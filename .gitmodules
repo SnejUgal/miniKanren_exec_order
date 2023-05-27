@@ -1,0 +1,6 @@
+[submodule "faster-miniKanren"]
+	path = faster-miniKanren
+	url = https://github.com/michaelballantyne/faster-minikanren.git
+[submodule "ocaml/OCanren"]
+	path = ocaml/OCanren
+	url = https://github.com/PLTools/OCanren.git

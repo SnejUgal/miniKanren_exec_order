@@ -1,0 +1,18 @@
+(executables
+ (names reverso_trace appendo)
+ (modules reverso_trace appendo)
+ (libraries OCanren)
+ (flags
+  (:standard -rectypes))
+ (preprocess
+  (pps OCanren-ppx.ppx_fresh)))
+
+(cram
+ (deps appendo.exe reverso_trace.exe rewriter.exe))
+
+(executable
+ (name rewriter)
+ (modules rewriter)
+ (flags
+  (:standard -linkall))
+ (libraries OCanren-ppx.ppx_fresh ppxlib.runner))
