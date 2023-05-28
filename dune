@@ -1,0 +1,12 @@
+(cram
+ (deps
+  racket/appendo.rkt
+  racket/appendo2.rkt
+  racket/debug_stuff.rkt
+  racket/mk.rkt))
+
+(cram
+ (deps faster-miniKanren/private-unstable.rkt faster-miniKanren/mk.scm))
+
+(cram
+ (deps ocaml/appendo.exe))
