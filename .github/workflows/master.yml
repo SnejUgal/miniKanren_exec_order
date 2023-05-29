@@ -1,0 +1,37 @@
+name: Build master
+
+on:
+  push:
+    branches:
+      - 'master'
+  
+jobs:
+  build:
+    env:
+      #OCANREN_STATS: yes
+      # enabling stats required extra link library
+      OCANREN_DOCS: yes
+      OPAMROOT: /home/user/.opam
+
+    runs-on: ubuntu-22.04
+    container:
+      image: kakadu18/genui:2022
+      # options: --user user
+
+    steps:
+      - run: opam --version
+      - run: opam exec -- ocamlopt --version
+
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: sudo apt install racket openjdk-18-jdk
+      - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test --with-doc
+
+      - run: opam exec -- dune test # dune runtest
+

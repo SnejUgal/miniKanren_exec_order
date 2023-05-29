@@ -17,13 +17,10 @@ let ( === ) a b st =
 let rec appendo a b ab st =
   Printf.printf "appendo: %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab));
   let open Std in
-  delay
-    (fun () ->
-      a
-      === nil ()
-      &&& (b === ab)
-      ||| Fresh.three (fun h t tmp ->
-            delay (fun () -> a === h % t &&& (ab === h % tmp) &&& appendo t b tmp)))
+  (a
+   === nil ()
+   &&& (b === ab)
+   ||| fresh (h t tmp) (a === h % t &&& (ab === h % tmp) &&& appendo t b tmp))
     st
 ;;
 
