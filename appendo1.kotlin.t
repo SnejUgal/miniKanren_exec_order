@@ -1,0 +1,1 @@
+  $ klogic/gradlew :test --tests "AppendoTest.testAppendo1"
