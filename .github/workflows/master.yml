@@ -19,6 +19,7 @@ jobs:
       # options: --user user
 
     steps:
+      - run: opam update
       - run: opam --version
       - run: opam exec -- ocamlopt --version
 
