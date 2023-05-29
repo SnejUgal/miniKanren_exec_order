@@ -7,22 +7,6 @@
   > Task :compileTestKotlin
   > Task :compileTestJava NO-SOURCE
   > Task :testClasses UP-TO-DATE
-  > Task :compileKotlin NO-SOURCE
-  > Task :compileJava NO-SOURCE
-  > Task :processResources NO-SOURCE
-  > Task :classes UP-TO-DATE
-  > Task :processTestResources NO-SOURCE
-  > Task :compileTestKotlin
-  > Task :compileTestJava NO-SOURCE
-  > Task :testClasses UP-TO-DATE
-  > Task :compileKotlin NO-SOURCE
-  > Task :compileJava NO-SOURCE
-  > Task :processResources NO-SOURCE
-  > Task :classes UP-TO-DATE
-  > Task :processTestResources NO-SOURCE
-  > Task :compileTestKotlin
-  > Task :compileTestJava NO-SOURCE
-  > Task :testClasses UP-TO-DATE
   
   > Task :test
   
@@ -41,21 +25,3 @@
       unifications: 8
   
   2 actionable tasks: 2 executed
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  Task: not found
-  [127]
- 

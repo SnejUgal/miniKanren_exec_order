@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     env:
-      #OCANREN_STATS: yes
-      # enabling stats required extra link library
-      OCANREN_DOCS: yes
       OPAMROOT: /home/user/.opam
 
     runs-on: ubuntu-22.04
@@ -19,14 +16,15 @@ jobs:
       # options: --user user
 
     steps:
-      - run: opam update
-      - run: opam --version
-      - run: opam exec -- ocamlopt --version
-
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
+
+      - run: opam update
+      - run: opam --version
+      - run: opam exec -- ocamlopt --version
+
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,6 +34,6 @@ jobs:
       - run: |
           sudo apt update
           sudo apt install racket openjdk-18-jdk -y --no-install-recommends
-      - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test --with-doc
+      - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
       - run: opam exec -- dune test # dune runtest

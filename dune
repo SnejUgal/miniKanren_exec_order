@@ -24,3 +24,8 @@
   ;klogic/.gradle
   ;klogic/build
   ))
+
+; It would be great to specify cram dependecies here, but...
+;(alias
+; (name trace-tests)
+; (deps @appendo1.kotlin))
