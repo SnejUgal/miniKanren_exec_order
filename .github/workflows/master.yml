@@ -30,7 +30,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - run: sudo apt install racket openjdk-18-jdk
+      - run: sudo apt install racket openjdk-18-jdk -y --no-install-recommends
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test --with-doc
 
       - run: opam exec -- dune test # dune runtest
