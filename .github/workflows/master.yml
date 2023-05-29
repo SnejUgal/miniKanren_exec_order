@@ -10,10 +10,10 @@ jobs:
     env:
       OPAMROOT: /home/user/.opam
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     container:
-      image: kakadu18/genui:2022
-      # options: --user user
+      image: kakadu18/ocaml:pltlab
+      options: --user user
 
     steps:
       - name: Cancel Previous Runs
