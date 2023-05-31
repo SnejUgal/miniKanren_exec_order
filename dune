@@ -9,7 +9,7 @@
  (deps faster-miniKanren/private-unstable.rkt faster-miniKanren/mk.scm))
 
 (cram
- (deps ocaml/appendo.exe))
+ (deps ocaml/appendo.exe ocaml/reverso.exe ocaml/quines.exe))
 
 (cram
  (deps

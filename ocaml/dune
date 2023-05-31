@@ -1,18 +1,45 @@
+(library
+ (name counters)
+ (modules counters)
+ (wrapped false))
+
 (executables
- (names reverso_trace appendo)
- (modules reverso_trace appendo)
+ (names reverso appendo)
+ (modules reverso appendo)
  (libraries OCanren)
  (flags
   (:standard -rectypes))
  (preprocess
-  (pps OCanren-ppx.ppx_fresh)))
+  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
+
+(library
+ (name scheme_interpret)
+ (modules scheme_interpret)
+ (libraries OCanren counters)
+ (flags
+  (:standard -rectypes))
+ (preprocess
+  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
+
+(executables
+ (names quines)
+ (modules quines)
+ (libraries OCanren scheme_interpret)
+ (flags
+  (:standard -rectypes))
+ (preprocess
+  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
 
 (cram
- (deps appendo.exe reverso_trace.exe rewriter.exe))
+ (deps appendo.exe reverso.exe rewriter.exe quines.exe))
 
 (executable
  (name rewriter)
  (modules rewriter)
  (flags
   (:standard -linkall))
- (libraries OCanren-ppx.ppx_fresh ppxlib.runner))
+ (libraries
+  OCanren-ppx.ppx_fresh
+  GT.ppx_all
+  OCanren-ppx.ppx_distrib
+  ppxlib.runner))

@@ -14,33 +14,39 @@ let ( === ) a b st =
   (a === b) st
 ;;
 
-let rec appendo a b ab st =
-  Printf.printf "appendo: %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab));
+let rec appendo a b ab =
   let open Std in
   conde
     [ a === nil () &&& (b === ab)
-    ; fresh (h t tmp) (a === h % t &&& (ab === h % tmp) &&& appendo t b tmp)
+    ; fresh (h t tmp) (a === h % t) (ab === h % tmp) (appendo t b tmp)
     ]
-    st
+;;
+
+let rec reverso a b =
+  let open Std in
+  conde
+    [ a === nil () &&& (a === b)
+    ; fresh (h t tmp) (a === h % t) (reverso t tmp) (appendo tmp !<h b)
+    ]
 ;;
 
 let example1 () =
   run
     q
-    (fun q -> appendo (Std.list Fun.id [ !!0 ]) (Std.list Fun.id [ !!1 ]) q)
+    (fun q -> reverso (Std.list Fun.id [ !!0; !!1 ]) q)
     (fun rr -> rr#reify (Std.List.reify OCanren.reify))
   |> Stream.take ~n:1
   |> ignore
 ;;
 
-let example2 () =
+(* let example2 () =
   run
     q
     (fun q -> appendo (Std.list Fun.id [ !!0; !!1 ]) (Std.list Fun.id [ !!2; !!3 ]) q)
     (fun rr -> rr#reify (Std.List.reify OCanren.reify))
   |> Stream.take ~n:1
   |> ignore
-;;
+;; *)
 
 let () =
   Arg.parse
@@ -50,28 +56,14 @@ let () =
             clear_unifications ();
             example1 ())
       , "" )
-    ; ( "-ex2"
+      (* ; ( "-ex2"
       , Arg.Unit
           (fun () ->
             clear_unifications ();
             example2 ())
-      , "" )
+      , "" ) *)
     ]
     (fun _ -> assert false)
     "";
   Printf.printf "unifications: %d\n" config.unifications
-;;
-
-let __ () =
-  let demo q =
-    let open Std in
-    conde
-      [ fresh () (q === !<(!!1)) (q === !<(!!2))
-      ; fresh () (q === !<(!!3)) (q === !<(!!4))
-      ; fresh () (q === !<(!!21)) (q === !<(!!22))
-      ]
-  in
-  run q demo (fun rr -> rr#reify (Std.List.reify OCanren.reify))
-  |> Stream.take ~n:1
-  |> ignore
 ;;
