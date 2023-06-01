@@ -1,6 +1,8 @@
 .PHONY: test test_kotlin test_ocaml test_caml test_racket
 PROMOTE ?=
 
+.DEFAULT_GOAL := test 
+
 test_kotlin:
 	dune b $(PROMOTE) \
 		@appendo1.kotlin \
@@ -17,4 +19,4 @@ test_caml:
 		@appendo2.ml \
 		@quines.ml \
 		
-test: test_kotlin test_racket test_kaml
+test: test_racket test_caml #test_kotlin

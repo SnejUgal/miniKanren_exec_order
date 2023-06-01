@@ -225,13 +225,14 @@ include struct
    [@@inline]
  ;;
 
+  (* 
   let ( ==? ) : ((_, _, _) Std.Triple.injected as 't) -> 't -> goal =
    fun x y ->
     (* TODO *)
     incr_counter ();
     Printf.printf "TODO\n";
     OCanren.( === ) x y
- ;;
+ ;; *)
 
   let pp = Format.asprintf "%a" (GT.fmt Gterm.logic)
   let r x = reify_in_empty Gterm.reify x
@@ -356,7 +357,7 @@ let thrineso x =
     (evalo p nil (val_ q))
     (evalo q nil (val_ r))
     (evalo r nil (val_ p))
-    (Std.Triple.make p q r ==? x)
+    (OCanren.( === ) x (Std.Triple.make p q r))
 ;;
 
 let wrap_term rr = rr#reify Gterm.reify |> show_lterm
