@@ -4,9 +4,9 @@
  (wrapped false))
 
 (executables
- (names reverso appendo)
- (modules reverso appendo)
- (libraries OCanren)
+ (names reverso appendo conjunction)
+ (modules reverso appendo conjunction)
+ (libraries OCanren counters)
  (flags
   (:standard -rectypes -dsource))
  (preprocess
@@ -31,7 +31,7 @@
   (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
 
 (cram
- (deps appendo.exe reverso.exe rewriter.exe quines.exe))
+ (deps conjunction.exe appendo.exe reverso.exe rewriter.exe quines.exe))
 
 (executable
  (name rewriter)
