@@ -165,7 +165,7 @@ module Gterm = struct
   let show_lterm = Format.asprintf "%a" (GT.fmt logic)
 end
 
-let gterm_reifier = Gterm.reify
+(* let gterm_reifier = Gterm.reify *)
 
 module Gresult = struct
   [%%distrib
@@ -192,60 +192,91 @@ let ( !! ) x = inj x
 open Gterm
 open Gresult
 
-type lenv = (GT.string OCanren.logic, Gresult.logic) Std.Pair.logic Std.List.logic
-[@@deriving gt ~options:{ fmt }]
+module Env = struct
+  type logic = (GT.string OCanren.logic, Gresult.logic) Std.Pair.logic Std.List.logic
+  [@@deriving gt ~options:{ fmt }]
 
-type fenv = (string OCanren.ilogic, Gresult.injected) Std.Pair.injected Std.List.injected
+  type injected =
+    (string OCanren.ilogic, Gresult.injected) Std.Pair.injected Std.List.injected
 
-let reif_env : (_, lenv) Reifier.t =
-  Std.List.reify (Std.Pair.reify OCanren.reify gresult_reifier)
-;;
+  let reify : (_, logic) Reifier.t =
+    Std.List.reify (Std.Pair.reify OCanren.reify gresult_reifier)
+  ;;
+end
+
+type fenv = Env.injected
 
 let ( === ) : 'a -> 'a -> goal = fun _ _ -> assert false
-let show_reif_term h t = show_lterm @@ gterm_reifier h t
+let show_reif_term h t = show_lterm @@ Gterm.reify h t
 let show_reif_result h t = show_lresult @@ gresult_reifier h t
 
 (* Specialized unifications for counting and printing  *)
 include struct
   let ( =/= ) = OCanren.( =/= )
   let ( =//= ) = OCanren.( =/= )
+  let pp = Format.asprintf "%a" (GT.fmt Env.logic)
+  let r x = reify_in_empty Env.reify x
 
   let ( ===! ) : fenv -> fenv -> goal =
    fun x y ->
     incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y
+   [@@inline]
  ;;
 
   let ( ==? ) : ((_, _, _) Std.Triple.injected as 't) -> 't -> goal =
    fun x y ->
+    (* TODO *)
     incr_counter ();
+    Printf.printf "TODO\n";
     OCanren.( === ) x y
  ;;
+
+  let pp = Format.asprintf "%a" (GT.fmt Gterm.logic)
+  let r x = reify_in_empty Gterm.reify x
 
   let ( ==== ) : Gterm.injected -> Gterm.injected -> goal =
    fun x y ->
     incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y
+   [@@inline]
  ;;
+
+  let pp = Format.asprintf "%a" (GT.fmt Std.List.logic @@ GT.fmt Gterm.logic)
+  let r x = reify_in_empty (Std.List.reify Gterm.reify) x
 
   let ( ====^ )
     : Gterm.injected Std.List.injected -> Gterm.injected Std.List.injected -> goal
     =
    fun x y ->
     incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y
+   [@@inline]
  ;;
+
+  let pp = Format.asprintf "%a" (GT.fmt StringLo.logic)
+  let r x = reify_in_empty StringLo.reify x
 
   let ( ===!! ) : string ilogic -> string ilogic -> goal =
    fun x y ->
     incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y
+   [@@inline]
  ;;
+
+  let pp = Format.asprintf "%a" (GT.fmt Gresult.logic)
+  let r x = reify_in_empty Gresult.reify x
 
   let ( ==!! ) : Gresult.injected -> Gresult.injected -> goal =
    fun x y ->
     incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y
+   [@@inline]
  ;;
 end
 
@@ -328,11 +359,11 @@ let thrineso x =
     (Std.Triple.make p q r ==? x)
 ;;
 
-let wrap_term rr = rr#reify gterm_reifier |> show_lterm
+let wrap_term rr = rr#reify Gterm.reify |> show_lterm
 let wrap_result rr = rr#reify gresult_reifier |> show_lresult
 
 let find_quines ~verbose n =
-  run q quineso (fun r -> r#reify gterm_reifier)
+  run q quineso (fun r -> r#reify Gterm.reify)
   |> OCanren.Stream.take ~n
   |> List.iter (fun q -> if verbose then printf "%s\n\n" (show_lterm q) else ())
 ;;
@@ -355,8 +386,7 @@ let wrap3terms = function
 ;;
 
 let find_thrines ~verbose n =
-  run q thrineso (fun r ->
-    r#reify (Std.Triple.reify gterm_reifier gterm_reifier gterm_reifier))
+  run q thrineso (fun r -> r#reify (Std.Triple.reify Gterm.reify Gterm.reify Gterm.reify))
   |> Stream.take ~n
   |> List.iter (fun a ->
        if verbose

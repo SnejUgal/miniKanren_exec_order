@@ -12,4 +12,5 @@
 
 #### dependencies
 
-  sudo apt install racket openjdk-18-jdk opam 
+  sudo apt install racket openjdk-18-jdk opam -y
+  raco pkg install benchmark pretty-format
