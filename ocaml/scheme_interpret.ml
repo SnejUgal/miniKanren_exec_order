@@ -210,6 +210,10 @@ let ( === ) : 'a -> 'a -> goal = fun _ _ -> assert false
 let show_reif_term h t = show_lterm @@ Gterm.reify h t
 let show_reif_result h t = show_lresult @@ gresult_reifier h t
 
+[@@@ocamlformat.disable]
+
+IFDEF TRACE THEN
+
 (* Specialized unifications for counting and printing  *)
 include struct
   let ( =/= ) = OCanren.( =/= )
@@ -224,15 +228,6 @@ include struct
     OCanren.( === ) x y
    [@@inline]
  ;;
-
-  (* 
-  let ( ==? ) : ((_, _, _) Std.Triple.injected as 't) -> 't -> goal =
-   fun x y ->
-    (* TODO *)
-    incr_counter ();
-    Printf.printf "TODO\n";
-    OCanren.( === ) x y
- ;; *)
 
   let pp = Format.asprintf "%a" (GT.fmt Gterm.logic)
   let r x = reify_in_empty Gterm.reify x
@@ -280,6 +275,23 @@ include struct
    [@@inline]
  ;;
 end
+
+ELSE
+
+include struct 
+
+  let (===!) = OCanren.(===) 
+  (* let (===!!) = OCanren.(===)  *)
+  let (====) = OCanren.(===) 
+  let (====^) = OCanren.(===)
+  let ( ===!! ) = OCanren.(===)
+  let ( ==!!) = OCanren.(===) 
+
+  let ( =/= ) = OCanren.( =/= ) 
+  let ( =//= ) = OCanren.( =/= ) 
+end
+
+END
 
 let rec lookupo : _ -> fenv -> Gresult.injected -> goal =
  fun x env t ->

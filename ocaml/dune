@@ -18,8 +18,16 @@
  (libraries OCanren counters)
  (flags
   (:standard -rectypes))
+ (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
  (preprocess
-  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   ppx_optcomp
+   --
+   -pp
+   "ocaml/bench/pp5+dump.exe -D TRACE")))
 
 (executables
  (names quines twines thrines)
