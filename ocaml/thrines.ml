@@ -2,6 +2,6 @@ open Scheme_interpret
 
 let () =
   clear_unifications ();
-  find_quines ~verbose:true 1;
+  find_thrines ~verbose:true 1;
   Printf.printf "unifications: %d\n" config.unifications
 ;;

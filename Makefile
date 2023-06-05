@@ -20,5 +20,7 @@ test_caml:
 		@appendo1.ml \
 		@appendo2.ml \
 		@quines.ml \
-		
+		@twines.ml \
+		@thrines.ml \
+
 test: test_racket test_caml #test_kotlin

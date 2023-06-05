@@ -13,7 +13,11 @@
   ocaml/appendo.exe
   ocaml/reverso.exe
   ocaml/quines.exe
-  ocaml/conjunction.exe))
+  ocaml/twines.exe
+  ocaml/thrines.exe
+  ocaml/conjunction.exe
+  ;
+  ))
 
 (cram
  (deps

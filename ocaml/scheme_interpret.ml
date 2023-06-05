@@ -347,17 +347,16 @@ let nil = Std.nil ()
 let quineso q = evalo q nil (val_ q)
 let twineso q p = q =/= p &&& evalo q nil (val_ p) &&& evalo p nil (val_ q)
 
-let thrineso x =
+let thrineso p q r =
   (* let (=//=) = diseqtrace @@ show_reif_term in *)
   fresh
-    (p q r)
+    ()
     (p =//= q)
     (q =//= r)
     (r =//= p)
     (evalo p nil (val_ q))
     (evalo q nil (val_ r))
     (evalo r nil (val_ p))
-    (OCanren.( === ) x (Std.Triple.make p q r))
 ;;
 
 let wrap_term rr = rr#reify Gterm.reify |> show_lterm
@@ -376,22 +375,12 @@ let find_twines ~verbose n =
        if verbose then printf "%s,\n%s\n\n" (show_lterm q) (show_lterm r) else ())
 ;;
 
-let wrap3terms = function
-  | Var _ -> assert false
-  | Value (a, b, c) ->
-    printf
-      "* %s\n  %s\n  %s\n\n"
-      (Gterm.show_lterm a)
-      (Gterm.show_lterm b)
-      (Gterm.show_lterm c)
-;;
-
 let find_thrines ~verbose n =
-  run q thrineso (fun r -> r#reify (Std.Triple.reify Gterm.reify Gterm.reify Gterm.reify))
+  run qrs thrineso (fun r1 r2 r3 ->
+    r1#reify Gterm.reify, r2#reify Gterm.reify, r3#reify Gterm.reify)
   |> Stream.take ~n
-  |> List.iter (fun a ->
+  |> List.iter (fun (q, r, s) ->
        if verbose
-       then (
-         let () = wrap3terms a in
-         print_newline ()))
+       then printf "%s,\n%s\,\n%s\n\n" (show_lterm q) (show_lterm r) (show_lterm s)
+       else ())
 ;;

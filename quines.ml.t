@@ -1,4 +1,4 @@
-  $ ocaml/quines.exe -ex1
+  $ ocaml/quines.exe
   [] []
   Val_ (_.10) Val_ (_.11)
   _.10 (seq ((symb 'quote) _.11 ))

@@ -22,8 +22,8 @@
   (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
 
 (executables
- (names quines)
- (modules quines)
+ (names quines twines thrines)
+ (modules quines twines thrines)
  (libraries OCanren scheme_interpret)
  (flags
   (:standard -rectypes))
@@ -31,7 +31,16 @@
   (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
 
 (cram
- (deps conjunction.exe appendo.exe reverso.exe rewriter.exe quines.exe))
+ (deps
+  conjunction.exe
+  appendo.exe
+  reverso.exe
+  rewriter.exe
+  quines.exe
+  twines.exe
+  thrines.exe
+  ;
+  ))
 
 (executable
  (name rewriter)
