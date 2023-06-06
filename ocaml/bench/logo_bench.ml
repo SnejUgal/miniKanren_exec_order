@@ -11,7 +11,7 @@ type config = { mutable print_raw : bool }
 let config = { print_raw = false }
 
 (* let count = 200 *)
-let repeat = 2
+let repeat = 10
 
 let () =
   Arg.parse
@@ -24,7 +24,7 @@ let test () =
   let goal q = logo (build_num 243) (build_num 3) q (build_num 0) in
   OCanren.(run q) goal (fun rr -> rr#reify num_reifier)
   |> OCanren.Stream.take ~n:1
-  |> ignore
+  |> fun xs -> assert (List.length xs = 1)
 ;;
 
 let warmup () =

@@ -9,7 +9,7 @@ open Benchmark
 type config = { mutable print_raw : bool }
 
 let config = { print_raw = false }
-let repeat = 2
+let repeat = 10
 
 let () =
   Arg.parse
