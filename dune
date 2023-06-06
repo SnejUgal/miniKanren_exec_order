@@ -12,6 +12,7 @@
  (deps
   ocaml/appendo.exe
   ocaml/reverso.exe
+  ocaml/numero.exe
   ocaml/quines.exe
   ocaml/twines.exe
   ocaml/thrines.exe

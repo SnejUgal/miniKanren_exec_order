@@ -13,7 +13,38 @@
    ;-dsource
    ))
  (preprocess
-  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr)))
+
+(library
+ (name numero_decls)
+ (modules numero_decls)
+ (wrapped false)
+ (libraries OCanren OCanren.tester counters)
+ (flags
+  (:standard -rectypes))
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr)))
+
+(executable
+ (name numero)
+ (modules numero)
+ (flags
+  (:standard -rectypes))
+ (libraries numero_decls)
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr)))
 
 (library
  (name scheme_interpret)
@@ -27,6 +58,7 @@
    OCanren-ppx.ppx_fresh
    GT.ppx_all
    OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr
    ppx_optcomp
    --
    -pp
@@ -39,7 +71,11 @@
  (flags
   (:standard -rectypes))
  (preprocess
-  (pps OCanren-ppx.ppx_fresh GT.ppx_all OCanren-ppx.ppx_distrib)))
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr)))
 
 (cram
  (deps
@@ -50,6 +86,7 @@
   quines.exe
   twines.exe
   thrines.exe
+  numero.exe
   ;
   ))
 
