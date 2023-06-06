@@ -1,22 +1,20 @@
-(* Execute as:
-    sudo cpupower frequency-set --governor performance
-    taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
-  *)
+(* Core_bench is used for microbenchmarks. Not sure it is needed. *)
 
 open Numero_decls_nolog
-open Benchmark
+(* open Benchmark *)
 
 type config = { mutable print_raw : bool }
 
 let config = { print_raw = false }
+let count = 200
 let repeat = 2
 
-let () =
+(* let () =
   Arg.parse
     [ "-raw", Arg.Unit (fun () -> config.print_raw <- true), "" ]
     (fun _ -> assert false)
     "help"
-;;
+;; *)
 
 let test () =
   let goal q = expo (build_num 3) (build_num 5) q in
@@ -32,12 +30,8 @@ let warmup () =
 
 let () =
   warmup ();
-  let res = latency1 ~name:"3^5" ~style:Nil ~repeat 10L test () in
-  print_newline ();
-  tabulate res;
-  if config.print_raw
-  then (
-    let _, data = List.hd res in
-    List.iter (fun { Benchmark.wall; _ } -> Printf.printf "%f " wall) data;
-    Printf.printf "\n")
+  let open Core in
+  let open Core_bench in
+  Command_unix.run
+    (Bench.make_command [ Bench.Test.create ~name:"3^5" (fun () -> ignore (test ())) ])
 ;;

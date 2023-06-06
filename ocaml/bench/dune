@@ -51,6 +51,13 @@
   (:standard -rectypes))
  (libraries benchmark numero_decls_nolog))
 
+(executables
+ (names expo_bench2)
+ (modules expo_bench2)
+ (flags
+  (:standard -rectypes -warn-error -32-69))
+ (libraries core_unix.command_unix core_bench numero_decls_nolog))
+
 (cram
  (deps ./expo_bench.exe))
 
