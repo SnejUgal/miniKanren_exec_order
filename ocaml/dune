@@ -26,12 +26,17 @@
  (libraries OCanren OCanren.tester counters)
  (flags
   (:standard -rectypes))
+ (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh
    GT.ppx_all
    OCanren-ppx.ppx_distrib
-   OCanren-ppx.ppx_repr)))
+   OCanren-ppx.ppx_repr
+   ppx_optcomp
+   --
+   -pp
+   "ocaml/bench/pp5+dump.exe -D TRACE")))
 
 (executable
  (name numero)

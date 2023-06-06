@@ -1,4 +1,22 @@
 (library
+ (name numero_decls_nolog)
+ (modules numero_decls_nolog)
+ (libraries OCanren OCanren.tester counters)
+ (wrapped false)
+ (flags
+  (:standard -rectypes))
+ (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   ppx_optcomp
+   --
+   -pp
+   ocaml/bench/pp5+dump.exe)))
+
+(library
  (name scheme_interpret_nolog)
  (modules scheme_interpret_nolog)
  (libraries OCanren counters)
@@ -25,6 +43,16 @@
 
 (cram
  (deps ./quines_bench.exe twines_bench ./thrines_bench.exe))
+
+(executables
+ (names expo_bench logo_bench)
+ (modules expo_bench logo_bench)
+ (flags
+  (:standard -rectypes))
+ (libraries benchmark numero_decls_nolog))
+
+(cram
+ (deps ./expo_bench.exe))
 
 (rule
  (targets pp5+dump.exe)

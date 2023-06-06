@@ -4,6 +4,46 @@ open OCanren.Std
 open Tester
 include Counters.Make ()
 
+[@@@ocamlformat.disable]
+
+IFDEF TRACE THEN
+
+(* Specialized unifications for counting and printing  *)
+include struct
+  let pp = Format.asprintf "%a" (GT.fmt Std.List.logic (GT.fmt OCanren.logic @@ GT.fmt GT.int))
+  let r x = reify_in_empty (Std.List.reify OCanren.reify) x
+
+  let ( === ) : int ilogic Std.List.injected -> _ -> goal =
+   fun x y ->
+    incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+    OCanren.( === ) x y
+   [@@inline]
+ ;;
+
+  let pp = Format.asprintf "%a" (GT.fmt OCanren.logic @@ GT.fmt GT.int)
+  let r x = reify_in_empty OCanren.reify x
+
+  let ( ==== ) : int ilogic -> int ilogic -> goal =
+   fun x y ->
+    incr_counter ();
+    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+    OCanren.( === ) x y
+   [@@inline]
+ ;;
+end
+
+ELSE
+
+include struct
+  let (===) = OCanren.(===)
+  let (====) = OCanren.(===)
+end
+
+END
+
+[@@@ocamlformat.enable]
+
 let rec build_num = function
   | 0 -> nil ()
   | n when n mod 2 == 0 -> inj 0 % build_num (n / 2)
@@ -23,23 +63,23 @@ let ( ! ) = inj
 
 let full_addero b x y r c =
   conde
-    [ !0 === b &&& (!0 === x) &&& (!0 === y) &&& (!0 === r) &&& (!0 === c)
-    ; !1 === b &&& (!0 === x) &&& (!0 === y) &&& (!1 === r) &&& (!0 === c)
-    ; !0 === b &&& (!1 === x) &&& (!0 === y) &&& (!1 === r) &&& (!0 === c)
-    ; !1 === b &&& (!1 === x) &&& (!0 === y) &&& (!0 === r) &&& (!1 === c)
-    ; !0 === b &&& (!0 === x) &&& (!1 === y) &&& (!1 === r) &&& (!0 === c)
-    ; !1 === b &&& (!0 === x) &&& (!1 === y) &&& (!0 === r) &&& (!1 === c)
-    ; !0 === b &&& (!1 === x) &&& (!1 === y) &&& (!0 === r) &&& (!1 === c)
-    ; !1 === b &&& (!1 === x) &&& (!1 === y) &&& (!1 === r) &&& (!1 === c)
+    [ !0 ==== b &&& (!0 ==== x) &&& (!0 ==== y) &&& (!0 ==== r) &&& (!0 ==== c)
+    ; !1 ==== b &&& (!0 ==== x) &&& (!0 ==== y) &&& (!1 ==== r) &&& (!0 ==== c)
+    ; !0 ==== b &&& (!1 ==== x) &&& (!0 ==== y) &&& (!1 ==== r) &&& (!0 ==== c)
+    ; !1 ==== b &&& (!1 ==== x) &&& (!0 ==== y) &&& (!0 ==== r) &&& (!1 ==== c)
+    ; !0 ==== b &&& (!0 ==== x) &&& (!1 ==== y) &&& (!1 ==== r) &&& (!0 ==== c)
+    ; !1 ==== b &&& (!0 ==== x) &&& (!1 ==== y) &&& (!0 ==== r) &&& (!1 ==== c)
+    ; !0 ==== b &&& (!1 ==== x) &&& (!1 ==== y) &&& (!0 ==== r) &&& (!1 ==== c)
+    ; !1 ==== b &&& (!1 ==== x) &&& (!1 ==== y) &&& (!1 ==== r) &&& (!1 ==== c)
     ]
 ;;
 
 let rec addero d n m r =
   conde
-    [ !0 === d &&& (nil () === m) &&& (n === r)
-    ; !0 === d &&& (nil () === n) &&& (m === r) &&& poso m
-    ; !1 === d &&& (nil () === m) &&& defer (addero !0 n !<(!1) r)
-    ; !1 === d &&& (nil () === n) &&& poso m &&& defer (addero !0 m !<(!1) r)
+    [ !0 ==== d &&& (nil () === m) &&& (n === r)
+    ; !0 ==== d &&& (nil () === n) &&& (m === r) &&& poso m
+    ; !1 ==== d &&& (nil () === m) &&& defer (addero !0 n !<(!1) r)
+    ; !1 ==== d &&& (nil () === n) &&& poso m &&& defer (addero !0 m !<(!1) r)
     ; ?&[ !<(!1) === n
         ; !<(!1) === m
         ; fresh (a c) (a %< c === r) (full_addero d !1 !1 a c)

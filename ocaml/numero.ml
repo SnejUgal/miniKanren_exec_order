@@ -2,7 +2,7 @@ open OCanren
 open Numero_decls
 
 let example1 () =
-  let msg, goal = REPR (fun q -> expo (build_num 3) (build_num 5) q) in
+  let msg, goal = REPR (fun q -> expo (build_num 2) (build_num 3) q) in
   print_endline msg;
   run q goal (fun rr -> rr#reify num_reifier)
   |> Stream.take ~n:1
@@ -10,7 +10,7 @@ let example1 () =
 ;;
 
 let example2 () =
-  let msg, goal = REPR (fun q -> logo (build_num 243) (build_num 3) q (build_num 0)) in
+  let msg, goal = REPR (fun q -> logo (build_num 8) (build_num 2) q (build_num 0)) in
   print_endline msg;
   run q goal (fun rr -> rr#reify num_reifier)
   |> Stream.take ~n:1
