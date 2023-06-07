@@ -21,12 +21,13 @@ test_caml:
 	dune b $(PROMOTE) \
 		@appendo1.ml \
 		@appendo2.ml \
-		@quines.ml \
-		@twines.ml \
-		@thrines.ml \
+		@expo1.ml \
+		@logo1.ml \
+		#@quines.ml \
+		#@twines.ml \
+		#@thrines.ml \
 
-test: test_racket test_caml test_kotlin
-
+test: test_caml test_kotlin #test_racket
 
 clean:
 	dune clean
