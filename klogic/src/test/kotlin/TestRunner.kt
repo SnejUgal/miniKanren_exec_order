@@ -10,6 +10,7 @@ private val tasks: Map<String, KFunction0<Unit>> = mapOf(
     "expo4" to OlegNumbersTest()::testExpo4,
     "expo5" to OlegNumbersTest()::testExpo5,
     "mul1" to OlegNumbersTest()::testMul1,
+    "repeatedMul1" to OlegNumbersTest()::testRepeatedMul1,
     "odd_mul1" to OlegNumbersTest()::testOddMul1,
     "logo1" to OlegNumbersTest()::testLogo1,
 )

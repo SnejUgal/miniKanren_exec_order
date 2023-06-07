@@ -61,8 +61,9 @@ let rec appendo l s out =
 let ( ! ) = inj
 
 type injected = int ilogic Std.List.injected
-let one : injected = !<(!!1)
 let zero : injected = Std.nil()
+let one : injected = !<(!!1)
+let three : injected = !!1 % !<(!!1)
 
 let poso q = fresh (h t) (q === h % t)
 let gt1o q = fresh (h t tt) (q === h % (t % tt))
@@ -234,7 +235,7 @@ let rec repeated_mul n q nq =
 let rec exp2 n b q =
   conde
     [ n === one &&& (q === zero)
-    ; ?&[ gt1o n; q === one; fresh s (splito n b s !<(!1)) ]
+    ; ?&[ gt1o n; q === one; fresh s (splito n b s one) ]
     ; fresh
         (q1 b2)
         (q === !0 % q1)
@@ -270,37 +271,37 @@ let logo n b q r =
             (exp2 n (nil ()) q)
             (fresh s (splito n dd r s))
         ]
-    ; ?&[ fresh (a ad add ddd) (conde [ !1 %< !1 === b; a % (ad % (add % ddd)) === b ])
+    ; ?&[ fresh (a ad add ddd) (conde [ b === three; b === a % (ad % (add % ddd)) ])
         ; ltlo b n
         ; fresh
             (bw1 bw nw nw1 ql1 ql s)
-            (exp2 b (nil ()) bw1)
-            (pluso bw1 !<(!1) bw)
+            (exp2 b zero bw1)
+            (pluso bw1 one bw)
             (ltlo q n)
             (fresh
                (q1 bwq1)
-               (pluso q !<(!1) q1)
+               (pluso q one q1)
                (multo bw q1 bwq1)
-               (lto nw1 bwq1)
-               (exp2 n (nil ()) nw1)
-               (pluso nw1 !<(!1) nw)
-               (divo nw bw ql1 s)
-               (pluso ql !<(!1) ql1)
-               (lelo ql q)
-               (fresh
-                  (bql qh s qdh qd)
-                  (repeated_mul b ql bql)
-                  (divo nw bw1 qh s)
-                  (pluso ql qdh qh)
-                  (pluso ql qd q)
-                  (leo qd qdh)
-                  (fresh
-                     (bqd bq1 bq)
-                     (repeated_mul b qd bqd)
-                     (multo bql bqd bq)
-                     (multo b bq bq1)
-                     (pluso bq r n)
-                     (lto n bq1))))
+               (lto nw1 bwq1))
+            (exp2 n zero nw1)
+            (pluso nw1 one nw)
+            (divo nw bw ql1 s)
+            (pluso ql one ql1)
+            (lelo ql q)
+            (fresh
+              (bql qh s qdh qd)
+              (repeated_mul b ql bql)
+              (divo nw bw1 qh s)
+              (pluso ql qdh qh)
+              (pluso ql qd q)
+              (leo qd qdh)
+              (fresh
+                  (bqd bq1 bq)
+                  (repeated_mul b qd bqd)
+                  (multo bql bqd bq)
+                  (multo b bq bq1)
+                  (pluso bq r n)
+                  (lto n bq1)))
         ]
     ]
 ;;

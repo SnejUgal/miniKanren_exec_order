@@ -56,7 +56,8 @@ class OlegNumbersTest {
         val power = 2u.toOlegLogicNumber()
 
         println("$base^$power")
-        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        println(answers[0].term)
         UnificationsController.onFinish()
     }
     @Test
@@ -66,6 +67,16 @@ class OlegNumbersTest {
 
         println("$a * $b")
         run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testRepeatedMul1() {
+        val a = 3u.toOlegLogicNumber()
+        val b = 2u.toOlegLogicNumber()
+
+        println("repeatedMul($a, $b, ?")
+        run(1, { r: Term<OlegLogicNumber> -> repeatedMulᴼ(a, b, r) })
         UnificationsController.onFinish()
     }
 
