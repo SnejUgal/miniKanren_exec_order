@@ -57,6 +57,14 @@ internal val numberOne: OlegLogicNumber = digitOne.toLogicList().toOlegLogicNumb
 internal val numberTwo: OlegLogicNumber = (digitZero + digitOne.toLogicList()).toOlegLogicNumber()
 internal val numberThree: OlegLogicNumber = (digitOne + digitOne.toLogicList()).toOlegLogicNumber()
 
+fun <T : Term<T>> appendᴼ(x: ListTerm<T>, y: ListTerm<T>, xy: ListTerm<T>): Goal =
+    conde (
+        (x `===` nilLogicList()) and (y `===` xy),
+        freshTypedVars<T, LogicList<T>, LogicList<T>> { head, tail, rest ->
+            (head + tail `===` x) and (head + rest `===` xy) and appendᴼ(tail, y, rest)
+        }
+    )
+
 /**
  * Checks whether the [number] is positive.
  */
@@ -126,52 +134,34 @@ fun plusᴼ(n: OlegTerm, m: OlegTerm, result: OlegTerm): Goal = adderᴼ(digitZe
 
 fun minusᴼ(n: OlegTerm, m: OlegTerm, result: OlegTerm): Goal = plusᴼ(m, result, n)
 
-// `=lo`
-fun hasTheSameLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
-    (n debugUnify numberZero) and (m debugUnify numberZero),
-    (n debugUnify numberOne) and (m debugUnify numberOne),
-    freshTypedVars<Digit, LogicList<Digit>, Digit, LogicList<Digit>> { a, x, b, y ->
+fun boundMulᴼ(q: OlegTerm, p: OlegTerm, n: OlegTerm, m: OlegTerm): Goal = conde(
+    (q debugUnify numberZero) and posᴼ(p),
+    freshTypedVars<Digit, Digit, Digit, Digit, LogicList<Digit>, LogicList<Digit>, LogicList<Digit>> { a0, a1, a2, a3, x, y, z ->
         val numberX = x.toOlegLogicNumber()
         val numberY = y.toOlegLogicNumber()
+        val numberZ = z.toOlegLogicNumber()
 
-        ((a + x).toOlegLogicNumber() debugUnify n) and posᴼ(numberX) and
-                ((b + y).toOlegLogicNumber() debugUnify m) and posᴼ(numberY) and
-                hasTheSameLengthᴼ(numberX, numberY)
+        and(
+            q debugUnify (a0 + x).toOlegLogicNumber(),
+            p debugUnify (a1 + y).toOlegLogicNumber(),
+            conde(
+                and(
+                    n debugUnify numberZero,
+                    m debugUnify (a2 + z).toOlegLogicNumber(),
+                    boundMulᴼ(numberX, numberY, numberZ, numberZero)
+                ),
+                and(
+                    n debugUnify (a3 + z).toOlegLogicNumber(),
+                    boundMulᴼ(numberX, numberY, numberZ, m)
+                )
+            )
+        )
     }
 )
 
-// `<lo`
-fun hasTheSmallerLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
-    (n debugUnify numberZero) and posᴼ(m),
-    (n debugUnify numberOne) and greaterThan1ᴼ(m),
-    freshTypedVars<Digit, LogicList<Digit>, Digit, LogicList<Digit>> { a, x, b, y ->
-        val numberX = x.toOlegLogicNumber()
-        val numberY = y.toOlegLogicNumber()
 
-        ((a + x).toOlegLogicNumber() debugUnify n) and posᴼ(numberX) and
-                ((b + y).toOlegLogicNumber() debugUnify m) and posᴼ(numberY) and
-                hasTheSmallerLengthᴼ(numberX, numberY)
-    }
-)
 
-// `<=lo`
-fun hasTheSmallerOrSameLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
-    hasTheSameLengthᴼ(n, m),
-    hasTheSmallerLengthᴼ(n, m)
-)
-
-// `<o`
-fun lessThanᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
-    hasTheSmallerLengthᴼ(n, m),
-    hasTheSameLengthᴼ(n, m) and freshTypedVars<OlegLogicNumber> { x -> posᴼ(x) and plusᴼ(n, x, m) }
-)
-
-// `<=o`
-fun lessThanOrEqualᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
-    n debugUnify m,
-    lessThanᴼ(n, m)
-)
-
+// *o
 fun mulᴼ(n: OlegTerm, m: OlegTerm, p: OlegTerm): Goal = conde(
     (n debugUnify numberZero) and (p debugUnify numberZero),
     posᴼ(n) and (m debugUnify numberZero) and (p debugUnify numberZero),
@@ -220,29 +210,50 @@ fun oddMulᴼ(x: OlegTerm, n: OlegTerm, m: OlegTerm, p: OlegTerm): Goal = freshT
     )
 }
 
-fun boundMulᴼ(q: OlegTerm, p: OlegTerm, n: OlegTerm, m: OlegTerm): Goal = conde(
-    (q debugUnify numberZero) and posᴼ(p),
-    freshTypedVars<Digit, Digit, Digit, Digit, LogicList<Digit>, LogicList<Digit>, LogicList<Digit>> { a0, a1, a2, a3, x, y, z ->
+// `=lo`
+fun hasTheSameLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
+    (n debugUnify numberZero) and (m debugUnify numberZero),
+    (n debugUnify numberOne) and (m debugUnify numberOne),
+    freshTypedVars<Digit, LogicList<Digit>, Digit, LogicList<Digit>> { a, x, b, y ->
         val numberX = x.toOlegLogicNumber()
         val numberY = y.toOlegLogicNumber()
-        val numberZ = z.toOlegLogicNumber()
 
-        and(
-            q debugUnify (a0 + x).toOlegLogicNumber(),
-            p debugUnify (a1 + y).toOlegLogicNumber(),
-            conde(
-                and(
-                    n debugUnify numberZero,
-                    m debugUnify (a2 + z).toOlegLogicNumber(),
-                    boundMulᴼ(numberX, numberY, numberZ, numberZero)
-                ),
-                and(
-                    n debugUnify (a3 + z).toOlegLogicNumber(),
-                    boundMulᴼ(numberX, numberY, numberZ, m)
-                )
-            )
-        )
+        ((a + x).toOlegLogicNumber() debugUnify n) and posᴼ(numberX) and
+                ((b + y).toOlegLogicNumber() debugUnify m) and posᴼ(numberY) and
+                hasTheSameLengthᴼ(numberX, numberY)
     }
+)
+
+// `<lo`
+fun hasTheSmallerLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
+    (n debugUnify numberZero) and posᴼ(m),
+    (n debugUnify numberOne) and greaterThan1ᴼ(m),
+    freshTypedVars<Digit, LogicList<Digit>, Digit, LogicList<Digit>> { a, x, b, y ->
+        val numberX = x.toOlegLogicNumber()
+        val numberY = y.toOlegLogicNumber()
+
+        ((a + x).toOlegLogicNumber() debugUnify n) and posᴼ(numberX) and
+                ((b + y).toOlegLogicNumber() debugUnify m) and posᴼ(numberY) and
+                hasTheSmallerLengthᴼ(numberX, numberY)
+    }
+)
+
+// `<=lo`
+fun hasTheSmallerOrSameLengthᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
+    hasTheSameLengthᴼ(n, m),
+    hasTheSmallerLengthᴼ(n, m)
+)
+
+// `<o`
+fun lessThanᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
+    hasTheSmallerLengthᴼ(n, m),
+    hasTheSameLengthᴼ(n, m) and freshTypedVars<OlegLogicNumber> { x -> posᴼ(x) and plusᴼ(n, x, m) }
+)
+
+// `<=o`
+fun lessThanOrEqualᴼ(n: OlegTerm, m: OlegTerm): Goal = conde(
+    n debugUnify m,
+    lessThanᴼ(n, m)
 )
 
 fun repeatedMulᴼ(n: OlegTerm, q: OlegTerm, nq: OlegTerm): Goal = conde(
@@ -266,7 +277,9 @@ fun repeatedMulᴼ(n: OlegTerm, q: OlegTerm, nq: OlegTerm): Goal = conde(
 fun divᴼ(n: OlegTerm, m: OlegTerm, q: OlegTerm, r: OlegTerm): Goal = conde(
     (r debugUnify n) and (q debugUnify numberZero) and lessThanᴼ(n, m),
     and(
-        (q debugUnify numberOne) and hasTheSameLengthᴼ(n, m) and plusᴼ(r, m, n),
+        (q debugUnify numberOne),
+        hasTheSameLengthᴼ(n, m),
+        plusᴼ(r, m, n),
         lessThanᴼ(r, m)
     ),
     and(

@@ -25,7 +25,11 @@
  (wrapped false)
  (libraries OCanren OCanren.tester counters)
  (flags
-  (:standard -rectypes))
+  (:standard
+   -rectypes
+   ;-dsource
+   ;
+   ))
  (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
  (preprocess
   (pps

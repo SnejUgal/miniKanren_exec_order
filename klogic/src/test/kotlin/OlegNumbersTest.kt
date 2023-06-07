@@ -2,11 +2,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.klogic.core.Term
 import org.klogic.core.run
-import utils.UnificationsController
-import utils.OlegLogicNumber
+import utils.*
 import utils.OlegLogicNumber.Companion.toOlegLogicNumber
-import utils.expᴼ
-import utils.logᴼ
 
 class OlegNumbersTest {
     @AfterEach
@@ -16,11 +13,70 @@ class OlegNumbersTest {
 
     @Test
     fun testExpo1() {
-        val base = 2u.toOlegLogicNumber()
-        val power = 3u.toOlegLogicNumber()
+        val base = 3u.toOlegLogicNumber()
+        val power = 5u.toOlegLogicNumber()
 
         println("$base^$power")
-        run(1, { r: Term<utils.OlegLogicNumber> -> expᴼ(base, power, r) })
+        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        println(answers[0].term)
+        UnificationsController.onFinish()
+    }
+    @Test
+    fun testExpo2() {
+        val base = 1u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+    @Test
+    fun testExpo3() {
+        val base = 2u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo4() {
+        val base = 2u.toOlegLogicNumber()
+        val power = 1u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo5() {
+        val base = 3u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+    @Test
+    fun testMul1() {
+        val a = 3u.toOlegLogicNumber()
+        val b = 3u.toOlegLogicNumber()
+
+        println("$a * $b")
+        run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testOddMul1() {
+        val q = 1u.toOlegLogicNumber()
+        val a = 3u.toOlegLogicNumber()
+        val b = 3u.toOlegLogicNumber()
+
+        println("oddMulo($1, $a, $b)")
+        run(1, { r: Term<OlegLogicNumber> -> oddMulᴼ(q, a, b, r) })
         UnificationsController.onFinish()
     }
 

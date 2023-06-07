@@ -5,6 +5,12 @@ private val tasks: Map<String, KFunction0<Unit>> = mapOf(
     "appendo2" to AppendoTest()::testAppendo2,
     "reverso" to ReversoTest()::testReverso,
     "expo1" to OlegNumbersTest()::testExpo1,
+    "expo2" to OlegNumbersTest()::testExpo2,
+    "expo3" to OlegNumbersTest()::testExpo3,
+    "expo4" to OlegNumbersTest()::testExpo4,
+    "expo5" to OlegNumbersTest()::testExpo5,
+    "mul1" to OlegNumbersTest()::testMul1,
+    "odd_mul1" to OlegNumbersTest()::testOddMul1,
     "logo1" to OlegNumbersTest()::testLogo1,
 )
 
