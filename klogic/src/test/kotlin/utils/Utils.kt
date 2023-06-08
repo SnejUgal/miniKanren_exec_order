@@ -37,14 +37,29 @@ fun <T : Term<T>> appendo(a: ListTerm<T>, b: ListTerm<T>, ab: ListTerm<T>): Goal
 
     conde(
         and(
-            a debugUnify nilLogicList(),
-            b debugUnify ab
+            (a debugUnify nilLogicList()).let {
+                println("Appendo: a === () - $a === ()")
+                it
+            },
+            (b debugUnify ab).let {
+                println("Appendo: b === ab - $b === $ab")
+                it
+            }
         ),
         freshTypedVars<T, LogicList<T>, LogicList<T>> { head, tail, rest ->
             and(
-                a debugUnify head + tail,
-                ab debugUnify head + rest,
-                appendo(tail, b, rest)
+                (a debugUnify head + tail).let {
+                    println("Appendo: a === h + t - $a === ${head + tail}")
+                    it
+                },
+                (ab debugUnify head + rest).let {
+                    println("Appendo: ab === h + r - $ab === ${head + rest}")
+                    it
+                },
+                appendo(tail, b, rest).let {
+                    println("Appendo: appendo(tail, b, rest) - appendo($tail, $b, $rest)")
+                    it
+                }
             )
         }
     )(state)
@@ -55,18 +70,33 @@ fun <T : Term<T>> reverso(a: ListTerm<T>, b: ListTerm<T>): Goal = { state ->
 
     conde(
         and(
-            a debugUnify nilLogicList(),
-            a debugUnify b
+            (a debugUnify nilLogicList()).let {
+                println("Reverso: a === () - $a === ()")
+                it
+              },
+            (a debugUnify b).let {
+                println("Reverso: a === b - $a === $b")
+                it
+            }
         ),
-        freshTypedVars<T, LogicList<T>, LogicList<T>> { h, t, tmp ->
+        freshTypedVars<T, LogicList<T>, LogicList<T>> { h, t, rest ->
             and(
-                a debugUnify h + t,
-                reverso(t, tmp),
+                (a debugUnify h + t).let {
+                    println("Reverso: a === h + t - $a === $h + $t")
+                    it
+                },
+                reverso(t, rest).let {
+                    println("Reverso: reverso(t, rest) - reverso($t, $rest)")
+                    it
+                },
                 appendo(
-                    tmp,
+                    rest,
                     h.toLogicList(),
                     b
-                )
+                ).let {
+                    println("Reverso: appendo(rest, (h), b) - appendo($rest, ($h), $b)")
+                    it
+                }
             )
         }
     )(state)
