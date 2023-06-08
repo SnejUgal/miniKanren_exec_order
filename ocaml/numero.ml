@@ -14,6 +14,7 @@ let expo3 () = wrap (REPR (fun q -> expo (build_num 2) (build_num 2) q))
 let expo4 () = wrap (REPR (expo (build_num 2) (build_num 1)))
 let expo5 () = wrap (REPR (expo (build_num 3) (build_num 2)))
 let mul1 () = wrap (REPR (multo (build_num 3) (build_num 3)))
+let mul2 () = wrap (REPR (multo (build_num 255) (build_num 255)))
 let repeatedMul1 () = wrap (REPR (repeated_mul (build_num 3) (build_num 2)))
 let odd_multo1 () = wrap (REPR (odd_multo (build_num 1) (build_num 3) (build_num 3)))
 let logo1 () = wrap (REPR (fun q -> logo (build_num 8) (build_num 2) q (build_num 0)))
@@ -34,7 +35,7 @@ let () =
     ; wrap "ex4" expo4
     ; wrap "ex5" expo5
     ; wrap "mul1" mul1
-    ; wrap "mul1" mul1
+    ; wrap "mul2" mul2
     ; wrap "repeatedMul1" repeatedMul1
     ; wrap "odd_mul1" odd_multo1
     ; wrap "logo1" logo1

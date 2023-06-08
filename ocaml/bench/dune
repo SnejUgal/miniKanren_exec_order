@@ -34,6 +34,24 @@
    -pp
    ocaml/bench/pp5+dump.exe)))
 
+(library
+ (name permo_nolog)
+ (modules permo_decls_nolog)
+ (libraries OCanren counters)
+ (wrapped false)
+ (flags
+  (:standard -rectypes))
+ (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   ;ppx_optcomp
+   --
+   -pp
+   ocaml/bench/pp5+dump.exe)))
+
 (executables
  (names quines_bench twines_bench thrines_bench)
  (modules quines_bench twines_bench thrines_bench)
@@ -50,6 +68,13 @@
  (flags
   (:standard -rectypes))
  (libraries benchmark numero_decls_nolog))
+
+(executables
+ (names permo_bench)
+ (modules permo_bench)
+ (flags
+  (:standard -rectypes))
+ (libraries benchmark permo_nolog))
 
 (executables
  (names expo_bench2)

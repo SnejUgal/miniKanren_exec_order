@@ -5,6 +5,7 @@ open Tester
 include Counters.Make ()
 
 [@@@ocamlformat.disable]
+[@@@ocaml.warnerror "-32"]
 
 IFDEF TRACE THEN
 

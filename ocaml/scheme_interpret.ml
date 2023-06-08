@@ -222,10 +222,10 @@ include struct
   let r x = reify_in_empty Env.reify x
 
   let ( ===! ) : fenv -> fenv -> goal =
-   fun x y ->
+   fun x y st ->
     incr_counter ();
     Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
-    OCanren.( === ) x y
+    OCanren.( === ) x y st 
    [@@inline]
  ;;
 
@@ -233,10 +233,10 @@ include struct
   let r x = reify_in_empty Gterm.reify x
 
   let ( ==== ) : Gterm.injected -> Gterm.injected -> goal =
-   fun x y ->
+   fun x y st ->
     incr_counter ();
     Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
-    OCanren.( === ) x y
+    OCanren.( === ) x y st 
    [@@inline]
  ;;
 
@@ -246,10 +246,10 @@ include struct
   let ( ====^ )
     : Gterm.injected Std.List.injected -> Gterm.injected Std.List.injected -> goal
     =
-   fun x y ->
+   fun x y st ->
     incr_counter ();
     Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
-    OCanren.( === ) x y
+    OCanren.( === ) x y st 
    [@@inline]
  ;;
 
@@ -257,10 +257,10 @@ include struct
   let r x = reify_in_empty StringLo.reify x
 
   let ( ===!! ) : string ilogic -> string ilogic -> goal =
-   fun x y ->
+   fun x y st ->
     incr_counter ();
     Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
-    OCanren.( === ) x y
+    OCanren.( === ) x y  st 
    [@@inline]
  ;;
 
@@ -268,10 +268,10 @@ include struct
   let r x = reify_in_empty Gresult.reify x
 
   let ( ==!! ) : Gresult.injected -> Gresult.injected -> goal =
-   fun x y ->
+   fun x y st ->
     incr_counter ();
     Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
-    OCanren.( === ) x y
+    OCanren.( === ) x y st 
    [@@inline]
  ;;
 end

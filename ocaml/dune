@@ -4,13 +4,30 @@
  (wrapped false))
 
 (executables
- (names reverso appendo conjunction perm)
- (modules reverso appendo conjunction perm)
+ (names reverso appendo conjunction)
+ (modules reverso appendo conjunction)
  (libraries OCanren counters)
  (flags
   (:standard
    -rectypes
-   -dsource
+   ;-dsource
+   ;
+   ))
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr)))
+
+(executables
+ (names perm)
+ (modules perm)
+ (libraries OCanren counters permo_decls)
+ (flags
+  (:standard
+   -rectypes
+   ;-dsource
    ;
    ))
  (preprocess
@@ -23,6 +40,29 @@
 (library
  (name numero_decls)
  (modules numero_decls)
+ (wrapped false)
+ (libraries OCanren OCanren.tester counters)
+ (flags
+  (:standard
+   -rectypes
+   ;-dsource
+   ;
+   ))
+ (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr
+   ppx_optcomp
+   --
+   -pp
+   "ocaml/bench/pp5+dump.exe -D TRACE")))
+
+(library
+ (name permo_decls)
+ (modules permo_decls)
  (wrapped false)
  (libraries OCanren OCanren.tester counters)
  (flags
@@ -75,8 +115,8 @@
    "ocaml/bench/pp5+dump.exe -D TRACE")))
 
 (executables
- (names quines twines thrines)
- (modules quines twines thrines)
+ (names quines twines thrines evalo)
+ (modules quines twines thrines evalo)
  (libraries OCanren scheme_interpret)
  (flags
   (:standard -rectypes))
