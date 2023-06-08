@@ -51,7 +51,7 @@ fun <T : Term<T>> appendo(a: ListTerm<T>, b: ListTerm<T>, ab: ListTerm<T>): Goal
 }
 
 fun <T : Term<T>> reverso(a: ListTerm<T>, b: ListTerm<T>): Goal = { state ->
-    System.out.printf("appendo: %s %s\n", a, b)
+    System.out.printf("reverso: %s %s\n", a, b)
 
     conde(
         and(

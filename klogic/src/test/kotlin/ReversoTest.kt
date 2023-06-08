@@ -24,4 +24,16 @@ class ReversoTest {
 
         UnificationsController.onFinish()
     }
+    
+    @Test
+    fun testReverso2() {
+        val a = LogicList.logicListOf("1".toSymbol()
+        , "2".toSymbol()
+        )
+
+        val goal = { q: Term<LogicList<Symbol>> -> reverso(q, a) }
+        run(1, goal)
+
+        UnificationsController.onFinish()
+    }
 }

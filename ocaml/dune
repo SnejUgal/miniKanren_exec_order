@@ -10,7 +10,8 @@
  (flags
   (:standard
    -rectypes
-   ;-dsource
+   -dsource
+   ;
    ))
  (preprocess
   (pps
