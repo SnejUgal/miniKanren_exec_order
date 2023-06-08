@@ -4,8 +4,8 @@
  (wrapped false))
 
 (executables
- (names reverso appendo conjunction)
- (modules reverso appendo conjunction)
+ (names reverso appendo conjunction perm)
+ (modules reverso appendo conjunction perm)
  (libraries OCanren counters)
  (flags
   (:standard

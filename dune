@@ -17,6 +17,7 @@
   ocaml/twines.exe
   ocaml/thrines.exe
   ocaml/conjunction.exe
+  ocaml/perm.exe
   ;
   ))
 
