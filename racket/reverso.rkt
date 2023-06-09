@@ -13,7 +13,7 @@
 (define report_counters (lambda ()
   (printf "unifications: ~a\n" unification_counter) ))
 
-(define === (lambda (a b) 
+(define === (lambda (a b)
   (begin
     (incr_counter)
     (pretty-printf "~a  ~a\n" ((reify a) empty-state) ((reify b) empty-state))

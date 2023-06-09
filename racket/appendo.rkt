@@ -28,7 +28,7 @@
          )
 )))
 
-(run 2 (q) (appendo '(0) '(1) q))
+(run 1 (q) (appendo '(0) '(1) q))
 (report_counters)
 ; (pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
 ;   #'(conde

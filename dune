@@ -2,7 +2,15 @@
  (deps
   racket/appendo.rkt
   racket/appendo2.rkt
+  racket/reverso.rkt
+  racket/reverso2.rkt
+  racket/reverso3.rkt
+  racket/reverso4.rkt
+  racket/mulo1.rkt
+  racket/expo5.rkt
   racket/debug_stuff.rkt
+  racket/numbers.rkt
+  ;racket/numbers.scm
   racket/mk.rkt))
 
 (cram

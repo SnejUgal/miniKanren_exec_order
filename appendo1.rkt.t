@@ -6,6 +6,5 @@
   appendo: _.12 (1) _.13
   _.12  ()
   (1)  _.13
-  _.12  (_.14 . _.15)
   '((0 1))
-  unifications: 6
+  unifications: 5
