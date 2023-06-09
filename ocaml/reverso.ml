@@ -86,27 +86,53 @@ let example1 () =
 let example2 () =
   run
     q
-    (fun q -> reverso q (Std.list Fun.id [ !!1; !!2 ]))
+    (fun q -> reverso q (Std.list Fun.id [ !!0; !!1 ]))
     (fun rr -> rr#reify (Std.List.reify OCanren.reify))
   |> Stream.take ~n:1
   |> ignore
 ;;
 
+let example3 () =
+  run
+    q
+    (fun q -> reverso q (Std.list Fun.id [ !!0; !!1; !!2 ]))
+    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
+  |> Stream.take ~n:1
+  |> List.iteri (fun i xs ->
+       Printf.printf
+         "%d: %s\n"
+         i
+         (GT.show Std.List.logic (GT.show OCanren.logic @@ GT.show GT.int) xs))
+;;
+
+let example4 () =
+  run
+    q
+    (fun q ->
+      fresh
+        (a b d)
+        (q === Std.list Fun.id [ a; b; !!1; d ])
+        (reverso q (Std.list Fun.id [ !!0; !!1; !!2; !!3 ])))
+    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
+  |> Stream.take ~n:1
+  |> List.iteri (fun i xs ->
+       Printf.printf
+         "%d: %s\n"
+         i
+         (GT.show Std.List.logic (GT.show OCanren.logic @@ GT.show GT.int) xs))
+;;
+
 let () =
+  let wrap name f =
+    ( "-" ^ name
+    , Arg.Unit
+        (fun () ->
+          clear_unifications ();
+          f ())
+    , "" )
+  in
   Arg.parse
-    [ ( "-ex1"
-      , Arg.Unit
-          (fun () ->
-            clear_unifications ();
-            example1 ())
-      , "" )
-    ; ( "-ex2"
-      , Arg.Unit
-          (fun () ->
-            clear_unifications ();
-            example2 ())
-      , "" )
-    ]
+    [ wrap "ex1" example1; wrap "ex2" example2; wrap "ex3" example3; wrap "ex4" example4 ]
     (fun _ -> assert false)
     "";
   Printf.printf "unifications: %d\n" config.unifications

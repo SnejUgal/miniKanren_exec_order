@@ -62,7 +62,7 @@ let () =
   Printf.printf "unifications: %d\n" config.unifications
 ;;
 
-let __ () =
+(* let __ () =
   let demo q =
     let open Std in
     conde
@@ -74,4 +74,4 @@ let __ () =
   run q demo (fun rr -> rr#reify (Std.List.reify OCanren.reify))
   |> Stream.take ~n:1
   |> ignore
-;;
+;; *)

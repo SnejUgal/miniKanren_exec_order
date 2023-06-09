@@ -22,7 +22,25 @@ include struct
    [@@inline]
  ;;
 
- let pp = Format.asprintf "%a" (GT.fmt Std.List.logic (GT.fmt OCanren.logic @@ GT.fmt GT.int))
+
+  let show_as_scheme fa : _ logic -> _ =
+    let rec loop ?(is_head=false): ('a, 'a Std.List.logic) Std.List.t -> string = function
+      | Cons (h, (Var _ as tl)) ->
+          String.concat "" [if is_head then "" else " "; fa h; " . "; loop_logic tl]
+      | Cons (h, Value tl) ->
+          String.concat "" [if is_head then "" else " "; fa h; loop tl]
+      | Nil -> ""
+    and loop_whole x = "(" ^ loop ~is_head:true x ^ ")"
+    and loop_logic = function
+        | Value v -> loop v
+        | Var _ as l -> GT.show(OCanren.logic) loop_whole l
+    and toplevel = function
+      | Var _ as l -> GT.show(OCanren.logic) loop_whole l
+      | Value v -> loop_whole v
+    in
+    toplevel
+
+  let pp = show_as_scheme (GT.show OCanren.logic @@ GT.show GT.int)
   let r x = reify_in_empty (Std.List.reify OCanren.reify) x
 
   let ( === ) : int ilogic Std.List.injected -> _ -> goal =
@@ -66,8 +84,9 @@ let zero : injected = Std.nil()
 let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 
-let poso q = fresh (h t) (q === h % t)
-let gt1o q = fresh (h t tt) (q === h % (t % tt))
+let zeroo n = zero === n
+let poso n = fresh (h t) (n === h % t)
+let gt1o n = fresh (a ad dd) (n === a % (ad % dd))
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
 let full_addero b x y r c =
@@ -84,19 +103,19 @@ let full_addero b x y r c =
 ;;
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
-let rec addero d n m r =
+let rec addero d n m r st =
   conde
     [ !0 ==== d &&& (nil () === m) &&& (n === r)
     ; !0 ==== d &&& (nil () === n) &&& (m === r) &&& poso m
-    ; !1 ==== d &&& (nil () === m) &&& defer (addero !0 n one r)
-    ; !1 ==== d &&& (nil () === n) &&& poso m &&& defer (addero !0 m one r)
+    ; !1 ==== d &&& (nil () === m) &&& (addero !0 n one r)
+    ; !1 ==== d &&& (nil () === n) &&& poso m &&& (addero !0 m one r)
     ; (n === one) &&&
       (m === one) &&&
       (fresh (a c) (a %< c === r) (full_addero d !1 !1 a c))
     ; n === one &&& gen_addero d n m r
-    ; m === one &&& gt1o n &&& gt1o r &&& defer (addero d one n r)
+    ; m === one &&& gt1o n &&& gt1o r &&& (addero d one n r)
     ; gt1o n &&& gen_addero d n m r
-    ]
+    ] st
 
 and gen_addero d n m r =
   fresh
