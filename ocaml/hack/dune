@@ -1,0 +1,12 @@
+(executables
+ (names hack_appendo)
+ (modules hack_appendo)
+ (libraries OCanren counters)
+ (flags
+  (:standard
+   -rectypes
+   -dsource
+   ;
+   ))
+ (preprocess
+  (pps ppx_hack OCanren-ppx.ppx_repr)))

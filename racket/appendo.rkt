@@ -30,17 +30,26 @@
 
 (run 1 (q) (appendo '(0) '(1) q))
 (report_counters)
-; (pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
-;   #'(conde
-;       ( (=== a '())
-;         (=== b ab)  )
-;       ((fresh (h t tmp)
-;          (=== a  `(,h . ,t)   )
-;          (=== ab `(,h . ,tmp) )
-;          (appendo t b tmp))))
-;   (list #'fresh #'conde #'bind* #'mplus*)
-; )))
-
+(pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
+  #'(conde
+       ( (=== a '())
+         (=== b ab)  )
+       ((fresh (h t tmp)
+          (=== a  `(,h . ,t)   )
+          (=== ab `(,h . ,tmp) )
+          (appendo t b tmp))))
+   (list #'suspend #'bind* #'fresh #'conde #'bind* #'mplus*)
+)))
+(pretty-printf "appendo:\n~a\n" (syntax->datum (expand
+  #'(conde
+       ( (=== a '())
+         (=== b ab)  )
+       ((fresh (h t tmp)
+          (=== a  `(,h . ,t)   )
+          (=== ab `(,h . ,tmp) )
+          (appendo t b tmp))))
+   ;(list #'fresh #'conde #'bind* #'mplus*)
+)))
 
 ; (pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
 ;   #'(conde
