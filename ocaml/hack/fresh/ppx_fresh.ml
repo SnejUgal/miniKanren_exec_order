@@ -57,6 +57,7 @@ let is_unif =
 ;;
 
 let is_conj = need_insert_fname ~name:"conj"
+let is_infix_conj = need_insert_fname ~name:"&&&"
 let is_disj e = need_insert_fname ~name:"disj" e || need_insert_fname ~name:"|||" e
 
 (*
@@ -183,12 +184,16 @@ let mapper =
       let loc = e.pexp_loc in
       match e.pexp_desc with
       | Pexp_apply (_, []) -> e
+      | Pexp_apply (e1, [ (Nolabel, argl); (Nolabel, argr) ]) when is_infix_conj e1 ->
+        [%expr fun st -> bindS ([%e self#expression argl] st) [%e self#expression argr]]
       | Pexp_apply (e1, (Nolabel, args) :: other_args) when is_conde e1 ->
         (* assert false; *)
         let goals = parse_to_list args in
         Format.eprintf "parsing conde gave %d goals\n%!" (List.length goals);
         let goals = List.map ~f:self#expression goals in
-        let rez = list_fold_left1 ~f:(fun acc x -> [%expr mplus [%e acc] [%e x]]) goals in
+        let rez =
+          list_fold_left1 ~f:(fun acc x -> [%expr mplusS [%e acc] [%e x]]) goals
+        in
         (match other_args with
          | [] -> rez
          | other_args -> Ast_builder.Default.(pexp_apply ~loc rez other_args))
@@ -204,6 +209,8 @@ let mapper =
           | [ body ] -> self#expression body
           | body ->
             let xs = List.map ~f:self#expression body in
+            list_fold_left1 ~f:(fun l r -> [%expr [%e l] [%e r]]) xs
+            |> 
             [%expr ?&[%e my_list ~loc xs]]
         in
         (match reconstruct_args args with

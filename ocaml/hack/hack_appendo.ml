@@ -36,14 +36,13 @@ let ( === ) a b st =
     st
 ;; *)
 
-let rec appendo a b ab st =
+let rec appendo a b ab =
   Printf.printf "appendo %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab));
   let open Std in
   conde
     [ a === nil () &&& (b === ab)
     ; fresh (h t tmp) (a === h % t) (ab === h % tmp) (appendo t b tmp)
     ]
-    st
 ;;
 
 (* let rec reverso a b st =
