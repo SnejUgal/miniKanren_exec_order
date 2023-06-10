@@ -26,18 +26,8 @@ let ( === ) a b st =
   (a === b) st
 ;;
 
-(* let rec appendo a b ab st =
-  Printf.printf "appendo %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab));
-  let open Std in
-  conde
-    [ a === nil () &&& (b === ab)
-    ; fresh (h t tmp) (a === h % t) (ab === h % tmp) (appendo t b tmp)
-    ]
-    st
-;; *)
-
 let rec appendo a b ab =
-  Printf.printf "appendo %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab));
+  (* Printf.printf "appendo %s %s %s\n" (pp (r a)) (pp (r b)) (pp (r ab)); *)
   let open Std in
   conde
     [ a === nil () &&& (b === ab)
@@ -45,73 +35,59 @@ let rec appendo a b ab =
     ]
 ;;
 
-(* let rec reverso a b st =
-  Printf.printf "reverso %s %s\n" (pp (r a)) (pp (r b));
+(*  *)
+(* let rec reverso a b =
   let open Std in
   conde
     [ a === nil () &&& (a === b)
     ; fresh (h t tmp) (a === h % t) (reverso t tmp) (appendo tmp !<h b)
     ]
-    st
 ;; *)
-
-let rec reverso a b st =
+let rec reverso a b =
   let open Std in
-  conde
-    [ a === nil () &&& (a === b)
-    ; fresh (h t tmp) (a === h % t) (reverso t tmp) (appendo tmp !<h b)
-    ]
-    st
+  fun st ->
+    pause (fun () ->
+      let st = State.new_scope st in
+      mplus
+        (bind ((a === nil ()) st) (a === b))
+        (pause (fun () ->
+           print_endline "after second pause";
+           (fun st ->
+             pause (fun () ->
+               print_endline "shit";
+               let h = State.fresh st in
+               let t = State.fresh st in
+               let tmp = State.fresh st in
+               bind (bind ((a === h % t) st) (reverso t tmp)) (appendo tmp !<h b)))
+             st)))
+;;
+
+let wrap (msg, goal) =
+  print_endline msg;
+  run q goal (fun rr -> rr#reify (Std.List.reify OCanren.reify))
+  |> Stream.take ~n:1
+  |> List.iteri (fun i n ->
+       Format.printf
+         "%3d:\t%s\n%!"
+         i
+         (GT.show Std.List.logic (GT.show OCanren.logic @@ GT.show GT.int) n))
 ;;
 
 let example1 () =
-  run
-    q
-    (fun q -> reverso (Std.list Fun.id [ !!0; !!1 ]) q)
-    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
-  |> Stream.take ~n:1
-  |> ignore
+  wrap (REPR (fun q -> appendo (Std.list Fun.id [ !!0 ]) (Std.list Fun.id [ !!1 ]) q))
 ;;
 
-(* let example2 () =
-  run
-    q
-    (fun q -> reverso q (Std.list Fun.id [ !!0; !!1 ]))
-    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
-  |> Stream.take ~n:1
-  |> ignore
+let example2 () =
+  wrap
+    (REPR
+       (fun q -> appendo (Std.list Fun.id [ !!0; !!1 ]) (Std.list Fun.id [ !!2; !!3 ]) q))
 ;;
 
-let example3 () =
-  run
-    q
-    (fun q -> reverso q (Std.list Fun.id [ !!0; !!1; !!2 ]))
-    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
-  |> Stream.take ~n:1
-  |> List.iteri (fun i xs ->
-       Printf.printf
-         "%d: %s\n"
-         i
-         (GT.show Std.List.logic (GT.show OCanren.logic @@ GT.show GT.int) xs))
-;; *)
-(*  *)
-(* let example4 () =
-  run
-    q
-    (fun q ->
-      fresh
-        (a b d)
-        (q === Std.list Fun.id [ a; b; !!1; d ])
-        (reverso q (Std.list Fun.id [ !!0; !!1; !!2; !!3 ])))
-    (fun rr -> rr#reify (Std.List.reify OCanren.reify))
-  |> Stream.take ~n:1
-  |> List.iteri (fun i xs ->
-       Printf.printf
-         "%d: %s\n"
-         i
-         (GT.show Std.List.logic (GT.show OCanren.logic @@ GT.show GT.int) xs))
-;; *)
+let reverso0 () = wrap (REPR (fun q -> reverso (Std.list Fun.id [ !!1 ]) q))
+let reverso1 () = wrap (REPR (fun q -> reverso (Std.list Fun.id [ !!1; !!2 ]) q))
+let reverso2 () = wrap (REPR (fun q -> reverso q (Std.list Fun.id [ !!1; !!2 ])))
 
+(* TODO: make double dashes, like in racket *)
 let () =
   let wrap name f =
     ( "-" ^ name
@@ -122,12 +98,13 @@ let () =
     , "" )
   in
   Arg.parse
-    [ wrap "ex1" example1
-      (* wrap "ex2" example2; wrap "ex3" example3; wrap "ex4" example4  *)
+    [ wrap "app1" example1
+    ; wrap "app2" example2
+    ; wrap "rev0" reverso0
+    ; wrap "rev1" reverso1
+    ; wrap "rev2" reverso2
     ]
     (fun _ -> assert false)
     "";
   Printf.printf "unifications: %d\n" config.unifications
 ;;
-(*  *)
-(*  *)
