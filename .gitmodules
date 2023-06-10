@@ -5,6 +5,6 @@
 [submodule "ocaml/OCanren"]
 	path = ocaml/OCanren
 	url = https://github.com/Kakadu/OCanren.git
-	branch = miniKanren2023
+	branch = syntax-hack
 	shallow = true
 
