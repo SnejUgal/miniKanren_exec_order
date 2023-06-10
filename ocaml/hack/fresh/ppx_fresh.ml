@@ -58,6 +58,8 @@ let is_unif =
 
 let is_conj = need_insert_fname ~name:"conj"
 let is_infix_conj = need_insert_fname ~name:"&&&"
+let is_bind_star = need_insert_fname ~name:"bind_star"
+let is_mplus_star = need_insert_fname ~name:"mplus_star"
 let is_disj e = need_insert_fname ~name:"disj" e || need_insert_fname ~name:"|||" e
 
 (*
@@ -168,13 +170,25 @@ let my_list ~loc es =
 let parse_to_list alist =
   let rec helper acc ele =
     match ele.pexp_desc with
-    | Pexp_construct ({ txt = Lident "[]" }, None) -> acc
-    | Pexp_construct ({ txt = Lident "::" }, Some { pexp_desc = Pexp_tuple [ y1; y2 ]; _ })
-      -> helper (y1 :: acc) y2
+    | Pexp_construct ({ txt = Lident "[]"; _ }, None) -> acc
+    | Pexp_construct
+        ({ txt = Lident "::"; _ }, Some { pexp_desc = Pexp_tuple [ y1; y2 ]; _ }) ->
+      helper (y1 :: acc) y2
     | _ -> [ ele ]
   in
   List.rev @@ helper [] alist
 ;;
+
+(** Transforms [a &&& b &&& c ... d] to a list [[a;b;c;d]] *)
+let parse_many_conjunctions alist =
+  let rec helper acc = function
+    | [%expr [%e? a] &&& [%e? b]] -> helper (a :: acc) b
+    | x -> x :: acc
+  in
+  List.rev @@ helper [] alist
+;;
+
+let nolabelize_args = List.map ~f:(fun x -> Nolabel, x)
 
 let mapper =
   object (self)
@@ -183,64 +197,92 @@ let mapper =
     method! expression e =
       let loc = e.pexp_loc in
       match e.pexp_desc with
-      | Pexp_apply (_, []) -> e
-      | Pexp_apply (e1, [ (Nolabel, argl); (Nolabel, argr) ]) when is_infix_conj e1 ->
-        [%expr fun st -> bindS ([%e self#expression argl] st) [%e self#expression argr]]
+      | Pexp_apply (_, []) ->
+        e
+        (* | Pexp_apply (e1, [ (Nolabel, argl); (Nolabel, argr) ]) when is_infix_conj e1 ->
+        self#expression
+          [%expr
+            fun st -> bind_star ([%e self#expression argl] st) [%e self#expression argr]] *)
+        (* conde *)
       | Pexp_apply (e1, (Nolabel, args) :: other_args) when is_conde e1 ->
-        (* assert false; *)
         let goals = parse_to_list args in
         Format.eprintf "parsing conde gave %d goals\n%!" (List.length goals);
         let goals = List.map ~f:self#expression goals in
-        let rez =
-          list_fold_left1 ~f:(fun acc x -> [%expr mplusS [%e acc] [%e x]]) goals
-        in
-        (match other_args with
-         | [] -> rez
-         | other_args -> Ast_builder.Default.(pexp_apply ~loc rez other_args))
+        let goals = List.map ~f:parse_many_conjunctions goals in
+        self#expression
+          [%expr
+            fun st ->
+              pause (fun () ->
+                let st = State.new_scope st in
+                [%e
+                  let open Ast_builder.Default in
+                  pexp_apply ~loc [%expr mplus_star]
+                  @@ nolabelize_args
+                  @@ List.map goals ~f:(function
+                       | [] -> assert false
+                       | h :: tl ->
+                         pexp_apply ~loc [%expr bind_star]
+                         @@ ((Nolabel, [%expr [%e h] st]) :: nolabelize_args tl))])]
+      | Pexp_apply (e1, args) when is_bind_star e1 ->
+        self#expression
+          (match args with
+           | [] -> failwith "should not happen"
+           | [ (_, e) ] -> e
+           | [ (_, e); (_, g0) ] -> [%expr bind [%e e] [%e g0]]
+           | (_, e) :: (_, g0) :: tl ->
+             let open Ast_builder.Default in
+             pexp_apply ~loc [%expr bind_star (bind [%e e] [%e g0])] tl)
+      | Pexp_apply (e1, args) when is_mplus_star e1 ->
+        self#expression
+          (match args with
+           | [] -> failwith "should not happen"
+           | [ (_, e) ] -> e
+           | (_, e0) :: tl ->
+             let open Ast_builder.Default in
+             [%expr
+               mplus
+                 [%e e0]
+                 (pause (fun () -> [%e pexp_apply ~loc [%expr mplus_star] tl]))])
+      (* pexp_apply ~loc [%expr bind_star (bind [%e e] [%e g0])] tl) *)
+      (* fresh  *)
       | Pexp_apply (e1, [ _ ]) when is_fresh e1 ->
         (* bad syntax -- no body*)
         e
       | Pexp_apply (e1, (Nolabel, args) :: body) when is_fresh e1 ->
         assert (List.length body > 0);
-        let body = List.map ~f:snd body in
+        (* let body = List.map ~f:snd body in *)
         let new_body : expression =
+          let open Ast_builder.Default in
           match body with
           | [] -> assert false
-          | [ body ] -> self#expression body
-          | body ->
-            let xs = List.map ~f:self#expression body in
-            list_fold_left1 ~f:(fun l r -> [%expr [%e l] [%e r]]) xs
-            |> 
-            [%expr ?&[%e my_list ~loc xs]]
+          | (_, h) :: tl ->
+            pexp_apply ~loc [%expr bind_star] ((Nolabel, [%expr [%e h] st]) :: tl)
         in
-        (match reconstruct_args args with
-         | Some (xs : string list) ->
-           let rec loop acc = function
-             | [] -> acc
-             | x :: y :: z :: rest ->
-               let px = Pat.var ~loc (Ast_builder.Default.Located.mk x ~loc) in
-               let py = Pat.var ~loc (Ast_builder.Default.Located.mk y ~loc) in
-               let pz = Pat.var ~loc (Ast_builder.Default.Located.mk z ~loc) in
-               [%expr Fresh.three (fun [%p px] [%p py] [%p pz] -> [%e loop acc rest])]
-             | x :: rest ->
-               let px = Pat.var ~loc (Ast_builder.Default.Located.mk x ~loc) in
-               [%expr Fresh.one (fun [%p px] -> [%e loop acc rest])]
-           in
-           loop [%expr delay (fun () -> [%e new_body])] xs
-           (* let ans =
-             List.fold_right
-               xs
-               ~f:(fun ident acc ->
+        self#expression
+          (match reconstruct_args args with
+           | Some (xs : string list) ->
+             let rec loop acc = function
+               | [] -> acc
+               | v :: tl ->
+                 let px = Pat.var ~loc (Ast_builder.Default.Located.mk v ~loc) in
                  [%expr
-                   Fresh.one
-                     (fun [%p Pat.var ~loc (Ast_builder.Default.Located.mk ident ~loc)] ->
-                     [%e acc])])
-               ~init:[%expr delay (fun () -> [%e new_body])]
-           in
-           ans *)
-         | None ->
-           Caml.Format.eprintf "Can't reconstruct args of 'fresh'";
-           { e with pexp_desc = Pexp_apply (e1, [ Nolabel, new_body ]) })
+                   let [%p px] = State.fresh st in
+                   [%e loop acc tl]]
+               (* | x :: y :: z :: rest ->
+                 let px = Pat.var ~loc (Ast_builder.Default.Located.mk x ~loc) in
+                 let py = Pat.var ~loc (Ast_builder.Default.Located.mk y ~loc) in
+                 let pz = Pat.var ~loc (Ast_builder.Default.Located.mk z ~loc) in
+                 [%expr Fresh.three (fun [%p px] [%p py] [%p pz] -> [%e loop acc rest])]
+               | x :: rest ->
+                 let px = Pat.var ~loc (Ast_builder.Default.Located.mk x ~loc) in
+                 [%expr Fresh.one (fun [%p px] -> [%e loop acc rest])] *)
+             in
+             [%expr
+               fun st -> pause (fun () -> (* TODO: new scope  *)
+                                          [%e loop new_body xs])]
+           | None ->
+             Caml.Format.eprintf "Can't reconstruct args of 'fresh'";
+             { e with pexp_desc = Pexp_apply (e1, [ Nolabel, new_body ]) })
       | Pexp_apply (d, [ (_, body) ]) when is_defer d ->
         let ans = [%expr delay (fun () -> [%e self#expression body])] in
         ans
