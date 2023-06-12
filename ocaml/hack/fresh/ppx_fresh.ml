@@ -182,10 +182,10 @@ let parse_to_list alist =
 (** Transforms [a &&& b &&& c ... d] to a list [[a;b;c;d]] *)
 let parse_many_conjunctions alist =
   let rec helper acc = function
-    | [%expr [%e? a] &&& [%e? b]] -> helper (a :: acc) b
+    | [%expr [%e? a] &&& [%e? b]] -> helper (b :: acc) a
     | x -> x :: acc
   in
-  List.rev @@ helper [] alist
+  helper [] alist
 ;;
 
 let nolabelize_args = List.map ~f:(fun x -> Nolabel, x)

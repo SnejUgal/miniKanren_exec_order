@@ -11,6 +11,7 @@
     empty-state
     var?
     var-idx
+    walk*
     ; A few primitives to be able to run macro expanded relations
     state-with-scope
     new-scope
@@ -18,7 +19,11 @@
     state-S
     mplus
     bind
+    ; two macro to debug macro
+    bind*
+    mplus*
     var
+    suspend
     always-wrap-reified?)
 
 (require "../faster-miniKanren/private-unstable.rkt")

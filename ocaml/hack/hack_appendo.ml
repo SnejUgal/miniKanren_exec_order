@@ -98,11 +98,11 @@ let () =
     , "" )
   in
   Arg.parse
-    [ wrap "app1" example1
-    ; wrap "app2" example2
-    ; wrap "rev0" reverso0
-    ; wrap "rev1" reverso1
-    ; wrap "rev2" reverso2
+    [ wrap "-app1" example1
+    ; wrap "-app2" example2
+    ; wrap "-rev0" reverso0
+    ; wrap "-rev1" reverso1
+    ; wrap "-rev2" reverso2
     ]
     (fun _ -> assert false)
     "";
