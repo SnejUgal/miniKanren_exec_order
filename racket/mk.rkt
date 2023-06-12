@@ -28,6 +28,40 @@
 
 (require "../faster-miniKanren/private-unstable.rkt")
 
+
+#| (define (mplus stream f)
+  (case-inf stream
+    (() (begin
+            (display "  mplus 1st branch\n")
+            f))
+    ((f^) (begin
+            (display "  mplus 2nd branch\n")
+            (lambda () (begin
+              (display "HERE\n")
+              (mplus (f) f^)))))
+    ((c) (begin
+            (display "  mplus 3rd branch\n")
+            (cons c f)))
+    ((c f^) (begin
+              (display "  mplus 4th branch\n")
+              (cons c (lambda () (mplus (f) f^)))))))
+
+; SearchStream, Goal -> SearchStream
+(define (bind stream g)
+  (case-inf stream
+    (() (begin
+            (display "  bind 1st branch\n")
+            #f))
+    ((f) (begin
+            (display "  bind 2nd branch\n")
+            (lambda () (bind (f) g))))
+    ((c) (begin
+            (display "  bind 3rd branch\n")
+            (g c)))
+    ((c f) (begin
+              (display "  bind 4th branch\n")
+              (mplus (g c) (lambda () (bind (f) g))))))) |#
+
 ; we create 10 variables to start OCanren and faster-miniKanren counters from the same number
 ; (begin
 ;   (let (
