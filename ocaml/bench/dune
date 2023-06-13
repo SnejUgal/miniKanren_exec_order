@@ -5,7 +5,7 @@
  (wrapped false)
  (flags
   (:standard -rectypes))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh
@@ -23,7 +23,7 @@
  (wrapped false)
  (flags
   (:standard -rectypes))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh
@@ -41,7 +41,7 @@
  (wrapped false)
  (flags
   (:standard -rectypes))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh
@@ -73,15 +73,22 @@
  (names permo_bench)
  (modules permo_bench)
  (flags
-  (:standard -rectypes))
+  (:standard -rectypes -open Permo_decls_nolog))
  (libraries benchmark permo_nolog))
 
+;(executables
+; (names expo_bench2)
+; (modules expo_bench2)
+; (flags
+;  (:standard -rectypes -warn-error -32-69))
+; (libraries core_unix.command_unix core_bench numero_decls_nolog))
+
 (executables
- (names expo_bench2)
- (modules expo_bench2)
+ (names numero_bench)
+ (modules numero_bench)
  (flags
-  (:standard -rectypes -warn-error -32-69))
- (libraries core_unix.command_unix core_bench numero_decls_nolog))
+  (:standard -rectypes -warn-error -32-69 -open Numero_decls_nolog))
+ (libraries benchmark numero_decls_nolog))
 
 (cram
  (deps ./expo_bench.exe))

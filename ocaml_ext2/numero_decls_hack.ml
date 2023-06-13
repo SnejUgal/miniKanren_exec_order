@@ -8,7 +8,7 @@ type ioleg = int ilogic Std.List.injected
 [@@@ocamlformat.disable]
 [@@@ocaml.warnerror "-32"]
 
-(* IFDEF TRACE THEN *)
+IFDEF TRACE THEN
 
 (* Specialized unifications for counting and printing  *)
 include struct
@@ -19,7 +19,7 @@ include struct
     | _ -> true
 
   let log fmt =
-    if are_unifications_silent then Format.ifprintf Format.std_formatter fmt 
+    if are_unifications_silent then Format.ifprintf Format.std_formatter fmt
     else Format.printf fmt
 
   let pp = Format.asprintf "%a" (GT.fmt OCanren.logic @@ GT.fmt GT.int)
@@ -88,14 +88,14 @@ include struct
  ;;
 end
 
-(* ELSE
+ELSE
 
 include struct
   let (===) : int ilogic Std.List.injected -> _ -> goal = OCanren.(===)
   let (====) : int ilogic -> int ilogic -> goal = OCanren.(===)
 end
 
-END *)
+END
 
 [@@@ocamlformat.enable]
 
@@ -113,7 +113,7 @@ let rec appendo l s out =
     ]
 ;;
 
-let rec appendo l s out st =
+(* let rec appendo l s out st =
   pause
     (fun () ->
       let st = State.new_scope st in
@@ -127,7 +127,7 @@ let rec appendo l s out st =
                     let d = State.fresh st in
                     let res = State.fresh st in
                       bind (bind (((a % d) === l) st) ((a % res) === out))
-                      (appendo d s res))) st)))
+                      (appendo d s res))) st))) *)
 
 
 let ( ! ) = inj
@@ -139,8 +139,8 @@ let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 let zeroo n = zero === n
 
-(* let poso n = fresh (h t) (( === ) ~s:"poso" n (h % t)) *)
-let poso n st =
+let poso n = fresh (h t) (( === ) ~s:"poso" n (h % t))
+(* let poso n st =
   pause (fun () ->
     let a = State.fresh st in
     let d = State.fresh st in
@@ -150,11 +150,11 @@ let poso n st =
       (bit_trace_after_reify a st)
       (trace_after_reify d st);
     (( === ) ~s:"poso" n (a % d)) st)
-;;
+;; *)
 
-(*  *)
-(* let gt1o n = fresh (a ad dd) (( === ) ~s:"gt1o" n (a % (ad % dd))) *)
-let gt1o n st =
+
+let gt1o n = fresh (a ad dd) (( === ) ~s:"gt1o" n (a % (ad % dd)))
+(* let gt1o n st =
   pause (fun () ->
     let a = State.fresh st in
     let ad = State.fresh st in
@@ -166,10 +166,8 @@ let gt1o n st =
       (bit_trace_after_reify ad st)
       (trace_after_reify dd st);
     (( === ) ~s:"gt1o" n (a % (ad % dd))) st)
-;;
+;; *)
 
-(*  *)
-(*  *)
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
 let full_addero b x y r c =
@@ -187,7 +185,7 @@ let full_addero b x y r c =
 
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
-
+(*
 let full_addero b x y r c st =
   log
     "\tfull_addero %s %s %s %s %s (REIFIED)\n"
@@ -262,7 +260,7 @@ let full_addero b x y r c st =
                                                (!1 ==== y))
                                             (!1 ==== r))
                                          (!1 ==== c))))))))))))))))
-;;
+;; *)
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
 let rec addero d n m r =
@@ -290,7 +288,7 @@ and gen_addero d n m r =
 ;;
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
-let rec addero d n m r st =
+(* let rec addero d n m r st =
   pause (fun () ->
     log "  addero after 1st pause\n";
     let st = State.new_scope st in
@@ -379,8 +377,8 @@ and gen_addero d n m r st =
          (full_addero d a b c e))
       (addero e x y z))
 ;;
+ *)
 
-(*  *)
 let pluso n m k = addero !0 n m k
 let minuso n m k = pluso m k n
 

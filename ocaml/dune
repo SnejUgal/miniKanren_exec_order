@@ -72,7 +72,7 @@
    ;-dsource
    ;
    ))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh
@@ -103,7 +103,7 @@
  (libraries OCanren counters)
  (flags
   (:standard -rectypes))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh

@@ -41,26 +41,17 @@ let example3 () =
 ;;
 
 let () =
+  let wrap name f =
+    ( name
+    , Arg.Unit
+        (fun () ->
+          clear_unifications ();
+          f ();
+          Printf.printf "unifications: %d\n" config.unifications)
+    , "" )
+  in
   Arg.parse
-    [ ( "-ex1"
-      , Arg.Unit
-          (fun () ->
-            clear_unifications ();
-            example1 ())
-      , "" )
-    ; ( "-ex2"
-      , Arg.Unit
-          (fun () ->
-            clear_unifications ();
-            example2 ())
-      , "" )
-    ; ( "-ex3"
-      , Arg.Unit
-          (fun () ->
-            clear_unifications ();
-            example3 ())
-      , "" )
-    ]
+    [ wrap "--ex1" example1; wrap "--ex2" example2; wrap "--ex3" example3 ]
     (fun _ -> assert false)
     "";
   Printf.printf "unifications: %d\n" config.unifications

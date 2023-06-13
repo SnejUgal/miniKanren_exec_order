@@ -3,7 +3,6 @@
     taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
   *)
 
-open Permo_decls_nolog
 open Benchmark
 
 type config = { mutable print_raw : bool }
@@ -38,7 +37,7 @@ let warmup () =
 
 let () =
   warmup ();
-  let res = latency1 ~name:"3^5" ~style:Nil ~repeat 10L test () in
+  let res = latency1 ~name:"1..8 (all)" ~style:Nil ~repeat 4L test () in
   print_newline ();
   tabulate res;
   if config.print_raw
