@@ -12,6 +12,14 @@
   multo (build_num 5) (build_num 5)
     0:	[1; 0; 0; 1; 1]
   unifications: 386
+
+  $ echo "obase=2;255*255" | bc
+  1111111000000001
+
+  $ ../ocaml/numero.exe --mul255x255
+  multo (build_num 255) (build_num 255)
+    0:	[1; 0; 0; 0; 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1]
+  unifications: 784097
   $ ../ocaml/numero.exe --exp2x3
   expo (build_num 2) (build_num 3)
     0:	[0; 0; 0; 1]

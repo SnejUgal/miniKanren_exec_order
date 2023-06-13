@@ -23,7 +23,9 @@ let mul5x5 () = wrap (REPR (multo (build_num 5) (build_num 5)))
 let mul5x5_all () = wrap ~n:(-1) (REPR (multo (build_num 5) (build_num 5)))
 let mul5x6 () = wrap (REPR (multo (build_num 5) (build_num 6)))
 let mul7x7 () = wrap (REPR (multo (build_num 7) (build_num 7)))
-let mul2 () = wrap (REPR (multo (build_num 255) (build_num 255)))
+let mul255x255 () = wrap (REPR (multo (build_num 255) (build_num 255)))
+
+(* let mul2 () = wrap (REPR (multo (build_num 255) (build_num 255))) *)
 let repeatedMul1 () = wrap (REPR (repeated_mul (build_num 3) (build_num 2)))
 let odd_multo1 () = wrap (REPR (odd_multo (build_num 1) (build_num 3) (build_num 3)))
 let exp2in3 () = wrap (REPR (expo (build_num 2) (build_num 3)))
@@ -64,7 +66,7 @@ let () =
     ; wrap "--mul5x5-all" mul5x5_all
     ; wrap "--mul5x6" mul5x6
     ; wrap "--mul7x7" mul7x7
-    ; wrap "--mul255x255" mul2
+    ; wrap "--mul255x255" mul255x255
     ; wrap "--exp2x3" exp2in3
     ; wrap "--exp3x5" exp3in5
     ; wrap "--repeatedMul1" repeatedMul1

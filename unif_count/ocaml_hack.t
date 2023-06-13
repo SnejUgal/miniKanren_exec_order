@@ -17,6 +17,16 @@
     0:	[1; 0; 0; 1; 1]
   unifications: 386
 
+  $ echo "obase=2;255*255" | bc
+  1111111000000001
+
+  $ ../ocaml/numero.exe --mul255x255
+  multo (build_num 255) (build_num 255)
+    0:	[1; 0; 0; 0; 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1]
+  unifications: 784097
+
+TODO: expo 255^2
+
   $ ../ocaml_ext2/hack_numero.exe --logo8base2
   fun q -> logo (build_num 8) (build_num 2) q (build_num 0)
     0:	[1; 1]
