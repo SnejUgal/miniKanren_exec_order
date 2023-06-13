@@ -1,5 +1,6 @@
 (library
  (name counters)
+ (public_name kanren_benchmarks.counters)
  (modules counters)
  (wrapped false))
 
@@ -48,7 +49,7 @@
    ;-dsource
    ;
    ))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    OCanren-ppx.ppx_fresh

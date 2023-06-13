@@ -1,8 +1,10 @@
 (* Relational arithmentics using binary numbers *)
 open OCanren
 open OCanren.Std
-open Tester
+
 include Counters.Make ()
+
+type ioleg = int ilogic Std.List.injected
 
 [@@@ocamlformat.disable]
 [@@@ocaml.warnerror "-32"]
@@ -11,13 +13,21 @@ IFDEF TRACE THEN
 
 (* Specialized unifications for counting and printing  *)
 include struct
+
+
+  let are_unifications_silent =
+    match Sys.getenv "SILENT_UNIFICATIONS" with
+    | exception Not_found -> false
+    | _ -> true
+
   let pp = Format.asprintf "%a" (GT.fmt OCanren.logic @@ GT.fmt GT.int)
   let r x = reify_in_empty OCanren.reify x
 
   let ( ==== ) : int ilogic -> int ilogic -> goal =
    fun x y st ->
     incr_counter ();
-    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+    if not are_unifications_silent then
+      Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y st 
    [@@inline]
  ;;
@@ -46,7 +56,8 @@ include struct
   let ( === ) : int ilogic Std.List.injected -> _ -> goal =
    fun x y st ->
     incr_counter ();
-    Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+    if not are_unifications_silent then
+      Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
     OCanren.( === ) x y st 
    [@@inline]
  ;;
@@ -274,7 +285,6 @@ let rec exp2 n b q =
     ]
 ;;
 
-let peano_reifier = r
 (** Satisfies n = b ^ q + r, where 0 <= r <= n and q is the largest. *)
 let logo n b q r =
   conde
@@ -328,10 +338,14 @@ let logo n b q r =
 
 let expo b q n = logo n b q zero
 
+let show_logic x = [%show: GT.int OCanren.logic Std.List.logic] () x
+let reify : (ioleg, _) Reifier.t = Std.List.reify OCanren.reify
+
+(* 
 let test17 n m = lelo n m &&& multo n (build_num 2) m
 let test27 b q r = logo (build_num 68) b q r &&& gt1o q
 let show_num = GT.(show List.ground @@ show int)
-let show_num_logic = GT.(show List.logic @@ show logic @@ show int)
+let show_num_logic = GT.(show List.logic @@ show logic @@ show int) *)
 
 (* let _ffoo _ =
   run_exn show_num (-1)  qr qrh (REPR (fun q r     -> multo q r (build_num 1)                          ));
@@ -340,6 +354,6 @@ let show_num_logic = GT.(show List.logic @@ show logic @@ show int)
   run_exn show_num (-1)   q  qh (REPR (fun q       -> logo (build_num 14) (build_num 2) (build_num 3) q));
   run_exn show_num (-1)   q  qh (REPR (fun q       -> expo (build_num 3) (build_num 5) q               ));
   () *)
-
+(* 
 let num_reifier h = List.reify OCanren.reify h
-let runL n = run_r num_reifier show_num_logic n
+let runL n = run_r num_reifier show_num_logic n *)

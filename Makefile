@@ -33,3 +33,11 @@ clean:
 	dune clean
 	$(RM) -r klogic/build
 
+
+.PHONY: check 
+CHARG ?= mul5x5	
+check:
+	dune exec ocaml_ext2/hack_numero.exe --display=quiet -- --$(CHARG) | tail -n +2 | nl -ba > ocaml.log && \
+	racket racket/mulo1.rkt --$(CHARG) | nl -ba > racket.log && \
+	grc diff -u ocaml.log racket.log
+

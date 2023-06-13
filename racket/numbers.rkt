@@ -20,13 +20,31 @@
       ((== a b) st)))
 ))
 
+; (defrel (appendo l s out)
+;   (conde
+;     [(=== l '()) (=== s out)]
+;     [(fresh (a d res)
+;        (=== `(,a . ,d) l)
+;        (=== `(,a . ,res) out)
+;        (appendo d s res))]))
+
 (defrel (appendo l s out)
-  (conde
-    [(=== l '()) (=== s out)]
-    [(fresh (a d res)
-       (=== `(,a . ,d) l)
-       (=== `(,a . ,res) out)
-       (appendo d s res))]))
+  (lambda (st)
+    (lambda ()
+      (let ((st (state-with-scope st (new-scope))))
+        (mplus
+          (bind ((=== l '()) st) (=== s out))
+          (lambda ()
+            ((lambda (st)
+              (lambda ()
+                (let ((scope (subst-scope (state-S st))))
+                (let ((a (var scope)) (d (var scope)) (res (var scope)))
+                (bind
+                (bind ((=== `(,a . ,d) l) st) (=== `(,a . ,res) out))
+                (appendo d s res))))))
+                st))))))
+                )
+
 
 (define build-num
   (lambda (n)
@@ -62,11 +80,11 @@
     (lambda ()
       (let ((scope (subst-scope (state-S st))))
         (let ((a (var scope)) (ad (var scope)) (dd (var scope)))
-          (pretty-printf "  a = ~a, ad = ~a , dd = ~a gt1o\n"
+          (pretty-printf "  a = ~a, ad = ~a, dd = ~a gt1o\n"
               (trace_after_reify a st)
               (trace_after_reify ad st)
               (trace_after_reify dd st) )
-          ((=== n `(,a ,ad . ,dd) ">1o") st)))))
+          ((=== n `(,a ,ad . ,dd) "gt1o") st)))))
 )
 
 #| (defrel (full-addero b x y r c)
@@ -82,25 +100,33 @@
 
 (defrel (full-addero b x y r c)
 (lambda (st)
-  (pretty-printf "\tfull-addero ~a ~a ~a ~a ~a (REIFIED)\n"
-      ((reify b) st) ((reify x) st) ((reify y) st) ((reify r) st) ((reify c) st) )
+  (pretty-printf "\tfull_addero ~a ~a ~a ~a ~a (REIFIED)\n"
+      (trace_after_reify b st)
+      (trace_after_reify x st)
+      (trace_after_reify y st)
+      (trace_after_reify r st)
+      (trace_after_reify c st) )
   (lambda ()
+    (display "  full_addero after pause 1\n")
     (let ((st (state-with-scope st (new-scope))))
       (mplus
        (bind
         (bind (bind (bind ((=== 0 b) st) (=== 0 x)) (=== 0 y)) (=== 0 r))
         (=== 0 c))
        (lambda ()
+         (display "  full_addero after pause 2\n")
          (mplus
           (bind
            (bind (bind (bind ((=== 1 b) st) (=== 0 x)) (=== 0 y)) (=== 1 r))
            (=== 0 c))
           (lambda ()
+            (display "  full_addero after pause 3\n") 
             (mplus
              (bind
               (bind (bind (bind ((=== 0 b) st) (=== 1 x)) (=== 0 y)) (=== 1 r))
               (=== 0 c))
              (lambda ()
+               (display "  full_addero after pause 4\n")
                (mplus
                 (bind
                  (bind
@@ -108,6 +134,7 @@
                   (=== 0 r))
                  (=== 1 c))
                 (lambda ()
+                  (display "  full_addero after pause 5\n")
                   (mplus
                    (bind
                     (bind
@@ -115,6 +142,7 @@
                      (=== 1 r))
                     (=== 0 c))
                    (lambda ()
+                     (display "  full_addero after pause 6\n")
                      (mplus
                       (bind
                        (bind
@@ -122,6 +150,7 @@
                         (=== 0 r))
                        (=== 1 c))
                       (lambda ()
+                        (display "  full_addero after pause 7\n")
                         (mplus
                          (bind
                           (bind
@@ -129,6 +158,7 @@
                            (=== 0 r))
                           (=== 1 c))
                          (lambda ()
+                           (display "  full_addero after pause 8\n")
                            (bind
                             (bind
                              (bind (bind ((=== 1 b) st) (=== 1 x)) (=== 1 y))
@@ -157,37 +187,45 @@
 (defrel (addero d n m r)
   (lambda (st)
     (lambda ()
+      (display "  addero after 1st pause\n")
       (let ((st (state-with-scope st (new-scope))))
         (mplus
         (bind
           (bind ((=== 0 d 50 ) st) (=== '() m 51))
           (=== n r 52))
         (lambda ()
+          (display "  addero after 2nd pause\n")
           (mplus
             (bind (bind (bind ((=== 0 d 53) st) (=== '() n 54)) (=== m r 55)) (poso m))
             (lambda ()
+          (display "  addero after 3rd pause\n")
               (mplus
               (bind (bind ((=== 1 d 56) st) (=== '() m)) (addero 0 n '(1) r))
               (lambda ()
+                (display "  addero after 4th pause\n")
                 (mplus
                   (bind
                     (bind (bind ((=== 1 d) st) (=== '() n 59)) (poso m))
                     (addero 0 '(1) m r))
                   (lambda ()
+                    (display "  addero after 5th pause\n")
                     (mplus
                     (bind
                       (bind ((=== n '(1)  60) st) (=== m '(1)  61))
                       (lambda (st)
                         (lambda ()
+                          (display "  addero after 6th pause\n")
                           (let ((scope (subst-scope (state-S st))))
                             (let ((a (var scope)) (c (var scope)))
                               (bind
                               ((=== `(,a ,c) r 62) st)
                               (full-addero d 1 1 a c)))))))
                     (lambda ()
+                      (display "  addero after 7th pause\n")
                       (mplus
                         (bind ((=== n '(1) 63) st) (gen-addero d n m r))
                         (lambda ()
+                          (display "  addero after 8th pause\n")
                           (mplus
                             (bind
                               (bind
@@ -196,6 +234,7 @@
                                   (>1o r))
                               (addero d '(1) n r))
                             (lambda ()
+                              (display "  addero after 9th pause\n")
                               (bind
                                 ((>1o n) st)
                                 (gen-addero d n m r)))))))))))))))))))
@@ -220,6 +259,14 @@
               (x (var scope))
               (y (var scope))
               (z (var scope)))
+          (pretty-printf "  a = ~a, b = ~a, c = ~a, e = ~a, x = ~a, y = ~a, z = ~a gen_addero\n"
+            (trace_after_reify a st)
+            (trace_after_reify b st)
+            (trace_after_reify c st)
+            (trace_after_reify e st)
+            (trace_after_reify x st)
+            (trace_after_reify y st)
+            (trace_after_reify z st) )
           (bind
             (bind
               (bind
@@ -273,7 +320,7 @@
                 (let ((x (var scope)))
                 (let ((y (var scope)))
                 (let ((z (var scope)))
-                  (pretty-printf "  a0 = ~a, a2 = ~a, a2 = ~a, a3 = ~a BOUND_MULTO\n"
+                  (pretty-printf "  a0 = ~a, a1 = ~a, a2 = ~a, a3 = ~a BOUND_MULTO\n"
                     (trace_after_reify a0 st)
                     (trace_after_reify a1 st)
                     (trace_after_reify a2 st)
@@ -395,10 +442,14 @@
     (*o x m q)
     (pluso `(0 . ,q) m p)))
  |#
+
 (defrel (odd-*o x n m p)
   (lambda (st)
     (pretty-printf "\todd_multo ~a ~a ~a ~a (REIFIED)\n"
-      ((reify x) st) ((reify n) st) ((reify m) st) ((reify p) st))
+      (trace_after_reify x st)
+      (trace_after_reify n st)
+      (trace_after_reify m st)
+      (trace_after_reify p st))
     (lambda ()
       (let ((scope (subst-scope (state-S st))))
         (let ((q (var scope)))
@@ -408,6 +459,7 @@
             (pluso `(0 . ,q) m p))))))
         ;)
 )
+
 ; extra let
 #| (defrel (odd-*o x n m p)
   (lambda (st)
@@ -421,6 +473,7 @@
             (bind head (*o x m q))
             (pluso `(0 . ,q) m p)))))))
 ) |#
+
 ; eqlo
 (defrel (=lo n m)
   (conde

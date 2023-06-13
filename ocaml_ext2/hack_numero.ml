@@ -1,10 +1,10 @@
-open Numero_decls
+open Numero_decls_hack
 
 let wrap : ?n:int -> string * (ioleg -> OCanren.goal) -> unit =
  fun ?(n = 1) (msg, goal) ->
   print_endline msg;
-  OCanren.(run q goal (fun rr -> rr#reify Numero_decls.reify) |> Stream.take ~n)
-  |> List.iteri (fun i n -> Format.printf "%3d:\t%s\n%!" i (Numero_decls.show_logic n))
+  OCanren.(run q goal (fun rr -> rr#reify Numero_decls_hack.reify) |> Stream.take ~n)
+  |> List.iteri (fun i n -> Format.printf "%3d:\t%s\n%!" i (Numero_decls_hack.show_logic n))
 ;;
 
 let expo1 () = wrap (REPR (fun q -> expo (build_num 3) (build_num 5) q))
@@ -21,25 +21,23 @@ let mul5x3 () = wrap (REPR (multo (build_num 5) (build_num 3)))
 let mul5x4 () = wrap (REPR (multo (build_num 5) (build_num 4)))
 let mul5x5 () = wrap (REPR (multo (build_num 5) (build_num 5)))
 let mul5x5_all () = wrap ~n:(-1) (REPR (multo (build_num 5) (build_num 5)))
+
 let mul5x6 () = wrap (REPR (multo (build_num 5) (build_num 6)))
 let mul7x7 () = wrap (REPR (multo (build_num 7) (build_num 7)))
 let mul2 () = wrap (REPR (multo (build_num 255) (build_num 255)))
 let repeatedMul1 () = wrap (REPR (repeated_mul (build_num 3) (build_num 2)))
 let odd_multo1 () = wrap (REPR (odd_multo (build_num 1) (build_num 3) (build_num 3)))
-let exp2in3 () = wrap (REPR (expo (build_num 2) (build_num 3)))
-let exp3in5 () = wrap (REPR (expo (build_num 3) (build_num 5)))
 
-let logo8base2 () =
-  wrap (REPR (fun q -> logo (build_num 8) (build_num 2) q (build_num 0)))
-;;
+let exp2in3  () = wrap (REPR (expo (build_num 2) (build_num 3) ))
+let exp3in5  () = wrap (REPR (expo (build_num 3) (build_num 5) ))
 
-let logo243base3 () =
-  wrap (REPR (fun q -> logo (build_num 243) (build_num 3) q (build_num 0)))
-;;
+let logo8base2 () = wrap (REPR (fun q -> logo (build_num 8) (build_num 2) q (build_num 0)))
+
+let logo243base3 () = wrap (REPR (fun q -> logo (build_num 243) (build_num 3) q (build_num 0)))
 
 let () =
   let wrap name f =
-    ( name
+    (  name
     , Arg.Unit
         (fun () ->
           clear_unifications ();

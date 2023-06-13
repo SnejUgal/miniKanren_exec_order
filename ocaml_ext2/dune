@@ -35,10 +35,11 @@
    -dsource
    ;
    ))
- (preprocessor_deps %{project_root}/bench/pp5+dump.exe)
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
    ppx_hack
+   ; OCanren-ppx.ppx_fresh
    GT.ppx_all
    OCanren-ppx.ppx_distrib
    OCanren-ppx.ppx_repr

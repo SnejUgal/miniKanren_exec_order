@@ -12,6 +12,16 @@ type ioleg = int ilogic Std.List.injected
 
 (* Specialized unifications for counting and printing  *)
 include struct
+
+  let are_unifications_silent =
+    match Sys.getenv "SILENT_UNIFICATIONS" with
+    | exception Not_found -> false
+    | _ -> true
+
+  let log fmt =
+    if are_unifications_silent then Format.ifprintf Format.std_formatter fmt 
+    else Format.printf fmt
+
   let pp = Format.asprintf "%a" (GT.fmt OCanren.logic @@ GT.fmt GT.int)
   let r x = reify_in_empty OCanren.reify x
 
@@ -26,11 +36,12 @@ include struct
        (* Printf.printf "partially applied unification %s\n" (Stdlib.Option.value s ~default:""); *)
          st ->
     incr_counter ();
-    Printf.printf
-      "%s %s, %s\n"
-      (bit_trace_after_reify x st)
-      (bit_trace_after_reify y st)
-      s;
+    if not are_unifications_silent then
+      Printf.printf
+        "%s %s, %s\n"
+        (bit_trace_after_reify x st)
+        (bit_trace_after_reify y st)
+        s;
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -70,7 +81,8 @@ include struct
   let ( === ) : ?s:string -> ioleg -> _ -> goal =
    fun ?(s = "") x y (* Printf.printf "partially applied unification %s\n" s; *) st ->
     incr_counter ();
-    Printf.printf "%s %s, %s\n" (trace_after_reify x st) (trace_after_reify y st) s;
+    if not are_unifications_silent then
+      Printf.printf "%s %s, %s\n" (trace_after_reify x st) (trace_after_reify y st) s;
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -93,13 +105,30 @@ let rec build_num = function
   | n -> inj 1 % build_num (n / 2)
 ;;
 
-(*  *)
+(* Appendo is used in multiplication *)
 let rec appendo l s out =
   conde
     [ l === Std.nil () &&& (s === out)
     ; fresh (a d res) (a % d === l) (a % res === out) (appendo d s res)
     ]
 ;;
+
+let rec appendo l s out st =
+  pause
+    (fun () ->
+      let st = State.new_scope st in
+        mplus (bind ((l === (Std.nil ())) st) (s === out))
+          (pause
+            (fun () ->
+              (fun st ->
+                pause
+                  (fun () ->
+                    let a = State.fresh st in
+                    let d = State.fresh st in
+                    let res = State.fresh st in
+                      bind (bind (((a % d) === l) st) ((a % res) === out))
+                      (appendo d s res))) st)))
+
 
 let ( ! ) = inj
 
@@ -115,8 +144,9 @@ let poso n st =
   pause (fun () ->
     let a = State.fresh st in
     let d = State.fresh st in
-    Printf.printf
-      "  a = %s, d = %s\n"
+    if not are_unifications_silent then
+    log
+      "  a = %s, d = %s POSO\n"
       (bit_trace_after_reify a st)
       (trace_after_reify d st);
     (( === ) ~s:"poso" n (a % d)) st)
@@ -129,8 +159,9 @@ let gt1o n st =
     let a = State.fresh st in
     let ad = State.fresh st in
     let dd = State.fresh st in
-    Printf.printf
-      "  a = %s, ad = %s, dd = %s\n"
+    if not are_unifications_silent then
+    log
+      "  a = %s, ad = %s, dd = %s gt1o\n"
       (bit_trace_after_reify a st)
       (bit_trace_after_reify ad st)
       (trace_after_reify dd st);
@@ -141,7 +172,7 @@ let gt1o n st =
 (*  *)
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
-(* let full_addero b x y r c =
+let full_addero b x y r c =
   conde
     [ !0 ==== b &&& (!0 ==== x) &&& (!0 ==== y) &&& (!0 ==== r) &&& (!0 ==== c)
     ; !1 ==== b &&& (!0 ==== x) &&& (!0 ==== y) &&& (!1 ==== r) &&& (!0 ==== c)
@@ -152,10 +183,13 @@ let gt1o n st =
     ; !0 ==== b &&& (!1 ==== x) &&& (!1 ==== y) &&& (!0 ==== r) &&& (!1 ==== c)
     ; !1 ==== b &&& (!1 ==== x) &&& (!1 ==== y) &&& (!1 ==== r) &&& (!1 ==== c)
     ]
-;; *)
+;;
+
+
+(** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
 
 let full_addero b x y r c st =
-  Printf.printf
+  log
     "\tfull_addero %s %s %s %s %s (REIFIED)\n"
     (bit_trace_after_reify b st)
     (bit_trace_after_reify x st)
@@ -163,17 +197,20 @@ let full_addero b x y r c st =
     (bit_trace_after_reify r st)
     (bit_trace_after_reify c st);
   pause (fun () ->
+    log "  full_addero after pause 1\n";
     let st = State.new_scope st in
     mplus
       (bind
          (bind (bind (bind ((!0 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!0 ==== r))
          (!0 ==== c))
       (pause (fun () ->
+        log "  full_addero after pause 2\n";
          mplus
            (bind
               (bind (bind (bind ((!1 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!1 ==== r))
               (!0 ==== c))
            (pause (fun () ->
+             log "  full_addero after pause 3\n";
               mplus
                 (bind
                    (bind
@@ -181,6 +218,7 @@ let full_addero b x y r c st =
                       (!1 ==== r))
                    (!0 ==== c))
                 (pause (fun () ->
+                  log "  full_addero after pause 4\n";
                    mplus
                      (bind
                         (bind
@@ -188,6 +226,7 @@ let full_addero b x y r c st =
                            (!0 ==== r))
                         (!1 ==== c))
                      (pause (fun () ->
+                      log "  full_addero after pause 5\n";
                         mplus
                           (bind
                              (bind
@@ -195,6 +234,7 @@ let full_addero b x y r c st =
                                 (!1 ==== r))
                              (!0 ==== c))
                           (pause (fun () ->
+                            log "  full_addero after pause 6\n";
                              mplus
                                (bind
                                   (bind
@@ -204,6 +244,7 @@ let full_addero b x y r c st =
                                      (!0 ==== r))
                                   (!1 ==== c))
                                (pause (fun () ->
+                                log "  full_addero after pause 7\n";
                                   mplus
                                     (bind
                                        (bind
@@ -213,6 +254,7 @@ let full_addero b x y r c st =
                                           (!0 ==== r))
                                        (!1 ==== c))
                                     (pause (fun () ->
+                                       log "  full_addero after pause 8\n";
                                        bind
                                          (bind
                                             (bind
@@ -222,7 +264,8 @@ let full_addero b x y r c st =
                                          (!1 ==== c))))))))))))))))
 ;;
 
-(* let rec addero d n m r =
+(** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
+let rec addero d n m r =
   conde
     [ !0 ==== d &&& (nil () === m) &&& (n === r)
     ; !0 ==== d &&& (nil () === n) &&& (m === r) &&& poso m
@@ -244,17 +287,19 @@ and gen_addero d n m r =
     (poso z)
     (full_addero d a b c e)
     (addero e x y z)
-;; *)
+;;
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
 let rec addero d n m r st =
   pause (fun () ->
+    log "  addero after 1st pause\n";
     let st = State.new_scope st in
     mplus
       (bind
          (bind ((( ==== ) ~s:"50" !0 d) st) (( === ) ~s:"51" (nil ()) m))
          (( === ) ~s:"52" n r))
       (pause (fun () ->
+         log "  addero after 2nd pause\n";
          mplus
            (bind
               (bind
@@ -262,11 +307,13 @@ let rec addero d n m r st =
                  (( === ) ~s:"55" m r))
               (poso m))
            (pause (fun () ->
+              log "  addero after 3rd pause\n";
               mplus
                 (bind
                    (bind ((( ==== ) ~s:"56" !1 d) st) (nil () === m))
                    (addero !0 n one r))
                 (pause (fun () ->
+                   log "  addero after 4th pause\n";
                    mplus
                      (bind
                         (bind
@@ -274,20 +321,24 @@ let rec addero d n m r st =
                            (poso m))
                         (addero !0 m one r))
                      (pause (fun () ->
+                        log "  addero after 5th pause\n";
                         mplus
                           (bind
                              (bind ((( === ) ~s:"60" n one) st) (( === ) ~s:"61" m one))
                              (fun st ->
                                pause (fun () ->
+                                 log "  addero after 6th pause\n";
                                  let a = State.fresh st in
                                  let c = State.fresh st in
                                  bind
                                    ((( === ) ~s:"62" (a %< c) r) st)
                                    (full_addero d !1 !1 a c))))
                           (pause (fun () ->
+                             log "  addero after 7th pause\n";
                              mplus
                                (bind ((( === ) ~s:"63" n one) st) (gen_addero d n m r))
                                (pause (fun () ->
+                                log "  addero after 8th pause\n";
                                   mplus
                                     (bind
                                        (bind
@@ -295,6 +346,7 @@ let rec addero d n m r st =
                                           (gt1o r))
                                        (addero d one n r))
                                     (pause (fun () ->
+                                       log "  addero after 9th pause\n";
                                        bind ((gt1o n) st) (gen_addero d n m r))))))))))))))))
 
 and gen_addero d n m r st =
@@ -306,6 +358,15 @@ and gen_addero d n m r st =
     let x = State.fresh st in
     let y = State.fresh st in
     let z = State.fresh st in
+    log
+      "  a = %s, b = %s, c = %s, e = %s, x = %s, y = %s, z = %s gen_addero\n"
+      (bit_trace_after_reify a st)
+      (bit_trace_after_reify b st)
+      (bit_trace_after_reify c st)
+      (bit_trace_after_reify e st)
+      (trace_after_reify x st)
+      (trace_after_reify y st)
+      (trace_after_reify z st);
     bind
       (bind
          (bind
@@ -323,7 +384,7 @@ and gen_addero d n m r st =
 let pluso n m k = addero !0 n m k
 let minuso n m k = pluso m k n
 
-(* let rec bound_multo q p n m =
+let rec bound_multo q p n m =
   conde
     [ q === zero &&& poso p
     ; fresh
@@ -335,9 +396,9 @@ let minuso n m k = pluso m k n
            ; n === a3 % z &&& bound_multo x y z m
            ])
     ]
-;; *)
+;;
 
-(* let rec multo n m p =
+let rec multo n m p =
   conde
     [ n === zero &&& (p === zero)
     ; poso n &&& (m === zero) &&& (p === zero)
@@ -348,9 +409,9 @@ let minuso n m k = pluso m k n
     ; fresh (x y) (n === !1 % x) (poso x) (m === !1 % y) (poso y) (odd_multo x n m p)
     ]
 
-    and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 % q) m p)
- *)
+and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 % q) m p)
 
+(*
 let rec bound_multo q p n m st =
   (* Printf.printf "bound_multo %s %s %s %s\n" (traceP q) (traceP p) (traceP n) (traceP m); *)
   Printf.printf
@@ -374,9 +435,9 @@ let rec bound_multo q p n m st =
              let y = State.fresh st in
              let z = State.fresh st in
              Printf.printf
-               "  a0 = %s, a1 = %s, a2 = %s, a3 = %s\n"
+               "  a0 = %s, a1 = %s, a2 = %s, a3 = %s BOUND_MULTO\n"
                (bit_trace_after_reify a0 st)
-               (bit_trace_after_reify a0 st)
+               (bit_trace_after_reify a1 st)
                (bit_trace_after_reify a2 st)
                (bit_trace_after_reify a3 st);
              bind
@@ -463,7 +524,7 @@ let rec multo n m p st =
                                       let x = State.fresh st in
                                       let y = State.fresh st in
                                       Printf.printf
-                                        "  x = %s, y = %s\n"
+                                        "  x = %s, y = %s BBB\n"
                                         (trace_after_reify x st)
                                         (trace_after_reify y st);
                                       bind
@@ -489,7 +550,7 @@ and odd_multo x n m p st =
     let q = State.fresh st in
     let head = (bound_multo q p n m) st in
     bind (bind head (multo x m q)) (pluso (!0 % q) m p))
-;;
+;; *)
 
 (*  *)
 
