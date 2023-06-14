@@ -45,6 +45,12 @@ TODO: expo 255^2
     0:	[1; 1; 0; 0; 1; 1; 1; 1]
   unifications: 410259
 
+  $ ../ocaml_ext2/hack_numero.exe --exp7x2
+  expo (build_num 7) (build_num 2)
+    0:	[1; 0; 0; 0; 1; 1]
+  unifications: 365455
+
+
 
   $ ../ocaml_ext2/hack_numero.exe --logo243base3
   fun q -> logo (build_num 243) (build_num 3) q (build_num 0)

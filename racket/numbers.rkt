@@ -15,8 +15,8 @@
   (lambda (st)
     (begin
       (incr_counter)
-      (pretty-printf "~a ~a, ~a\n" (trace_after_reify a st) (trace_after_reify b st) msg)
-      ; (pretty-printf "~a ~a, ~a\n" (pp a) (pp b) msg)
+      (unless (getenv "SILENT_UNIFICATIONS")
+        (pretty-printf "~a ~a, ~a\n" (trace_after_reify a st) (trace_after_reify b st) msg))
       ((== a b) st)))
 ))
 

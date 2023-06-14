@@ -32,6 +32,7 @@ let repeatedMul1 () = wrap (REPR (repeated_mul (build_num 3) (build_num 2)))
 let odd_multo1 () = wrap (REPR (odd_multo (build_num 1) (build_num 3) (build_num 3)))
 let exp2in3 () = wrap (REPR (expo (build_num 2) (build_num 3)))
 let exp3in5 () = wrap (REPR (expo (build_num 3) (build_num 5)))
+let exp7in2 () = wrap (REPR (expo (build_num 7) (build_num 2)))
 
 let logo8base2 () =
   wrap (REPR (fun q -> logo (build_num 8) (build_num 2) q (build_num 0)))
@@ -73,6 +74,7 @@ let () =
     ; wrap "--mul255x255" mul255x255
     ; wrap "--exp2x3" exp2in3
     ; wrap "--exp3x5" exp3in5
+    ; wrap "--exp7x2" exp7in2
     ; wrap "--repeatedMul1" repeatedMul1
     ; wrap "--odd_mul1" odd_multo1
     ; wrap "--logo8base2" logo8base2
