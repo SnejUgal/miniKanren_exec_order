@@ -1,2 +1,8 @@
 (cram
  (deps ../ocaml_ext2/hack_numero.exe ../ocaml/numero.exe))
+
+(cram
+ (deps
+  ../klogic/klogic.jar
+  ;
+  ))

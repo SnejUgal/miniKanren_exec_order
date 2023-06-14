@@ -14,6 +14,7 @@ let expo4 () = wrap (REPR (expo (build_num 2) (build_num 1)))
 let expo5 () = wrap (REPR (expo (build_num 3) (build_num 2)))
 let mul1x1 () = wrap (REPR (multo (build_num 1) (build_num 1)))
 let mul1x2 () = wrap (REPR (multo (build_num 1) (build_num 2)))
+let mul2x3 () = wrap (REPR (multo (build_num 2) (build_num 3)))
 let mul3x3 () = wrap (REPR (multo (build_num 3) (build_num 3)))
 let mul3x5 () = wrap (REPR (multo (build_num 3) (build_num 5)))
 let mul4x4 () = wrap (REPR (multo (build_num 4) (build_num 4)))
@@ -23,6 +24,7 @@ let mul5x5 () = wrap (REPR (multo (build_num 5) (build_num 5)))
 let mul5x5_all () = wrap ~n:(-1) (REPR (multo (build_num 5) (build_num 5)))
 let mul5x6 () = wrap (REPR (multo (build_num 5) (build_num 6)))
 let mul7x7 () = wrap (REPR (multo (build_num 7) (build_num 7)))
+let mul127x127 () = wrap (REPR (multo (build_num 127) (build_num 127)))
 let mul255x255 () = wrap (REPR (multo (build_num 255) (build_num 255)))
 
 (* let mul2 () = wrap (REPR (multo (build_num 255) (build_num 255))) *)
@@ -57,6 +59,7 @@ let () =
     ; wrap "--ex5" expo5
     ; wrap "--mul1x1" mul1x1
     ; wrap "--mul1x2" mul1x2
+    ; wrap "--mul2x3" mul2x3
     ; wrap "--mul3x3" mul3x3
     ; wrap "--mul3x5" mul3x5
     ; wrap "--mul4x4" mul4x4
@@ -66,6 +69,7 @@ let () =
     ; wrap "--mul5x5-all" mul5x5_all
     ; wrap "--mul5x6" mul5x6
     ; wrap "--mul7x7" mul7x7
+    ; wrap "--mul127x127" mul127x127
     ; wrap "--mul255x255" mul255x255
     ; wrap "--exp2x3" exp2in3
     ; wrap "--exp3x5" exp3in5

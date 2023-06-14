@@ -5,14 +5,20 @@
 
 open Benchmark
 
-type config = { mutable print_raw : bool }
+type config =
+  { mutable print_raw : bool
+  ; mutable repeat : int
+  }
 
-let config = { print_raw = false }
-let repeat = 2
+let config = { print_raw = false; repeat = 10 }
 
 let () =
   Arg.parse
-    [ "-raw", Arg.Unit (fun () -> config.print_raw <- true), "" ]
+    [ "-raw", Arg.Unit (fun () -> config.print_raw <- true), ""
+    ; ( "-r"
+      , Arg.Int (fun n -> config.repeat <- n)
+      , Printf.sprintf " repeatitions (default=%d)" config.repeat )
+    ]
     (fun _ -> assert false)
     "help"
 ;;
@@ -40,7 +46,7 @@ let () =
   let res =
     latencyN
       ~style:Nil
-      ~repeat
+      ~repeat:config.repeat
       4L
       [ "3^5", wrap_test (expo (build_num 3) (build_num 5)), ()
       ; "log_3 243", wrap_test (fun q -> logo q (build_num 3) (build_num 5) zero), ()
