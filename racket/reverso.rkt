@@ -24,40 +24,40 @@
          (=== ab `(,h . ,tmp) )
          (appendo t b tmp))) )))
 
-; (define reverso (lambda (a b)
-;     (conde
-;       ( (=== a '())
-;         (=== a b)  )
-;       ((fresh (h t tmp)
-;          (=== a  `(,h . ,t))
-;          (reverso t tmp)
-;          (appendo tmp `(,h) b))))
-; ))
 (define reverso (lambda (a b)
-(lambda (st)
-  (lambda ()
-    (let-values (((st) (state-with-scope st (new-scope))))
-      (mplus
-        (bind
-          ((=== a '()) st)
-          (=== a b))
-        (lambda ()
-          (begin 
-            (pretty-printf "after second pause\n")
-           ((lambda (st)
-            (lambda ()
-              (let-values (((scope) (subst-scope (state-S st))))
-                (pretty-printf "shit\n")
-                (let-values
-                   (((h) (var scope))
-                    ((t) (var scope))
-                    ((tmp) (var scope)))
-                  (bind
-                    (bind
-                      ((=== a `(,h . ,t)) st)
-                      (reverso t tmp))
-                    (appendo tmp `(,h) b))))))
-            st)))))))))
+    (conde
+      ( (=== a '())
+        (=== a b)  )
+      ((fresh (h t tmp)
+         (=== a  `(,h . ,t))
+         (reverso t tmp)
+         (appendo tmp `(,h) b))))
+))
+; (define reverso (lambda (a b)
+; (lambda (st)
+;   (lambda ()
+;     (let-values (((st) (state-with-scope st (new-scope))))
+;       (mplus
+;         (bind
+;           ((=== a '()) st)
+;           (=== a b))
+;         (lambda ()
+;           (begin 
+;             (pretty-printf "after second pause\n")
+;            ((lambda (st)
+;             (lambda ()
+;               (let-values (((scope) (subst-scope (state-S st))))
+;                 (pretty-printf "shit\n")
+;                 (let-values
+;                    (((h) (var scope))
+;                     ((t) (var scope))
+;                     ((tmp) (var scope)))
+;                   (bind
+;                     (bind
+;                       ((=== a `(,h . ,t)) st)
+;                       (reverso t tmp))
+;                     (appendo tmp `(,h) b))))))
+;             st)))))))))
 
 
 (command-line

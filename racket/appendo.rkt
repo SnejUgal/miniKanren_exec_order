@@ -10,62 +10,49 @@
   (lambda (st)
     (begin
       (incr_counter)
-      (pretty-printf "~a  ~a\n" (pp a) (pp b))
+      (pretty-printf "~a ~a\n" (pp a) (pp b))
       ((== a b) st)))
 ))
 
 (define appendo (lambda (a b ab)
-  (lambda (st)
-  (begin
-    (pretty-printf "appendo: ~a ~a ~a\n" (pp a) (pp b) (pp ab))
-    ((conde
+    (conde
       ( (=== a '())
         (=== b ab)  )
       ((fresh (h t tmp)
          (=== a  `(,h . ,t)   )
          (=== ab `(,h . ,tmp) )
-         (appendo t b tmp)))) st)
-         )
-)))
+         (appendo t b tmp))) )))
 
-(run 1 (q) (appendo '(0) '(1) q))
-(report_counters)
-(pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
-  #'(conde
-       ( (=== a '())
-         (=== b ab)  )
-       ((fresh (h t tmp)
-          (=== a  `(,h . ,t)   )
-          (=== ab `(,h . ,tmp) )
-          (appendo t b tmp))))
-   (list #'suspend #'bind* #'fresh #'conde #'bind* #'mplus*)
-)))
-(pretty-printf "appendo:\n~a\n" (syntax->datum (expand
-  #'(conde
-       ( (=== a '())
-         (=== b ab)  )
-       ((fresh (h t tmp)
-          (=== a  `(,h . ,t)   )
-          (=== ab `(,h . ,tmp) )
-          (appendo t b tmp))))
-   ;(list #'fresh #'conde #'bind* #'mplus*)
-)))
-
-; (pretty-printf "appendo:\n~a\n" (syntax->datum (expand-only
-;   #'(conde
-;     ( (=== x 1) (=== x 2) )
-;     ( (=== x 11) (=== x 12) )
-;   )
-;   (list #'fresh #'conde #'bind* #'mplus*)
+; (define appendo (lambda (a b ab)
+;   (lambda (st)
+;   (begin
+;     (pretty-printf "appendo: ~a ~a ~a\n" (pp a) (pp b) (pp ab))
+;     ((conde
+;       ( (=== a '())
+;         (=== b ab)  )
+;       ((fresh (h t tmp)
+;          (=== a  `(,h . ,t)   )
+;          (=== ab `(,h . ,tmp) )
+;          (appendo t b tmp)))) st)
+;          )
 ; )))
 
+; (run 1 (q) (appendo '(0) '(1) q))
+; (report_counters)
 
-(define demo1 (lambda (x)
-  (conde
-    ( (=== x 1) (=== x 2)   )
-    ( (=== x 11) (=== x 12)  )
-    ( (=== x 21) (=== x 22)  )
-  )
-))
 
-; (run 6 (q) (demo1 q))
+(command-line
+ #:program "compiler"
+ #:once-each
+ [("--app0+1")
+  ""
+  (begin
+    (pretty-printf "  ~a\n" (run 1 (q) (appendo '(0) '(1) q)))
+    (report_counters))]
+ [("--app01+23")
+  ""
+  (begin
+    (pretty-printf "  ~a\n" (run 1 (q) (appendo '(0 1) '(2 3) q)))
+    (report_counters))]
+)
+

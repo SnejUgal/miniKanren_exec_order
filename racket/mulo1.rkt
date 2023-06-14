@@ -69,26 +69,17 @@
   (begin
     (run 1 (q) (*o (build-num 255) (build-num 255) q))
     (report_counters))]
- #|   [("--app2") ""
-      (begin
-        (run 1 (q) (*o '(build-num 255) '(build-num 255) q))
-        (report_counters))] |#
- #| [("--rev0") ""
-      (begin
-        (run 1 (q) (reverso '(1) q))
-        (report_counters))]
-  [("--rev1") ""
-      (begin
-        (pretty-printf "~a\n"
-          (run 1 (q) (reverso '(1 2) q))
-        )
-        (report_counters))]
-  [("--rev2") ""
-      (begin
-        (pretty-printf "~a\n"
-          (run 1 (q) (reverso q '(1 2)))
-        )
-        (report_counters))] |#)
+  [("--exp2x3")
+  ""
+  (begin
+    (run 1 (q) (expo (build-num 2) (build-num 3) q))
+    (report_counters))]
+ [("--exp3x2")
+  ""
+  (begin
+    (run 1 (q) (expo (build-num 3) (build-num 2) q))
+    (report_counters))]
+)
 
 ; (run 1 (q) (*o '(1 1) '(1 1) q))
 
