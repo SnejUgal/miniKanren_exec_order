@@ -20,30 +20,30 @@
       ((== a b) st)))
 ))
 
-; (defrel (appendo l s out)
-;   (conde
-;     [(=== l '()) (=== s out)]
-;     [(fresh (a d res)
-;        (=== `(,a . ,d) l)
-;        (=== `(,a . ,res) out)
-;        (appendo d s res))]))
-
 (defrel (appendo l s out)
-  (lambda (st)
-    (lambda ()
-      (let ((st (state-with-scope st (new-scope))))
-        (mplus
-          (bind ((=== l '()) st) (=== s out))
-          (lambda ()
-            ((lambda (st)
-              (lambda ()
-                (let ((scope (subst-scope (state-S st))))
-                (let ((a (var scope)) (d (var scope)) (res (var scope)))
-                (bind
-                (bind ((=== `(,a . ,d) l) st) (=== `(,a . ,res) out))
-                (appendo d s res))))))
-                st))))))
-                )
+  (conde
+    [(=== l '()) (=== s out)]
+    [(fresh (a d res)
+       (=== `(,a . ,d) l)
+       (=== `(,a . ,res) out)
+       (appendo d s res))]))
+
+; (defrel (appendo l s out)
+;   (lambda (st)
+;     (lambda ()
+;       (let ((st (state-with-scope st (new-scope))))
+;         (mplus
+;           (bind ((=== l '()) st) (=== s out))
+;           (lambda ()
+;             ((lambda (st)
+;               (lambda ()
+;                 (let ((scope (subst-scope (state-S st))))
+;                 (let ((a (var scope)) (d (var scope)) (res (var scope)))
+;                 (bind
+;                 (bind ((=== `(,a . ,d) l) st) (=== `(,a . ,res) out))
+;                 (appendo d s res))))))
+;                 st))))))
+;                 )
 
 
 (define build-num

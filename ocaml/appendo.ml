@@ -48,7 +48,7 @@ let example2 () =
 (*  *)
 let () =
   let wrap name f =
-    ( "-" ^ name
+    ( name
     , Arg.Unit
         (fun () ->
           clear_unifications ();
@@ -56,8 +56,8 @@ let () =
     , "" )
   in
   Arg.parse
-    [ wrap "ex1" example1
-    ; wrap "ex2" example2
+    [ wrap "--app0+1" example1
+    ; wrap "--app01+23" example2
       (* wrap "ex2" example2; wrap "ex3" example3; wrap "ex4" example4  *)
     ]
     (fun _ -> assert false)

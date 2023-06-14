@@ -1,5 +1,7 @@
 open OCanren
 
+[@@@ocaml.warnerror "-32"]
+
 type config = { mutable unifications : int }
 
 let config = { unifications = 0 }
@@ -38,11 +40,11 @@ let rec appendo a b ab st =
   conde
     [ a === nil () &&& (b === ab)
     ; Fresh.three (fun h t tmp ->
-        Printf.printf
+        (* Printf.printf
           "  app.fresh h=%s, t=%s, tmp=%s\n"
           (pp_int h)
           (pp_list t)
-          (pp_list tmp);
+          (pp_list tmp); *)
         delay (fun () -> ?&[ a === h % t; ab === h % tmp; appendo t b tmp ]))
     ]
     st
@@ -64,11 +66,11 @@ let rec reverso a b st =
   conde
     [ a === nil () &&& (a === b)
     ; Fresh.three (fun h t tmp ->
-        Printf.printf
+        (* Printf.printf
           "  rev.fresh h=%s, t=%s, tmp=%s\n"
           (pp_int h)
           (pp_list t)
-          (pp_list tmp);
+          (pp_list tmp); *)
         delay (fun () -> ?&[ a === h % t; reverso t tmp; appendo tmp !<h b ]))
     ]
     st

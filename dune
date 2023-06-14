@@ -1,16 +1,3 @@
-(cram
- (deps
-  ocaml/appendo.exe
-  ocaml/reverso.exe
-  ocaml/numero.exe
-  ocaml/quines.exe
-  ocaml/twines.exe
-  ocaml/thrines.exe
-  ocaml/conjunction.exe
-  ocaml/perm.exe
-  ;
-  ))
-
 ; It would be great to specify cram dependecies here, but...
 ;(alias
 ; (name trace-tests)
