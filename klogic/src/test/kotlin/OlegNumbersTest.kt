@@ -70,12 +70,63 @@ class OlegNumbersTest {
     }
 
     @Test
+    fun testExpo1x2() {
+        val base = 1u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo2x1() {
+        val base = 2u.toOlegLogicNumber()
+        val power = 1u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo2x2() {
+        val base = 2u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
     fun testExpo2x3() {
         val base = 2u.toOlegLogicNumber()
         val power = 3u.toOlegLogicNumber()
 
         println("$base^$power")
         run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo2x5() {
+        val base = 2u.toOlegLogicNumber()
+        val power = 5u.toOlegLogicNumber()
+
+        println("$base^$power")
+        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        UnificationsController.onFinish()
+    }
+
+    @Test
+    fun testExpo3x2() {
+        val base = 3u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        println(answers[0].term)
         UnificationsController.onFinish()
     }
 

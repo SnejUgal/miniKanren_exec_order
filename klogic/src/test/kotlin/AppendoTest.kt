@@ -22,7 +22,8 @@ class AppendoTest {
         val b = logicListOf("1".toSymbol())
 
         val goal = { q: Term<LogicList<Symbol>> -> appendo(a, b, q) }
-        run(1, goal)
+        val answers = run(1, goal)
+        println(answers[0])
 
         UnificationsController.onFinish()
     }
@@ -34,7 +35,8 @@ class AppendoTest {
         val b = logicListOf("2".toSymbol(), "3".toSymbol())
 
         val goal = { q: Term<LogicList<Symbol>> -> appendo(a, b, q) }
-        run(1, goal)
+        val answers = run(1, goal)
+        println(answers[0])
 
         UnificationsController.onFinish()
     }
