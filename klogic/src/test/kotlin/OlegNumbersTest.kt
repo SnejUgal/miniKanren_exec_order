@@ -140,6 +140,17 @@ class OlegNumbersTest {
         println(answers[0].term)
         UnificationsController.onFinish()
     }
+    
+    @Test
+    fun testExpo7x2() {
+        val base = 7u.toOlegLogicNumber()
+        val power = 2u.toOlegLogicNumber()
+
+        println("$base^$power")
+        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
+        println(answers[0].term)
+        UnificationsController.onFinish()
+    }
 
     @Test
     fun testLogo8base2() {
