@@ -25,7 +25,8 @@ object UnificationsController {
 }
 
 infix fun <T : Term<T>> Term<T>.debugUnify(other: Term<T>): Goal = { state: State ->
-    System.out.printf("%s %s\n", this, other)
+    if (System.getenv("SILENT_UNIFICATIONS") == null)
+        System.out.printf("%s %s\n", this, other)
     UnificationsController.onUnification()
 
     (this unify other)(state)

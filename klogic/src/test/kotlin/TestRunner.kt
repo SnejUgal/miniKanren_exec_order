@@ -5,15 +5,22 @@ private val tasks: Map<String, KFunction0<Unit>> = mapOf(
     "appendo2" to AppendoTest()::testAppendo2,
     "reverso" to ReversoTest()::testReverso,
     "reverso2" to ReversoTest()::testReverso2,
-    "expo1" to OlegNumbersTest()::testExpo1,
-    "expo2" to OlegNumbersTest()::testExpo2,
+    "mul2x3" to OlegNumbersTest()::testMul2x3,
+    "mul3x3" to OlegNumbersTest()::testMul3x3,
+    "mul5x5" to OlegNumbersTest()::testMul5x5,
+    "mul5x5-all" to OlegNumbersTest()::testMul5x5all,
+    "mul127x127" to OlegNumbersTest()::testMul127x127,
+    "mul255x255" to OlegNumbersTest()::testMul255x255,
+    "exp2x3" to OlegNumbersTest()::testExpo2x3,
+    "exp3x5" to OlegNumbersTest()::testExpo3x5,
+    "logo8base2" to OlegNumbersTest()::testLogo8base2,
     "expo3" to OlegNumbersTest()::testExpo3,
     "expo4" to OlegNumbersTest()::testExpo4,
     "expo5" to OlegNumbersTest()::testExpo5,
     "mul1" to OlegNumbersTest()::testMul1,
     "repeatedMul1" to OlegNumbersTest()::testRepeatedMul1,
     "odd_mul1" to OlegNumbersTest()::testOddMul1,
-    "logo1" to OlegNumbersTest()::testLogo1,
+
 )
 
 fun main(args: Array<String>) {
