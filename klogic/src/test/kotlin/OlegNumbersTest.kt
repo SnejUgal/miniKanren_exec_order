@@ -153,6 +153,17 @@ class OlegNumbersTest {
         UnificationsController.onFinish()
     }
     @Test
+    fun testLogo243base3() {
+        val n = 243u.toOlegLogicNumber()
+        val b = 3u.toOlegLogicNumber()
+        val r = 0u.toOlegLogicNumber()
+
+        println("log $n base $b with reminder $r")
+        run(1, { q: Term<OlegLogicNumber> -> logᴼ(n, b, q, r) })
+
+        UnificationsController.onFinish()
+    }
+    @Test
     fun testExpo3() {
         val base = 2u.toOlegLogicNumber()
         val power = 2u.toOlegLogicNumber()

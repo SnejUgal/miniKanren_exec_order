@@ -26,6 +26,10 @@ TODO: expo 255^2
   $ java -jar ../klogic/klogic.jar logo8base2
   log (0, 0, 0, 1) base (0, 1) with reminder ()
   unifications: 178
+  $ java -jar ../klogic/klogic.jar logo243base3
+  log (1, 1, 0, 0, 1, 1, 1, 1) base (1, 1) with reminder ()
+  unifications: 74042
+
   $ java -jar ../klogic/klogic.jar exp2x3
   (0, 1)^(1, 1)
   unifications: 121
