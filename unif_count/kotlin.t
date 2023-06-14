@@ -37,3 +37,7 @@ TODO: expo 255^2
   (1, 1)^(1, 0, 1)
   (1, 1, 0, 0, 1, 1, 1, 1)
   unifications: 823212
+  $ java -jar ../klogic/klogic.jar exp7x2
+  (1, 1, 1)^(0, 1)
+  (1, 0, 0, 0, 1, 1)
+  unifications: 385752
