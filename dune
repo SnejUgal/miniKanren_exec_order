@@ -29,12 +29,6 @@
   ;
   ))
 
-(cram
- (deps
-  klogic/klogic.jar
-  ;
-  ))
-
 ; It would be great to specify cram dependecies here, but...
 ;(alias
 ; (name trace-tests)
