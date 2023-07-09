@@ -206,7 +206,7 @@ let mapper =
         (* conde *)
       | Pexp_apply (e1, (Nolabel, args) :: other_args) when is_conde e1 ->
         let goals = parse_to_list args in
-        Format.eprintf "parsing conde gave %d goals\n%!" (List.length goals);
+        (* Format.eprintf "parsing conde gave %d goals\n%!" (List.length goals); *)
         let goals = List.map ~f:self#expression goals in
         let goals = List.map ~f:parse_many_conjunctions goals in
         self#expression

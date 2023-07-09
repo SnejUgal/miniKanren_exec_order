@@ -1,3 +1,8 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -8-27))))
+
 (library
  (name counters)
  (public_name kanren_benchmarks.counters)
@@ -99,10 +104,16 @@
 
 (library
  (name scheme_interpret)
- (modules scheme_interpret)
- (libraries OCanren counters)
+ (modules scheme_ast scheme_interpret)
+ (wrapped false)
+ (libraries OCanren counters FCPM)
  (flags
-  (:standard -rectypes))
+  (:standard
+   -rectypes
+   ;-dsource
+   ;
+   ))
+ (inline_tests)
  (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
  (preprocess
   (pps
@@ -110,6 +121,36 @@
    GT.ppx_all
    OCanren-ppx.ppx_distrib
    OCanren-ppx.ppx_repr
+   ppx_optcomp
+   ppx_expect
+   --
+   -pp
+   "ocaml/bench/pp5+dump.exe -D TRACE")))
+
+(library
+ (name FCPM)
+ (modules FCPM))
+
+(library
+ (name scheme_test)
+ (modules numero_decls_test)
+ (libraries scheme_interpret)
+ (wrapped false)
+ (inline_tests)
+ (flags
+  (:standard
+   -rectypes
+   ;-dsource
+   ;
+   ))
+ (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)
+ (preprocess
+  (pps
+   OCanren-ppx.ppx_fresh
+   GT.ppx_all
+   OCanren-ppx.ppx_distrib
+   OCanren-ppx.ppx_repr
+   ppx_expect
    ppx_optcomp
    --
    -pp
@@ -135,6 +176,7 @@
   reverso.exe
   rewriter.exe
   quines.exe
+  ;  quines_naive.exe
   twines.exe
   thrines.exe
   numero.exe

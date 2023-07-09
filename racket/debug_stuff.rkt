@@ -7,6 +7,7 @@
   incr_counter
   report_counters
   pp
+  trace_after_reify
   )
 
 (define unification_counter 0)
@@ -23,4 +24,7 @@
     ((var? v) (string-append "_" "." (number->string (var-idx v))))
     ((pair? v) (cons (pp (car v)) (pp (cdr v))) )
     (else v))
+))
+(define trace_after_reify (lambda (x st)
+  (pp (walk* x (state-S st)))
 ))

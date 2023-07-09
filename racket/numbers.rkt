@@ -7,9 +7,7 @@
 
 (provide *o build-num zeroo poso >1o expo logo)
 
-(define trace_after_reify (lambda (x st)
-  (pp (walk* x (state-S st)))
-))
+
 (define === (lambda (a b [msg ""])
   ; (pretty-printf "partially applied unification ~a\n" msg)
   (lambda (st)
@@ -123,7 +121,7 @@
 ;            (bind (bind (bind ((=== 1 b) st) (=== 0 x)) (=== 0 y)) (=== 1 r))
 ;            (=== 0 c))
 ;           (lambda ()
-;             (display "  full_addero after pause 3\n") 
+;             (display "  full_addero after pause 3\n")
 ;             (mplus
 ;              (bind
 ;               (bind (bind (bind ((=== 0 b) st) (=== 1 x)) (=== 0 y)) (=== 1 r))
