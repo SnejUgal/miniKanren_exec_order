@@ -54,7 +54,10 @@ let%expect_test "A default quine" =
     (fun q -> q#reify Gresult.reify)
   |> OCanren.Stream.take ~n:1
   |> List.iteri (fun n t -> Format.printf "%3d: %a\n%!" n (GT.fmt Gresult.logic) t);
-  [%expect {| |}];
+  [%expect "
+    0: Val_ (
+       ((lambda (u) (list u (list (quote quote) u))) (quote (lambda (u) (list u (list (quote quote) u)))))
+       )"];
   Scheme_interpret.set_trace old_trace
 ;;
 
@@ -82,6 +85,26 @@ let%expect_test "quines" =
     (fun q -> q#reify Gterm.reify)
   |> OCanren.Stream.take ~n:20
   |> List.iteri (fun n t -> Format.printf "%3d: %a\n%!" n (GT.fmt Gterm.logic) t);
-  [%expect "0: (A B)"];
+  [%expect "
+     0: ((lambda (_.8) (list _.8 (list (quote quote) _.8))) (quote (lambda (_.8) (list _.8 (list (quote quote) _.8)))))
+     1: ((lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list (quote quote) _.8))) (quote (lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list (quote quote) _.8)))))
+     2: ((lambda (_.8) (list _.8 (list ((lambda (_.1302) _.1302) (quote quote)) _.8))) (quote (lambda (_.8) (list _.8 (list ((lambda (_.1302) _.1302) (quote quote)) _.8)))))
+     3: ((lambda (_.8) (list (list (quote lambda) (quote (_.8)) _.8) (list (quote quote) _.8))) (quote (list (list (quote lambda) (quote (_.8)) _.8) (list (quote quote) _.8))))
+     4: ((lambda (_.8) (list _.8 (list ((lambda (_.1302) (quote quote)) (quote _.2015)) _.8))) (quote (lambda (_.8) (list _.8 (list ((lambda (_.1302) (quote quote)) (quote _.2015)) _.8)))))
+     5: ((lambda (_.8) ((lambda (_.157) (list _.8 (list _.157 _.8))) (quote quote))) (quote (lambda (_.8) ((lambda (_.157) (list _.8 (list _.157 _.8))) (quote quote)))))
+     6: ((lambda (_.8) (list _.8 ((lambda (_.608) (list _.608 _.8)) (quote quote)))) (quote (lambda (_.8) (list _.8 ((lambda (_.608) (list _.608 _.8)) (quote quote))))))
+     7: ((lambda (_.8) (list _.8 (list (quote quote) ((lambda (_.2249) _.8) (quote _.3862))))) (quote (lambda (_.8) (list _.8 (list (quote quote) ((lambda (_.2249) _.8) (quote _.3862)))))))
+     8: (((lambda (_.80) (lambda (_.8) (list _.8 (list (quote quote) _.8)))) (quote _.108)) (quote ((lambda (_.80) (lambda (_.8) (list _.8 (list (quote quote) _.8)))) (quote _.108))))
+     9: ((lambda (_.8) ((lambda (_.157) (list _.157 (list (quote quote) _.157))) _.8)) (quote (lambda (_.8) ((lambda (_.157) (list _.157 (list (quote quote) _.157))) _.8))))
+    10: ((lambda (_.8) ((lambda (_.157) (list _.8 (list (quote quote) _.8))) (quote _.249))) (quote (lambda (_.8) ((lambda (_.157) (list _.8 (list (quote quote) _.8))) (quote _.249)))))
+    11: ((lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.8)) (quote _.949)))) (quote (lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.8)) (quote _.949))))))
+    12: ((lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list ((lambda (_.7311) _.7311) (quote quote)) _.8))) (quote (lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list ((lambda (_.7311) _.7311) (quote quote)) _.8)))))
+    13: ((lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.608)) _.8))) (quote (lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.608)) _.8)))))
+    14: ((lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list ((lambda (_.7311) (quote quote)) (quote _.8735)) _.8))) (quote (lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) (list ((lambda (_.7311) (quote quote)) (quote _.8735)) _.8)))))
+    15: ((lambda (_.8) ((lambda (_.157) (list _.157 (list (quote quote) _.8))) _.8)) (quote (lambda (_.8) ((lambda (_.157) (list _.157 (list (quote quote) _.8))) _.8))))
+    16: ((lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.8)) _.8))) (quote (lambda (_.8) (list _.8 ((lambda (_.608) (list (quote quote) _.8)) _.8)))))
+    17: ((lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) ((lambda (_.5971) (list _.5971 _.8)) (quote quote)))) (quote (lambda (_.8) (list ((lambda (_.303) _.8) (quote _.531)) ((lambda (_.5971) (list _.5971 _.8)) (quote quote))))))
+    18: ((lambda (_.8) (list _.8 (list (quote quote) ((lambda (_.2249) _.2249) _.8)))) (quote (lambda (_.8) (list _.8 (list (quote quote) ((lambda (_.2249) _.2249) _.8))))))
+    19: (((lambda (_.80) (lambda (_.8) (list _.8 (list _.80 _.8)))) (quote quote)) (quote ((lambda (_.80) (lambda (_.8) (list _.8 (list _.80 _.8)))) (quote quote))))"];
   Scheme_interpret.set_trace old_trace
 ;;
