@@ -59,6 +59,11 @@
   (begin
     (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 5) (build-num 5) q)))
     (report_counters))]
+ [("--mul5x5-all")
+  ""
+  (begin
+    (pretty-printf "  ~a\n" (run* (q) (*o (build-num 5) (build-num 5) q)))
+    (report_counters))]
  [("--mul5x6")
   ""
   (begin

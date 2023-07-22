@@ -11,8 +11,8 @@
     ((1 0 0 1 1))
   unifications: 366
   $ racket ../racket/mulo1.rkt --mul5x5-all
-  compiler: unknown switch: --mul5x5-all
-  [1]
+    ((1 0 0 1 1))
+  unifications: 371
   $ racket ../racket/mulo1.rkt --mul127x127
   unifications: 192121
   $ racket ../racket/mulo1.rkt --mul255x255
