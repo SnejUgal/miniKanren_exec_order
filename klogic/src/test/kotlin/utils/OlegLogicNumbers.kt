@@ -12,7 +12,7 @@ import utils.OlegLogicNumber.Companion.digitZero
 import utils.OlegLogicNumber.Companion.numberZero
 import utils.OlegLogicNumber.Companion.toOlegLogicNumber
 
-typealias Digit = Symbol
+private typealias Digit = Symbol
 
 private typealias OlegTerm = Term<OlegLogicNumber>
 private typealias DigitTerm = Term<Digit>

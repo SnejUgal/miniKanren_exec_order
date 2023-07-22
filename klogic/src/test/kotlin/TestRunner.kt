@@ -9,6 +9,9 @@ private val tasks: Map<String, KFunction0<Unit>> = mapOf(
     "mul3x3" to OlegNumbersTest()::testMul3x3,
     "mul5x5" to OlegNumbersTest()::testMul5x5,
     "mul5x5-all" to OlegNumbersTest()::testMul5x5all,
+    "gen-mul5x5" to ExportedNumbersTest()::testMul5x5,
+    "gen-mul5x5-all" to ExportedNumbersTest()::testMul5x5all,
+    
     "mul127x127" to OlegNumbersTest()::testMul127x127,
     "mul255x255" to OlegNumbersTest()::testMul255x255,
     "exp1x2" to OlegNumbersTest()::testExpo1x2,

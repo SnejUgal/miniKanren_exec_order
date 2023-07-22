@@ -13,5 +13,5 @@ TODO: Why no answers?
   	at AppendoTest.testAppendo2(AppendoTest.kt:39)
   	at TestRunnerKt$tasks$2.invoke(TestRunner.kt:5)
   	at TestRunnerKt$tasks$2.invoke(TestRunner.kt:5)
-  	at TestRunnerKt.main(TestRunner.kt:35)
+  	at TestRunnerKt.main(TestRunner.kt:38)
   [1]

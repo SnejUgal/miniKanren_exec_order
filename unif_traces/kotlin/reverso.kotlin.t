@@ -27,5 +27,5 @@ TODO: Why no answers?
   	at ReversoTest.testReverso(ReversoTest.kt:25)
   	at TestRunnerKt$tasks$3.invoke(TestRunner.kt:6)
   	at TestRunnerKt$tasks$3.invoke(TestRunner.kt:6)
-  	at TestRunnerKt.main(TestRunner.kt:35)
+  	at TestRunnerKt.main(TestRunner.kt:38)
   [1]
