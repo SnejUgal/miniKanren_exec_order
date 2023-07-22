@@ -1,3 +1,4 @@
+
 name: Build master
 
 on:
@@ -33,9 +34,12 @@ jobs:
 
       - run: |
           sudo apt update
-          sudo apt install racket openjdk-18-jdk -y --no-install-recommends
-          raco pkg install benchmark pretty-format
-          
+          sudo apt install racket libssl-dev openjdk-18-jdk -y --no-install-recommends
+      # https://github.com/racket/racket/issues/4306
+      # libssl-dev might be mandatory
+      - name: Install Racket dependencies
+        run: raco pkg install benchmark pretty-format
+
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
       - run: opam exec -- dune test # dune runtest
