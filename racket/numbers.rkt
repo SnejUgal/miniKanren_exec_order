@@ -60,11 +60,11 @@
 
 (defrel (poso n)
   (fresh (a d)
-    (== `(,a . ,d) n)))
+    (=== `(,a . ,d) n)))
 
 (defrel (>1o n)
   (fresh (a ad dd)
-    (== `(,a ,ad . ,dd) n)))
+    (=== `(,a ,ad . ,dd) n)))
 
 ; (defrel (poso n)
 ;   (lambda (st)
