@@ -37,8 +37,11 @@ jobs:
           sudo apt install racket libssl-dev openjdk-18-jdk -y --no-install-recommends
       # https://github.com/racket/racket/issues/4306
       # libssl-dev might be mandatory
+      # https://github.com/racket/racket/issues/2691#issuecomment-812963346
       - name: Install Racket dependencies
-        run: raco pkg install benchmark pretty-format
+        run: |
+          raco setup --doc-index --force-user-docs
+          raco pkg install benchmark pretty-format
 
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
