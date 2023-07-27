@@ -11,6 +11,25 @@
 
 (require "numbers.rkt")
 
+(define run1 (lambda (rel)
+  (map 
+    (lambda (p) p)
+      ;(let ((q (car p)) (st0 (cdr p)))
+      ;(let ((st (state-with-scope st0 nonlocal-scope)))
+      ;  ((reify q) st))))
+    
+    (let ((st empty-state))
+      (let ((scope (subst-scope (state-S st))))
+        (let ((q (var scope)))            
+          (map 
+            (lambda (st0)
+              (let ((st (state-with-scope st0 nonlocal-scope)))
+                ((reify q) st))
+            ) 
+            (takeMK 1 ((rel q) st))
+          )))))
+))
+
 (command-line
  #:program "compiler"
  #:once-each 
@@ -32,7 +51,7 @@
  [("--mul3x3")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 3) (build-num 3) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda (q) (*o (build-num 3) (build-num 3) q))))
     (report_counters))]
  [("--mul4x4")
   ""

@@ -24,7 +24,11 @@
     mplus*
     var
     suspend
-    always-wrap-reified?)
+    always-wrap-reified?
+    ; for custom run
+    nonlocal-scope
+    takeMK
+    )
 
 (require "../faster-miniKanren/private-unstable.rkt")
 

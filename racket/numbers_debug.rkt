@@ -173,3 +173,9 @@
 (pretty-printf "\n~a\n"
                (syntax->datum (expand-only #'(run 1 (q) (*o (build-num 5) (build-num 5) q))
                                            (list #'run #'conde #'fresh #'suspend #'bind* #'mplus*))))
+
+
+(pretty-printf "\n~a\n"
+               (syntax->datum (expand-only
+  #'(run 1 (q) (*o (build-num 3) (build-num 3) q))
+  (list #'run #'conde #'fresh #'suspend #'bind* #'mplus*))))
