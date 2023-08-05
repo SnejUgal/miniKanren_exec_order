@@ -1,4 +1,4 @@
-$ export SILENT_UNIFICATIONS=1
+  $ export SILENT_UNIFICATIONS=1
 $ java -jar ../klogic/klogic.jar mul2x3
 (0, 1) * (1, 1)
 unifications: 19
