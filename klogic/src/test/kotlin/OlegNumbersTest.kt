@@ -12,7 +12,7 @@ import org.klogic.utils.terms.mulᴼ
 class OlegNumbersTest {
     private val unificationsTracer = UnificationListener { firstTerm, secondTerm, stateBefore, _ ->
         if (System.getenv("SILENT_UNIFICATIONS") == null)
-            println("${firstTerm.walk(stateBefore.substitution)} ${secondTerm.walk(stateBefore.substitution)}, ")
+            println("${firstTerm.walk(stateBefore.substitution)} ${secondTerm.walk(stateBefore.substitution)}")
     }
 
     inline fun <R> withEmptyContext(block: RelationalContext.() -> R): R = RelationalContext().useWith { block() }

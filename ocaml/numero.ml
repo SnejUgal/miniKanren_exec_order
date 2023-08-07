@@ -1,9 +1,9 @@
 open Numero_decls
 
 let wrap : ?n:int -> string * (ioleg -> OCanren.goal) -> unit =
- fun ?(n = 1) (msg, goal) ->
+  fun ?(n = 1) (msg, goal) ->
   print_endline msg;
-  OCanren.(run q goal (fun rr -> rr#reify Numero_decls.reify) |> Stream.take ~n)
+  OCanren.(run_hacky q goal (fun rr -> rr#reify Numero_decls.reify) |> Stream.take ~n)
   |> List.iteri (fun i n -> Format.printf "%3d:\t%s\n%!" i (Numero_decls.show_logic n))
 ;;
 
@@ -16,6 +16,7 @@ let mul1x1 () = wrap (REPR (multo (build_num 1) (build_num 1)))
 let mul1x2 () = wrap (REPR (multo (build_num 1) (build_num 2)))
 let mul2x3 () = wrap (REPR (multo (build_num 2) (build_num 3)))
 let mul3x3 () = wrap (REPR (multo (build_num 3) (build_num 3)))
+let mul3x3all () = wrap ~n:(-1) (REPR (multo (build_num 3) (build_num 3)))
 let mul3x5 () = wrap (REPR (multo (build_num 3) (build_num 5)))
 let mul4x4 () = wrap (REPR (multo (build_num 4) (build_num 4)))
 let mul5x3 () = wrap (REPR (multo (build_num 5) (build_num 3)))
@@ -62,6 +63,7 @@ let () =
     ; wrap "--mul1x2" mul1x2
     ; wrap "--mul2x3" mul2x3
     ; wrap "--mul3x3" mul3x3
+    ; wrap "--mul3x3-all" mul3x3all
     ; wrap "--mul3x5" mul3x5
     ; wrap "--mul4x4" mul4x4
     ; wrap "--mul5x3" mul5x3
