@@ -57,11 +57,11 @@ include struct
   let pp = show_as_scheme (GT.show OCanren.logic @@ GT.show GT.int)
   let r x = reify_in_empty (Std.List.reify OCanren.reify) x
 
-  let ( === ) : int ilogic Std.List.injected -> _ -> goal =
-   fun x y st ->
+  let ( === ) : ?msg:string -> int ilogic Std.List.injected -> _ -> goal =
+   fun ?(msg="") x y st ->
     incr_counter ();
     if not are_unifications_silent then
-      Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+      Printf.printf "%s %s %s\n" (pp (r x)) (pp (r y)) msg;
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -100,8 +100,12 @@ let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 
 let zeroo n = zero === n
-let poso n = fresh (h t) (n === h % t)
-let gt1o n = fresh (a ad dd) (n === a % (ad % dd))
+let poso ?(q="") n = 
+  fresh (h t) 
+    ((===) ~msg:("poso "^q) n (h % t))
+let gt1o n = 
+  fresh (a ad dd) 
+    ((===) n (a % (ad % dd)) ~msg:"gt1o")
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
 let full_addero b x y r c =
@@ -163,13 +167,26 @@ let rec bound_multo q p n m =
 
 let rec multo n m p =
   conde
-    [ n === zero &&& (p === zero)
+    [ ((===) ~msg:"348.1" n zero) &&& (p === zero)
     ; poso n &&& (m === zero) &&& (p === zero)
-    ; n === one &&& poso m &&& (m === p)
-    ; gt1o n &&& (m === one) &&& (n === p)
-    ; fresh (x z) (n === !0 % x) (poso x) (p === !0 % z) (poso z) (gt1o m) (multo x m z)
-    ; fresh (x y) (n === !1 % x) (poso x) (m === !0 % y) (poso y) (multo m n p)
-    ; fresh (x y) (n === !1 % x) (poso x) (m === !1 % y) (poso y) (odd_multo x n m p)
+    ; ((===) n one ~msg:"350") &&& poso m &&& (m === p)
+    ; gt1o n &&& ((===) m one ~msg:"351.2") &&& (n === p)
+    ; fresh (x z) 
+         ((===) ~msg:"353" n (!0 % x)) (poso ~q:"173" x) 
+         ((===) ~msg:"354" p (!0 % z)) (poso ~q:"174" z) 
+         (gt1o m) 
+         (multo x m z)
+    ; fresh (x y) 
+        ((===) n (!1 % x) ~msg:"358")
+        (poso x ~q:"179") 
+        (m === !0 % y) 
+        (poso y ~q:"181") 
+        (multo m n p)
+    ; fresh (x y) 
+        ((===) ~msg:"362" n (!1 % x)) 
+        (poso x ~q:"178") 
+        (m === !1 % y) (poso y) 
+        (odd_multo x n m p)
     ]
 
 and odd_multo x n m p =

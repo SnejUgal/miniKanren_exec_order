@@ -3,7 +3,7 @@ open Numero_decls_hack
 let wrap : ?n:int -> string * (ioleg -> OCanren.goal) -> unit =
  fun ?(n = 1) (msg, goal) ->
   print_endline msg;
-  OCanren.(run q goal (fun rr -> rr#reify Numero_decls_hack.reify) |> Stream.take ~n)
+  OCanren.(run_hacky q goal (fun rr -> rr#reify Numero_decls_hack.reify) |> Stream.take ~n)
   |> List.iteri (fun i n -> Format.printf "%3d:\t%s\n%!" i (Numero_decls_hack.show_logic n))
 ;;
 

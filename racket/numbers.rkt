@@ -14,7 +14,7 @@
     (begin
       (incr_counter)
       (unless (getenv "SILENT_UNIFICATIONS")
-        (pretty-printf "~a ~a, ~a\n" (trace_after_reify a st) (trace_after_reify b st) msg))
+        (pretty-printf "~a ~a  ~a\n" (trace_after_reify a st) (trace_after_reify b st) msg))
       ((== a b) st)))
 ))
 
@@ -58,13 +58,13 @@
 (defrel (zeroo n)
   (=== '() n))
 
-(defrel (poso n)
+(defrel (poso n [msg ""])
   (fresh (a d)
-    (=== `(,a . ,d) n)))
+    (=== n `(,a . ,d) (~a "poso" msg))))
 
 (defrel (>1o n)
   (fresh (a ad dd)
-    (=== `(,a ,ad . ,dd) n)))
+    (=== n `(,a ,ad . ,dd) "gt1o")))
 
 ; (defrel (poso n)
 ;   (lambda (st)
@@ -345,21 +345,22 @@
 
 (defrel (*o n m p)
   (conde
-    ((=== n '()) (=== p '()))
+    ((=== n '() 348.1) (=== p '()))
     ((poso n) (=== m '()) (=== p '()))
-    ((=== n '(1)) (poso m) (=== m p))
-    ((>1o n) (=== m '(1)) (=== n p))
+    ((=== n '(1) 350) (poso m) (=== m p))
+    ((>1o n) (=== m '(1) 351.2) (=== n p))
     ((fresh (x z)
-       (=== n `(0 . ,x)) (poso x)
-       (=== p `(0 . ,z)) (poso z)
+       (=== n `(0 . ,x) 353) (poso x)
+       (=== p `(0 . ,z) 354) (poso z)
        (>1o m)
        (*o x m z)))
     ((fresh (x y)
-       (=== n `(1 . ,x)) (poso x)
-       (=== m `(0 . ,y)) (poso y)
+       (=== n `(1 . ,x) 358) (poso x 179)
+       (=== m `(0 . ,y) 359) (poso y 181)
        (*o m n p)))
     ((fresh (x y)
-       (=== n `(1 . ,x)) (poso x)
+       (=== n `(1 . ,x) 362) 
+       (poso x 178)
        (=== m `(1 . ,y)) (poso y)
        (odd-*o x n m p)))))
 

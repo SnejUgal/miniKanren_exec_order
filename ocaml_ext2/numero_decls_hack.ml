@@ -78,11 +78,12 @@ include struct
     @@ reify_in_state st (Std.List.reify OCanren.reify) x
   ;;
 
-  let ( === ) : ?s:string -> ioleg -> _ -> goal =
-   fun ?(s = "") x y (* Printf.printf "partially applied unification %s\n" s; *) st ->
+  let ( === ) : ?msg:string -> ioleg -> _ -> goal =
+   fun ?(msg = "") x y (* Printf.printf "partially applied unification %s\n" s; *) st ->
     incr_counter ();
     if not are_unifications_silent then
-      Printf.printf "%s %s, %s\n" (trace_after_reify x st) (trace_after_reify y st) s;
+      Printf.printf "%s %s%s\n" (trace_after_reify x st) (trace_after_reify y st)
+        (if msg = "" then "" else ", " ^ msg);
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -114,21 +115,20 @@ let rec appendo l s out =
 ;;
 
 (* let rec appendo l s out st =
-  pause
-    (fun () ->
-      let st = State.new_scope st in
-        mplus (bind ((l === (Std.nil ())) st) (s === out))
-          (pause
-            (fun () ->
-              (fun st ->
-                pause
-                  (fun () ->
-                    let a = State.fresh st in
-                    let d = State.fresh st in
-                    let res = State.fresh st in
-                      bind (bind (((a % d) === l) st) ((a % res) === out))
-                      (appendo d s res))) st))) *)
-
+   pause
+   (fun () ->
+   let st = State.new_scope st in
+   mplus (bind ((l === (Std.nil ())) st) (s === out))
+   (pause
+   (fun () ->
+   (fun st ->
+   pause
+   (fun () ->
+   let a = State.fresh st in
+   let d = State.fresh st in
+   let res = State.fresh st in
+   bind (bind (((a % d) === l) st) ((a % res) === out))
+   (appendo d s res))) st))) *)
 
 let ( ! ) = inj
 
@@ -138,38 +138,35 @@ let zero : injected = Std.nil ()
 let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 let zeroo n = zero === n
-
-let poso n = fresh (h t) (( === ) ~s:"poso" n (h % t))
+let poso ?(q = "") n = fresh (h t) (( === ) ~msg:("poso " ^ q) n (h % t))
 (* let poso n st =
-  pause (fun () ->
-    let a = State.fresh st in
-    let d = State.fresh st in
-    if not are_unifications_silent then
-    log
-      "  a = %s, d = %s POSO\n"
-      (bit_trace_after_reify a st)
-      (trace_after_reify d st);
-    (( === ) ~s:"poso" n (a % d)) st)
-;; *)
+   pause (fun () ->
+   let a = State.fresh st in
+   let d = State.fresh st in
+   if not are_unifications_silent then
+   log
+   "  a = %s, d = %s POSO\n"
+   (bit_trace_after_reify a st)
+   (trace_after_reify d st);
+   (( === ) ~msg:"poso" n (a % d)) st)
+   ;; *)
 
-
-let gt1o n = fresh (a ad dd) (( === ) ~s:"gt1o" n (a % (ad % dd)))
+let gt1o n = fresh (a ad dd) (( === ) ~msg:"gt1o" n (a % (ad % dd)))
 (* let gt1o n st =
-  pause (fun () ->
-    let a = State.fresh st in
-    let ad = State.fresh st in
-    let dd = State.fresh st in
-    if not are_unifications_silent then
-    log
-      "  a = %s, ad = %s, dd = %s gt1o\n"
-      (bit_trace_after_reify a st)
-      (bit_trace_after_reify ad st)
-      (trace_after_reify dd st);
-    (( === ) ~s:"gt1o" n (a % (ad % dd))) st)
-;; *)
+   pause (fun () ->
+   let a = State.fresh st in
+   let ad = State.fresh st in
+   let dd = State.fresh st in
+   if not are_unifications_silent then
+   log
+   "  a = %s, ad = %s, dd = %s gt1o\n"
+   (bit_trace_after_reify a st)
+   (bit_trace_after_reify ad st)
+   (trace_after_reify dd st);
+   (( === ) ~msg:"gt1o" n (a % (ad % dd))) st)
+   ;; *)
 
-
-(** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
+(** Satisfies [b] + [x] + [y] = [r] + 2 * [c] *)
 let full_addero b x y r c =
   conde
     [ !0 ==== b &&& (!0 ==== x) &&& (!0 ==== y) &&& (!0 ==== r) &&& (!0 ==== c)
@@ -183,84 +180,83 @@ let full_addero b x y r c =
     ]
 ;;
 
-
-(** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
+(** Satisfies [b] + [x] + [y] = [r] + 2 * [c] *)
 (*
-let full_addero b x y r c st =
-  log
-    "\tfull_addero %s %s %s %s %s (REIFIED)\n"
-    (bit_trace_after_reify b st)
-    (bit_trace_after_reify x st)
-    (bit_trace_after_reify y st)
-    (bit_trace_after_reify r st)
-    (bit_trace_after_reify c st);
-  pause (fun () ->
-    log "  full_addero after pause 1\n";
-    let st = State.new_scope st in
-    mplus
-      (bind
-         (bind (bind (bind ((!0 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!0 ==== r))
-         (!0 ==== c))
-      (pause (fun () ->
-        log "  full_addero after pause 2\n";
-         mplus
-           (bind
-              (bind (bind (bind ((!1 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!1 ==== r))
-              (!0 ==== c))
-           (pause (fun () ->
-             log "  full_addero after pause 3\n";
-              mplus
-                (bind
-                   (bind
-                      (bind (bind ((!0 ==== b) st) (!1 ==== x)) (!0 ==== y))
-                      (!1 ==== r))
-                   (!0 ==== c))
-                (pause (fun () ->
-                  log "  full_addero after pause 4\n";
-                   mplus
-                     (bind
-                        (bind
-                           (bind (bind ((!1 ==== b) st) (!1 ==== x)) (!0 ==== y))
-                           (!0 ==== r))
-                        (!1 ==== c))
-                     (pause (fun () ->
-                      log "  full_addero after pause 5\n";
-                        mplus
-                          (bind
-                             (bind
-                                (bind (bind ((!0 ==== b) st) (!0 ==== x)) (!1 ==== y))
-                                (!1 ==== r))
-                             (!0 ==== c))
-                          (pause (fun () ->
-                            log "  full_addero after pause 6\n";
-                             mplus
-                               (bind
-                                  (bind
-                                     (bind
-                                        (bind ((!1 ==== b) st) (!0 ==== x))
-                                        (!1 ==== y))
-                                     (!0 ==== r))
-                                  (!1 ==== c))
-                               (pause (fun () ->
-                                log "  full_addero after pause 7\n";
-                                  mplus
-                                    (bind
-                                       (bind
-                                          (bind
-                                             (bind ((!0 ==== b) st) (!1 ==== x))
-                                             (!1 ==== y))
-                                          (!0 ==== r))
-                                       (!1 ==== c))
-                                    (pause (fun () ->
-                                       log "  full_addero after pause 8\n";
-                                       bind
-                                         (bind
-                                            (bind
-                                               (bind ((!1 ==== b) st) (!1 ==== x))
-                                               (!1 ==== y))
-                                            (!1 ==== r))
-                                         (!1 ==== c))))))))))))))))
-;; *)
+   let full_addero b x y r c st =
+   log
+   "\tfull_addero %s %s %s %s %s (REIFIED)\n"
+   (bit_trace_after_reify b st)
+   (bit_trace_after_reify x st)
+   (bit_trace_after_reify y st)
+   (bit_trace_after_reify r st)
+   (bit_trace_after_reify c st);
+   pause (fun () ->
+   log "  full_addero after pause 1\n";
+   let st = State.new_scope st in
+   mplus
+   (bind
+   (bind (bind (bind ((!0 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!0 ==== r))
+   (!0 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 2\n";
+   mplus
+   (bind
+   (bind (bind (bind ((!1 ==== b) st) (!0 ==== x)) (!0 ==== y)) (!1 ==== r))
+   (!0 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 3\n";
+   mplus
+   (bind
+   (bind
+   (bind (bind ((!0 ==== b) st) (!1 ==== x)) (!0 ==== y))
+   (!1 ==== r))
+   (!0 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 4\n";
+   mplus
+   (bind
+   (bind
+   (bind (bind ((!1 ==== b) st) (!1 ==== x)) (!0 ==== y))
+   (!0 ==== r))
+   (!1 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 5\n";
+   mplus
+   (bind
+   (bind
+   (bind (bind ((!0 ==== b) st) (!0 ==== x)) (!1 ==== y))
+   (!1 ==== r))
+   (!0 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 6\n";
+   mplus
+   (bind
+   (bind
+   (bind
+   (bind ((!1 ==== b) st) (!0 ==== x))
+   (!1 ==== y))
+   (!0 ==== r))
+   (!1 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 7\n";
+   mplus
+   (bind
+   (bind
+   (bind
+   (bind ((!0 ==== b) st) (!1 ==== x))
+   (!1 ==== y))
+   (!0 ==== r))
+   (!1 ==== c))
+   (pause (fun () ->
+   log "  full_addero after pause 8\n";
+   bind
+   (bind
+   (bind
+   (bind ((!1 ==== b) st) (!1 ==== x))
+   (!1 ==== y))
+   (!1 ==== r))
+   (!1 ==== c))))))))))))))))
+   ;; *)
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
 let rec addero d n m r =
@@ -289,95 +285,95 @@ and gen_addero d n m r =
 
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
 (* let rec addero d n m r st =
-  pause (fun () ->
-    log "  addero after 1st pause\n";
-    let st = State.new_scope st in
-    mplus
-      (bind
-         (bind ((( ==== ) ~s:"50" !0 d) st) (( === ) ~s:"51" (nil ()) m))
-         (( === ) ~s:"52" n r))
-      (pause (fun () ->
-         log "  addero after 2nd pause\n";
-         mplus
-           (bind
-              (bind
-                 (bind ((( ==== ) ~s:"53" !0 d) st) (( === ) ~s:"54" (nil ()) n))
-                 (( === ) ~s:"55" m r))
-              (poso m))
-           (pause (fun () ->
-              log "  addero after 3rd pause\n";
-              mplus
-                (bind
-                   (bind ((( ==== ) ~s:"56" !1 d) st) (nil () === m))
-                   (addero !0 n one r))
-                (pause (fun () ->
-                   log "  addero after 4th pause\n";
-                   mplus
-                     (bind
-                        (bind
-                           (bind ((!1 ==== d) st) (( === ) ~s:"59" (nil ()) n))
-                           (poso m))
-                        (addero !0 m one r))
-                     (pause (fun () ->
-                        log "  addero after 5th pause\n";
-                        mplus
-                          (bind
-                             (bind ((( === ) ~s:"60" n one) st) (( === ) ~s:"61" m one))
-                             (fun st ->
-                               pause (fun () ->
-                                 log "  addero after 6th pause\n";
-                                 let a = State.fresh st in
-                                 let c = State.fresh st in
-                                 bind
-                                   ((( === ) ~s:"62" (a %< c) r) st)
-                                   (full_addero d !1 !1 a c))))
-                          (pause (fun () ->
-                             log "  addero after 7th pause\n";
-                             mplus
-                               (bind ((( === ) ~s:"63" n one) st) (gen_addero d n m r))
-                               (pause (fun () ->
-                                log "  addero after 8th pause\n";
-                                  mplus
-                                    (bind
-                                       (bind
-                                          (bind ((( === ) ~s:"64" m one) st) (gt1o n))
-                                          (gt1o r))
-                                       (addero d one n r))
-                                    (pause (fun () ->
-                                       log "  addero after 9th pause\n";
-                                       bind ((gt1o n) st) (gen_addero d n m r))))))))))))))))
+   pause (fun () ->
+   log "  addero after 1st pause\n";
+   let st = State.new_scope st in
+   mplus
+   (bind
+   (bind ((( ==== ) ~msg:"50" !0 d) st) (( === ) ~msg:"51" (nil ()) m))
+   (( === ) ~msg:"52" n r))
+   (pause (fun () ->
+   log "  addero after 2nd pause\n";
+   mplus
+   (bind
+   (bind
+   (bind ((( ==== ) ~msg:"53" !0 d) st) (( === ) ~msg:"54" (nil ()) n))
+   (( === ) ~msg:"55" m r))
+   (poso m))
+   (pause (fun () ->
+   log "  addero after 3rd pause\n";
+   mplus
+   (bind
+   (bind ((( ==== ) ~msg:"56" !1 d) st) (nil () === m))
+   (addero !0 n one r))
+   (pause (fun () ->
+   log "  addero after 4th pause\n";
+   mplus
+   (bind
+   (bind
+   (bind ((!1 ==== d) st) (( === ) ~msg:"59" (nil ()) n))
+   (poso m))
+   (addero !0 m one r))
+   (pause (fun () ->
+   log "  addero after 5th pause\n";
+   mplus
+   (bind
+   (bind ((( === ) ~msg:"60" n one) st) (( === ) ~msg:"61" m one))
+   (fun st ->
+   pause (fun () ->
+   log "  addero after 6th pause\n";
+   let a = State.fresh st in
+   let c = State.fresh st in
+   bind
+   ((( === ) ~msg:"62" (a %< c) r) st)
+   (full_addero d !1 !1 a c))))
+   (pause (fun () ->
+   log "  addero after 7th pause\n";
+   mplus
+   (bind ((( === ) ~msg:"63" n one) st) (gen_addero d n m r))
+   (pause (fun () ->
+   log "  addero after 8th pause\n";
+   mplus
+   (bind
+   (bind
+   (bind ((( === ) ~msg:"64" m one) st) (gt1o n))
+   (gt1o r))
+   (addero d one n r))
+   (pause (fun () ->
+   log "  addero after 9th pause\n";
+   bind ((gt1o n) st) (gen_addero d n m r))))))))))))))))
 
-and gen_addero d n m r st =
-  pause (fun () ->
-    let a = State.fresh st in
-    let b = State.fresh st in
-    let c = State.fresh st in
-    let e = State.fresh st in
-    let x = State.fresh st in
-    let y = State.fresh st in
-    let z = State.fresh st in
-    log
-      "  a = %s, b = %s, c = %s, e = %s, x = %s, y = %s, z = %s gen_addero\n"
-      (bit_trace_after_reify a st)
-      (bit_trace_after_reify b st)
-      (bit_trace_after_reify c st)
-      (bit_trace_after_reify e st)
-      (trace_after_reify x st)
-      (trace_after_reify y st)
-      (trace_after_reify z st);
-    bind
-      (bind
-         (bind
-            (bind
-               (bind
-                  (bind ((( === ) ~s:"30" (a % x) n) st) (( === ) ~s:"31" (b % y) m))
-                  (poso y))
-               (( === ) ~s:"32" (c % z) r))
-            (poso z))
-         (full_addero d a b c e))
-      (addero e x y z))
-;;
- *)
+   and gen_addero d n m r st =
+   pause (fun () ->
+   let a = State.fresh st in
+   let b = State.fresh st in
+   let c = State.fresh st in
+   let e = State.fresh st in
+   let x = State.fresh st in
+   let y = State.fresh st in
+   let z = State.fresh st in
+   log
+   "  a = %s, b = %s, c = %s, e = %s, x = %s, y = %s, z = %s gen_addero\n"
+   (bit_trace_after_reify a st)
+   (bit_trace_after_reify b st)
+   (bit_trace_after_reify c st)
+   (bit_trace_after_reify e st)
+   (trace_after_reify x st)
+   (trace_after_reify y st)
+   (trace_after_reify z st);
+   bind
+   (bind
+   (bind
+   (bind
+   (bind
+   (bind ((( === ) ~msg:"30" (a % x) n) st) (( === ) ~msg:"31" (b % y) m))
+   (poso y))
+   (( === ) ~msg:"32" (c % z) r))
+   (poso z))
+   (full_addero d a b c e))
+   (addero e x y z))
+   ;;
+*)
 
 let pluso n m k = addero !0 n m k
 let minuso n m k = pluso m k n
@@ -396,103 +392,59 @@ let rec bound_multo q p n m =
     ]
 ;;
 
-let rec multo n m p =
-  conde
-    [ n === zero &&& (p === zero)
+(* asdfasdfasdfas *)
+(* let rec multo n m p =
+   conde
+   [ ((===) ~msg:"348.1" n zero) &&& (p === zero)
     ; poso n &&& (m === zero) &&& (p === zero)
-    ; n === one &&& poso m &&& (m === p)
-    ; gt1o n &&& (m === one) &&& (n === p)
-    ; fresh (x z) (n === !0 % x) (poso x) (p === !0 % z) (poso z) (gt1o m) (multo x m z)
-    ; fresh (x y) (n === !1 % x) (poso x) (m === !0 % y) (poso y) (multo m n p)
-    ; fresh (x y) (n === !1 % x) (poso x) (m === !1 % y) (poso y) (odd_multo x n m p)
-    ]
-
-and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 % q) m p)
-
-(*
-let rec bound_multo q p n m st =
-  (* Printf.printf "bound_multo %s %s %s %s\n" (traceP q) (traceP p) (traceP n) (traceP m); *)
-  Printf.printf
-    "\tbound_multo %s %s %s %s (REIFIED)\n"
-    (trace_after_reify q st)
-    (trace_after_reify p st)
-    (trace_after_reify n st)
-    (trace_after_reify m st);
-  pause (fun () ->
-    let st = State.new_scope st in
-    mplus
-      (bind ((q === zero) st) (poso p))
-      (pause (fun () ->
-         (fun st ->
-           pause (fun () ->
-             let a0 = State.fresh st in
-             let a1 = State.fresh st in
-             let a2 = State.fresh st in
-             let a3 = State.fresh st in
-             let x = State.fresh st in
-             let y = State.fresh st in
-             let z = State.fresh st in
-             Printf.printf
-               "  a0 = %s, a1 = %s, a2 = %s, a3 = %s BOUND_MULTO\n"
-               (bit_trace_after_reify a0 st)
-               (bit_trace_after_reify a1 st)
-               (bit_trace_after_reify a2 st)
-               (bit_trace_after_reify a3 st);
-             bind
-               (bind ((( === ) ~s:"20" q (a0 % x)) st) (( === ) ~s:"21" p (a1 % y)))
-               (fun st ->
-                 pause (fun () ->
-                   let st = State.new_scope st in
-                   mplus
-                     (bind
-                        (bind ((( === ) ~s:"22" n zero) st) (( === ) ~s:"23" m (a2 % z)))
-                        (bound_multo x y z zero))
-                     (pause (fun () ->
-                        bind ((( === ) ~s:"24" n (a3 % z)) st) (bound_multo x y z m)))))))
-           st)))
-;;
-
+    ; ((===) n one ~msg:"350") &&& poso m &&& (m === p)
+    ; gt1o n &&& ((===) m one ~msg:"351.2") &&& (n === p)
+    ; fresh (x z) 
+         ((===) ~msg:"353" n (!0 % x)) (poso ~q:"173" x) 
+         ((===) ~msg:"354" p (!0 % z)) (poso ~q:"174" z) 
+         (gt1o m) 
+         (multo x m z)
+    ; fresh (x y) 
+        ((===) n (!1 % x) ~msg:"358")
+        (poso x ~q:"179") 
+        (m === !0 % y) 
+        (poso y ~q:"181") 
+        (multo m n p)
+    ; fresh (x y) 
+        ((===) ~msg:"362" n (!1 % x)) 
+        (poso x ~q:"178") 
+        (m === !1 % y) (poso y) 
+        (odd_multo x n m p)
+    ] *)
 let rec multo n m p st =
-  (* Printf.printf "multo %s %s %s\n" (traceP n) (traceP m) (traceP p); *)
-  Printf.printf
-    "\tmulto %s %s %s (REIFIED)\n"
-    (trace_after_reify n st)
-    (trace_after_reify m st)
-    (trace_after_reify p st);
   pause (fun () ->
-    Printf.printf "\tmulto after 1st pause\n";
     let st = State.new_scope st in
     mplus
-      (bind ((( === ) ~s:"1" n zero) st) (( === ) ~s:"2" p zero))
+      (bind ((( === ) ~msg:"348.1" n zero) st) (p === zero))
       (pause (fun () ->
-         Printf.printf "\tmulto after 2nd pause\n";
          mplus
-           (bind (bind ((poso n) st) (( === ) ~s:"3" m zero)) (( === ) ~s:"4" p zero))
+           (bind (bind ((poso n) st) (m === zero)) (p === zero))
            (pause (fun () ->
               mplus
-                (bind (bind ((( === ) ~s:"5" n one) st) (poso m)) (( === ) ~s:"6" m p))
+                (bind (bind ((( === ) n one ~msg:"350") st) (poso m)) (m === p))
                 (pause (fun () ->
                    mplus
-                     (bind
-                        (bind ((gt1o n) st) (( === ) ~s:"7" m one))
-                        (( === ) ~s:"8" n p))
+                     (bind (bind ((gt1o n) st) (( === ) m one ~msg:"351.2")) (n === p))
                      (pause (fun () ->
                         mplus
                           ((fun st ->
                              pause (fun () ->
                                let x = State.fresh st in
                                let z = State.fresh st in
-                               Printf.printf
-                                 "  x = %s, z = %s\n"
-                                 (trace_after_reify x st)
-                                 (trace_after_reify z st);
                                bind
                                  (bind
                                     (bind
                                        (bind
-                                          (bind ((( === ) n ~s:"9" (!0 % x)) st) (poso x))
-                                          (( === ) p (!0 % z) ~s:"10"))
-                                       (poso z))
+                                          (bind
+                                             ((( === ) ~msg:"353" n (!0 % x)) st)
+                                             (poso ~q:"173" x))
+                                          (( === ) ~msg:"354" p (!0 % z)))
+                                       (poso ~q:"174" z))
                                     (gt1o m))
                                  (multo x m z)))
                              st)
@@ -502,18 +454,14 @@ let rec multo n m p st =
                                   pause (fun () ->
                                     let x = State.fresh st in
                                     let y = State.fresh st in
-                                    Printf.printf
-                                      "  x = %s, y = %s AAA\n"
-                                      (trace_after_reify x st)
-                                      (trace_after_reify y st);
                                     bind
                                       (bind
                                          (bind
                                             (bind
-                                               ((( === ) n (!1 % x) ~s:"11") st)
-                                               (poso x))
-                                            (( === ) ~s:"12" m (!0 % y)))
-                                         (poso y))
+                                               ((( === ) n (!1 % x) ~msg:"358") st)
+                                               (poso x ~q:"179"))
+                                            (m === !0 % y))
+                                         (poso y ~q:"181"))
                                       (multo m n p)))
                                   st)
                                (pause (fun () ->
@@ -521,34 +469,159 @@ let rec multo n m p st =
                                     pause (fun () ->
                                       let x = State.fresh st in
                                       let y = State.fresh st in
-                                      Printf.printf
-                                        "  x = %s, y = %s BBB\n"
-                                        (trace_after_reify x st)
-                                        (trace_after_reify y st);
                                       bind
                                         (bind
                                            (bind
                                               (bind
-                                                 ((( === ) n (!1 % x) ~s:"13") st)
-                                                 (poso x))
-                                              (( === ) m (!1 % y) ~s:"14"))
+                                                 ((( === ) ~msg:"362" n (!1 % x)) st)
+                                                 (poso x ~q:"178"))
+                                              (m === !1 % y))
                                            (poso y))
                                         (odd_multo x n m p)))
                                     st)))))))))))))
 
-and odd_multo x n m p st =
-  (* Printf.printf "odd_multo %s %s %s %s\n" (traceP x) (traceP n) (traceP m) (traceP p); *)
-  Printf.printf
-    "\todd_multo %s %s %s %s (REIFIED)\n"
-    (trace_after_reify x st)
-    (trace_after_reify n st)
-    (trace_after_reify m st)
-    (trace_after_reify p st);
-  pause (fun () ->
-    let q = State.fresh st in
-    let head = (bound_multo q p n m) st in
-    bind (bind head (multo x m q)) (pluso (!0 % q) m p))
-;; *)
+and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 % q) m p)
+
+(*
+   let rec bound_multo q p n m st =
+   (* Printf.printf "bound_multo %s %s %s %s\n" (traceP q) (traceP p) (traceP n) (traceP m); *)
+   Printf.printf
+   "\tbound_multo %s %s %s %s (REIFIED)\n"
+   (trace_after_reify q st)
+   (trace_after_reify p st)
+   (trace_after_reify n st)
+   (trace_after_reify m st);
+   pause (fun () ->
+   let st = State.new_scope st in
+   mplus
+   (bind ((q === zero) st) (poso p))
+   (pause (fun () ->
+   (fun st ->
+   pause (fun () ->
+   let a0 = State.fresh st in
+   let a1 = State.fresh st in
+   let a2 = State.fresh st in
+   let a3 = State.fresh st in
+   let x = State.fresh st in
+   let y = State.fresh st in
+   let z = State.fresh st in
+   Printf.printf
+   "  a0 = %s, a1 = %s, a2 = %s, a3 = %s BOUND_MULTO\n"
+   (bit_trace_after_reify a0 st)
+   (bit_trace_after_reify a1 st)
+   (bit_trace_after_reify a2 st)
+   (bit_trace_after_reify a3 st);
+   bind
+   (bind ((( === ) ~msg:"20" q (a0 % x)) st) (( === ) ~msg:"21" p (a1 % y)))
+   (fun st ->
+   pause (fun () ->
+   let st = State.new_scope st in
+   mplus
+   (bind
+   (bind ((( === ) ~msg:"22" n zero) st) (( === ) ~msg:"23" m (a2 % z)))
+   (bound_multo x y z zero))
+   (pause (fun () ->
+   bind ((( === ) ~msg:"24" n (a3 % z)) st) (bound_multo x y z m)))))))
+   st)))
+   ;;
+
+   let rec multo n m p st =
+   (* Printf.printf "multo %s %s %s\n" (traceP n) (traceP m) (traceP p); *)
+   Printf.printf
+   "\tmulto %s %s %s (REIFIED)\n"
+   (trace_after_reify n st)
+   (trace_after_reify m st)
+   (trace_after_reify p st);
+   pause (fun () ->
+   Printf.printf "\tmulto after 1st pause\n";
+   let st = State.new_scope st in
+   mplus
+   (bind ((( === ) ~msg:"1" n zero) st) (( === ) ~msg:"2" p zero))
+   (pause (fun () ->
+   Printf.printf "\tmulto after 2nd pause\n";
+   mplus
+   (bind (bind ((poso n) st) (( === ) ~msg:"3" m zero)) (( === ) ~msg:"4" p zero))
+   (pause (fun () ->
+   mplus
+   (bind (bind ((( === ) ~msg:"5" n one) st) (poso m)) (( === ) ~msg:"6" m p))
+   (pause (fun () ->
+   mplus
+   (bind
+   (bind ((gt1o n) st) (( === ) ~msg:"7" m one))
+   (( === ) ~msg:"8" n p))
+   (pause (fun () ->
+   mplus
+   ((fun st ->
+   pause (fun () ->
+   let x = State.fresh st in
+   let z = State.fresh st in
+   Printf.printf
+   "  x = %s, z = %s\n"
+   (trace_after_reify x st)
+   (trace_after_reify z st);
+   bind
+   (bind
+   (bind
+   (bind
+   (bind ((( === ) n ~msg:"9" (!0 % x)) st) (poso x))
+   (( === ) p (!0 % z) ~msg:"10"))
+   (poso z))
+   (gt1o m))
+   (multo x m z)))
+   st)
+   (pause (fun () ->
+   mplus
+   ((fun st ->
+   pause (fun () ->
+   let x = State.fresh st in
+   let y = State.fresh st in
+   Printf.printf
+   "  x = %s, y = %s AAA\n"
+   (trace_after_reify x st)
+   (trace_after_reify y st);
+   bind
+   (bind
+   (bind
+   (bind
+   ((( === ) n (!1 % x) ~msg:"11") st)
+   (poso x))
+   (( === ) ~msg:"12" m (!0 % y)))
+   (poso y))
+   (multo m n p)))
+   st)
+   (pause (fun () ->
+   (fun st ->
+   pause (fun () ->
+   let x = State.fresh st in
+   let y = State.fresh st in
+   Printf.printf
+   "  x = %s, y = %s BBB\n"
+   (trace_after_reify x st)
+   (trace_after_reify y st);
+   bind
+   (bind
+   (bind
+   (bind
+   ((( === ) n (!1 % x) ~msg:"13") st)
+   (poso x))
+   (( === ) m (!1 % y) ~msg:"14"))
+   (poso y))
+   (odd_multo x n m p)))
+   st)))))))))))))
+
+   and odd_multo x n m p st =
+   (* Printf.printf "odd_multo %s %s %s %s\n" (traceP x) (traceP n) (traceP m) (traceP p); *)
+   Printf.printf
+   "\todd_multo %s %s %s %s (REIFIED)\n"
+   (trace_after_reify x st)
+   (trace_after_reify n st)
+   (trace_after_reify m st)
+   (trace_after_reify p st);
+   pause (fun () ->
+   let q = State.fresh st in
+   let head = (bound_multo q p n m) st in
+   bind (bind head (multo x m q)) (pluso (!0 % q) m p))
+   ;; *)
 
 (*  *)
 
@@ -712,15 +785,14 @@ let reify : (ioleg, _) Reifier.t = Std.List.reify OCanren.reify
 (* let test17 n m = lelo n m &&& multo n (build_num 2) m
 let test27 b q r = logo (build_num 68) b q r &&& gt1o q
 let show_num = GT.(show List.ground @@ show int)
-
- *)
+*)
 (* let _ffoo _ =
-  run_exn show_num (-1)  qr qrh (REPR (fun q r     -> multo q r (build_num 1)                          ));
-  run_exn show_num (-1)   q  qh (REPR (fun q       -> multo (build_num 7) (build_num 63) q             ));
-  run_exn show_num (-1)  qr qrh (REPR (fun q r     -> divo (build_num 3) (build_num 2) q r             ));
-  run_exn show_num (-1)   q  qh (REPR (fun q       -> logo (build_num 14) (build_num 2) (build_num 3) q));
-  run_exn show_num (-1)   q  qh (REPR (fun q       -> expo (build_num 3) (build_num 5) q               ));
-  () *)
+   run_exn show_num (-1)  qr qrh (REPR (fun q r     -> multo q r (build_num 1)                          ));
+   run_exn show_num (-1)   q  qh (REPR (fun q       -> multo (build_num 7) (build_num 63) q             ));
+   run_exn show_num (-1)  qr qrh (REPR (fun q r     -> divo (build_num 3) (build_num 2) q r             ));
+   run_exn show_num (-1)   q  qh (REPR (fun q       -> logo (build_num 14) (build_num 2) (build_num 3) q));
+   run_exn show_num (-1)   q  qh (REPR (fun q       -> expo (build_num 3) (build_num 5) q               ));
+   () *)
 
 (* let num_reifier h = List.reify OCanren.reify h *)
 (* let runL n = run_r num_reifier show_num_logic n *)
