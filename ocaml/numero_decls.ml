@@ -322,14 +322,13 @@ let logo n b q r =
     ; ((===) ~msg:"611.1" q one) &&& gt1o b &&& eqlo n b &&& pluso r b n
     ; q === one &&& poso q &&& pluso r one n
     ; b === zero &&& poso q &&& (r === n)
-    ; ?&[ !0 %< !1 === b
-        ; fresh
-            (a ad dd)
-            (poso dd)
-            (n === a % (ad % dd))
-            (exp2 n (nil ()) q)
-            (fresh s (splito n dd r s))
-        ]
+    ; (b === (!0 %< !1)) &&&
+      (fresh
+          (a ad dd)
+          (poso dd)
+          (n === a % (ad % dd))
+          (exp2 n (nil ()) q)
+          (fresh s (splito n dd r s)))
     ; ?&[ fresh (a ad add ddd) (conde [ b === three; b === a % (ad % (add % ddd)) ])
         ; ltlo b n
         ; fresh

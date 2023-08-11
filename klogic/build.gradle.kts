@@ -31,9 +31,11 @@ dependencies {
     // Use it for the head of the specific branch (for example, main)
 //    testImplementation("com.github.Kakadu.klogic:klogic-core:main-SNAPSHOT") // core
 //    testImplementation("com.github.Kakadu.klogic:klogic-utils:main-SNAPSHOT") // util terms
+//   testImplementation("com.github.Kakadu.klogic:klogic-core:tracing-SNAPSHOT") // core
+//   testImplementation("com.github.Kakadu.klogic:klogic-utils:tracing-SNAPSHOT") // util terms
 
-    testImplementation("com.github.Kakadu.klogic:klogic-core:1642f6cc3d8cd6d0af2c30c8f436065571024e92") // core
-    testImplementation("com.github.Kakadu.klogic:klogic-utils:1642f6cc3d8cd6d0af2c30c8f436065571024e92") // util terms
+     testImplementation("com.github.Kakadu.klogic:klogic-core:ef606b1a5e22a4f4cbd086c9dee0c39b94f2f8ef") // core
+     testImplementation("com.github.Kakadu.klogic:klogic-utils:ef606b1a5e22a4f4cbd086c9dee0c39b94f2f8ef") // util terms
     //
 }
 

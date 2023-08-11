@@ -611,7 +611,7 @@
     ((=== q '(1) 611.1) (>1o b) (=lo n b) (pluso r b n))
     ((=== q '(1)) (poso q) (pluso r '(1) n))
     ((=== b '()) (poso q) (=== r n))
-    ((=== '(0 1) b)
+    ((=== b '(0 1))
      (fresh (a ad dd)
        (poso dd)
        (=== n `(,a ,ad . ,dd))
