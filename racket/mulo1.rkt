@@ -36,17 +36,17 @@
  [("--mul1x1")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 1) (build-num 1) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda (q) (*o (build-num 1) (build-num 1) q))))
     (report_counters))]
  [("--mul1x2")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 1) (build-num 2) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda (q) (*o (build-num 1) (build-num 2) q))))
     (report_counters))]
  [("--mul2x3")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 2) (build-num 3) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda (q) (*o (build-num 2) (build-num 3) q))))
     (report_counters))]
  [("--mul3x3")
   ""
@@ -56,22 +56,22 @@
  [("--mul4x4")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 4) (build-num 4) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda(q) (*o (build-num 4) (build-num 4) q))))
     (report_counters))]
  [("--mul3x5")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 3) (build-num 5) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda(q) (*o (build-num 3) (build-num 5) q))))
     (report_counters))]
  [("--mul5x3")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 5) (build-num 3) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda(q) (*o (build-num 5) (build-num 3) q))))
     (report_counters))]
  [("--mul5x4")
   ""
   (begin
-    (pretty-printf "  ~a\n" (run 1 (q) (*o (build-num 5) (build-num 4) q)))
+    (pretty-printf "  ~a\n" (run1 (lambda (q) (*o (build-num 5) (build-num 4) q))))
     (report_counters))]
  [("--mul5x5")
   ""
@@ -96,37 +96,42 @@
  [("--mul127x127")
   ""
   (begin
-    (run 1 (q) (*o (build-num 127) (build-num 127) q))
+    (run1 (lambda (q) (*o (build-num 127) (build-num 127) q)))
     (report_counters))]
  [("--mul255x255")
   ""
   (begin
-    (run 1 (q) (*o (build-num 255) (build-num 255) q))
+    (run1 (lambda (q) (*o (build-num 255) (build-num 255) q)))
     (report_counters))]
   [("--exp2x3")
   ""
   (begin
-    (run 1 (q) (expo (build-num 2) (build-num 3) q))
+    (run1 (lambda (q) (expo (build-num 2) (build-num 3) q)))
     (report_counters))]
  [("--exp3x2")
   ""
   (begin
-    (run 1 (q) (expo (build-num 3) (build-num 2) q))
+    (run1 (lambda (q) (expo (build-num 3) (build-num 2) q)))
     (report_counters))]
  [("--exp3x5")
   ""
   (begin
-    (run 1 (q) (expo (build-num 3) (build-num 5) q))
+    (run1 (lambda (q) (expo (build-num 3) (build-num 5) q)))
     (report_counters))]
  [("--exp7x2")
   ""
   (begin
-    (run 1 (q) (expo (build-num 7) (build-num 2) q))
+    (run1 (lambda (q) (expo (build-num 7) (build-num 2) q)))
+    (report_counters))]
+ [("--logo8base2")
+  ""
+  (begin
+    (run1 (lambda (q) (expo (build-num 2) q (build-num 8) )))
     (report_counters))]
  [("--logo243base3")
   ""
   (begin
-    (run 1 (q) (expo (build-num 3) q (build-num 243) ))
+    (run1 (lambda (q) (expo (build-num 3) q (build-num 243) )))
     (report_counters))]
 )
 

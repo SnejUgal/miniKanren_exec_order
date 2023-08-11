@@ -32,8 +32,8 @@ dependencies {
 //    testImplementation("com.github.Kakadu.klogic:klogic-core:main-SNAPSHOT") // core
 //    testImplementation("com.github.Kakadu.klogic:klogic-utils:main-SNAPSHOT") // util terms
 
-    testImplementation("com.github.Kakadu.klogic:klogic-core:f7378a0202262b34d57b907880aa9e569d8fa29b") // core
-    testImplementation("com.github.Kakadu.klogic:klogic-utils:f7378a0202262b34d57b907880aa9e569d8fa29b") // util terms
+    testImplementation("com.github.Kakadu.klogic:klogic-core:1642f6cc3d8cd6d0af2c30c8f436065571024e92") // core
+    testImplementation("com.github.Kakadu.klogic:klogic-utils:1642f6cc3d8cd6d0af2c30c8f436065571024e92") // util terms
     //
 }
 

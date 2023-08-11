@@ -24,14 +24,15 @@ include struct
     | exception Not_found -> false
     | _ -> true
 
-  let pp = Format.asprintf "%a" (GT.fmt OCanren.logic @@ GT.fmt GT.int)
-  let r x = reify_in_empty OCanren.reify x
+  let pp st x =
+    (GT.show OCanren.logic @@ GT.show GT.int) @@
+    reify_in_state st OCanren.reify x
 
   let ( ==== ) : int ilogic -> int ilogic -> goal =
    fun x y st ->
     incr_counter ();
     if not are_unifications_silent then
-      Printf.printf "%s %s\n" (pp (r x)) (pp (r y));
+      Printf.printf "%s %s\n" (pp st x) (pp st y);
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -54,14 +55,15 @@ include struct
     in
     toplevel
 
-  let pp = show_as_scheme (GT.show OCanren.logic @@ GT.show GT.int)
-  let r x = reify_in_empty (Std.List.reify OCanren.reify) x
+  let pp st x =
+    show_as_scheme (GT.show OCanren.logic @@ GT.show GT.int) @@
+    reify_in_state st (Std.List.reify OCanren.reify) x
 
   let ( === ) : ?msg:string -> int ilogic Std.List.injected -> _ -> goal =
    fun ?(msg="") x y st ->
     incr_counter ();
     if not are_unifications_silent then
-      Printf.printf "%s %s %s\n" (pp (r x)) (pp (r y)) msg;
+      Printf.printf "%s %s%s\n" (pp st x) (pp st y) (if msg = "" then "" else "  " ^ msg);
     OCanren.( === ) x y st
    [@@inline]
  ;;
@@ -100,11 +102,11 @@ let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 
 let zeroo n = zero === n
-let poso ?(q="") n = 
-  fresh (h t) 
+let poso ?(q="") n =
+  fresh (h t)
     ((===) ~msg:("poso "^q) n (h % t))
-let gt1o n = 
-  fresh (a ad dd) 
+let gt1o n =
+  fresh (a ad dd)
     ((===) n (a % (ad % dd)) ~msg:"gt1o")
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
@@ -124,10 +126,10 @@ let full_addero b x y r c =
 (** Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r]. *)
 let rec addero d n m r st =
   conde
-    [ !0 ==== d &&& (nil () === m) &&& (n === r)
-    ; !0 ==== d &&& (nil () === n) &&& (m === r) &&& poso m
-    ; !1 ==== d &&& (nil () === m) &&& (addero !0 n one r)
-    ; !1 ==== d &&& (nil () === n) &&& poso m &&& (addero !0 m one r)
+    [ !0 ==== d &&& (m === nil ()) &&& (n === r)
+    ; !0 ==== d &&& (n === nil ()) &&& (m === r) &&& poso m
+    ; !1 ==== d &&& (m === nil ()) &&& (addero !0 n one r)
+    ; !1 ==== d &&& (n === nil ()) &&& poso m &&& (addero !0 one m r)
     ; (n === one) &&&
       (m === one) &&&
       (fresh (a c) (a %< c === r) (full_addero d !1 !1 a c))
@@ -167,25 +169,31 @@ let rec bound_multo q p n m =
 
 let rec multo n m p =
   conde
-    [ ((===) ~msg:"348.1" n zero) &&& (p === zero)
-    ; poso n &&& (m === zero) &&& (p === zero)
-    ; ((===) n one ~msg:"350") &&& poso m &&& (m === p)
-    ; gt1o n &&& ((===) m one ~msg:"351.2") &&& (n === p)
-    ; fresh (x z) 
-         ((===) ~msg:"353" n (!0 % x)) (poso ~q:"173" x) 
-         ((===) ~msg:"354" p (!0 % z)) (poso ~q:"174" z) 
-         (gt1o m) 
+    [ ((===) ~msg:"348.1" n zero) &&& ((===) ~msg:"348.2" p zero)
+    ; poso n ~q:"349.0" &&& ((===) ~msg:"349.1" m zero) &&& ((===) ~msg:"349.2" p zero)
+    ; ((===) n one ~msg:"350.1") &&& poso ~q:"350.2" m &&& ((===) ~msg:"350.3" m p)
+    ; gt1o n &&& ((===) m one ~msg:"351.1") &&& ((===) ~msg:"351.2" n p)
+    ; fresh (x z)
+         ((===) ~msg:"353" n (!0 % x))
+         (poso ~q:"173" x)
+         ((===) ~msg:"354" p (!0 % z))
+         (poso ~q:"174" z)
+         (gt1o m)
          (multo x m z)
-    ; fresh (x y) 
+    ; fresh (x y)
         ((===) n (!1 % x) ~msg:"358")
-        (poso x ~q:"179") 
-        (m === !0 % y) 
-        (poso y ~q:"181") 
+        (* (debug_var x (Fun.flip num_reifier) (function [q] -> 
+                let () = Format.printf "x = %s\n%!" (show_logic q) in 
+                success)) *)
+        (poso x ~q:"179")
+        ((===) m (!0 % y) ~msg:"359")
+        (poso y ~q:"181")
         (multo m n p)
-    ; fresh (x y) 
-        ((===) ~msg:"362" n (!1 % x)) 
-        (poso x ~q:"178") 
-        (m === !1 % y) (poso y) 
+    ; fresh (x y)
+        ((===) ~msg:"362" n (!1 % x))
+        (poso x ~q:"178")
+        ((===) ~msg:"364" m (!1 % y))
+        (poso y ~q:"180")
         (odd_multo x n m p)
     ]
 
@@ -311,8 +319,8 @@ let logo n b q r =
   conde
     [ n === one &&& poso b &&& (q === zero) &&& (r === zero)
     ; q === zero &&& lto n b &&& pluso r one n
-    ; q === one &&& gt1o b &&& eqlo n b &&& pluso r b n
-    ; b === one &&& poso q &&& pluso r one n
+    ; ((===) ~msg:"611.1" q one) &&& gt1o b &&& eqlo n b &&& pluso r b n
+    ; q === one &&& poso q &&& pluso r one n
     ; b === zero &&& poso q &&& (r === n)
     ; ?&[ !0 %< !1 === b
         ; fresh
