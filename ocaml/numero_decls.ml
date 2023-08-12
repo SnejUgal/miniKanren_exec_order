@@ -102,12 +102,12 @@ let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 
 let zeroo n = zero === n
-let poso ?(q="") n =
+let poso  n =
   fresh (h t)
-    ((===) ~msg:("poso "^q) n (h % t))
+    ((===) n (h % t))
 let gt1o n =
   fresh (a ad dd)
-    ((===) n (a % (ad % dd)) ~msg:"gt1o")
+    ((===) n (a % (ad % dd)))
 
 (** Satisfies [b] + [x] + [y] = [r] + 2 * [c]  *)
 let full_addero b x y r c =
@@ -169,31 +169,31 @@ let rec bound_multo q p n m =
 
 let rec multo n m p =
   conde
-    [ ((===) ~msg:"348.1" n zero) &&& ((===) ~msg:"348.2" p zero)
-    ; poso n ~q:"349.0" &&& ((===) ~msg:"349.1" m zero) &&& ((===) ~msg:"349.2" p zero)
-    ; ((===) n one ~msg:"350.1") &&& poso ~q:"350.2" m &&& ((===) ~msg:"350.3" m p)
-    ; gt1o n &&& ((===) m one ~msg:"351.1") &&& ((===) ~msg:"351.2" n p)
+    [ ((===) n zero) &&& ((===) p zero)
+    ; poso n &&& ((===) m zero) &&& ((===) p zero)
+    ; ((===) n one) &&& poso m &&& ((===) m p)
+    ; gt1o n &&& ((===) m one) &&& ((===) n p)
     ; fresh (x z)
-         ((===) ~msg:"353" n (!0 % x))
-         (poso ~q:"173" x)
-         ((===) ~msg:"354" p (!0 % z))
-         (poso ~q:"174" z)
+         ((===) n (!0 % x))
+         (poso x)
+         ((===) p (!0 % z))
+         (poso z)
          (gt1o m)
          (multo x m z)
     ; fresh (x y)
-        ((===) n (!1 % x) ~msg:"358")
+        ((===) n (!1 % x))
         (* (debug_var x (Fun.flip num_reifier) (function [q] -> 
                 let () = Format.printf "x = %s\n%!" (show_logic q) in 
                 success)) *)
-        (poso x ~q:"179")
-        ((===) m (!0 % y) ~msg:"359")
-        (poso y ~q:"181")
+        (poso x)
+        ((===) m (!0 % y))
+        (poso y)
         (multo m n p)
     ; fresh (x y)
-        ((===) ~msg:"362" n (!1 % x))
-        (poso x ~q:"178")
-        ((===) ~msg:"364" m (!1 % y))
-        (poso y ~q:"180")
+        ((===) n (!1 % x))
+        (poso x)
+        ((===) m (!1 % y))
+        (poso y)
         (odd_multo x n m p)
     ]
 
@@ -319,7 +319,7 @@ let logo n b q r =
   conde
     [ n === one &&& poso b &&& (q === zero) &&& (r === zero)
     ; q === zero &&& lto n b &&& pluso r one n
-    ; ((===) ~msg:"611.1" q one) &&& gt1o b &&& eqlo n b &&& pluso r b n
+    ; ((===) q one) &&& gt1o b &&& eqlo n b &&& pluso r b n
     ; q === one &&& poso q &&& pluso r one n
     ; b === zero &&& poso q &&& (r === n)
     ; (b === (!0 %< !1)) &&&

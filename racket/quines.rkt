@@ -14,15 +14,23 @@
           (newline)
           (list-display (cdr lis)))))
 
-(define === (lambda (a b [msg ""])
+(define === (lambda (a b)
   ; (pretty-printf "partially applied unification ~a\n" msg)
   (lambda (st)
     (begin
       (incr_counter)
       (unless (getenv "SILENT_UNIFICATIONS")
-        (pretty-printf "~a ~a, ~a\n" (trace_after_reify a st) (trace_after_reify b st) msg))
+        (pretty-printf "~a ~a\n" (trace_after_reify a st) (trace_after_reify b st)))
       ((== a b) st)))
 ))
+
+(define lookupo
+  (lambda (x env t)
+    (fresh (rest y v)
+      (=== `((,y . ,v) . ,rest) env)
+      (conde
+        ((=== y x) (=== v t))
+        ((=/= y x) (lookupo x rest t))))))
 
 (define not-in-envo (lambda (x env)
    (conde
@@ -71,21 +79,29 @@
 
       ((fresh (x body)
          (=== exp `(seq ( (symb 'lambda)
-                         (seq ((symb ,x)))
-                         ,body) ) )
+                          (seq ((symb ,x)))
+                          ,body) ) )
          (not-in-envo 'lambda env)
          (=== r `(closure ,x ,body ,env) ) ))
     )) )
 
-(define lookupo
-  (lambda (x env t)
-    (fresh (rest y v)
-      (=== `((,y . ,v) . ,rest) env)
-      (conde
-        ((=== y x) (=== v t))
-        ((=/= y x) (lookupo x rest t))))))
 
 ;
+(define run1 (lambda (rel)
+  (map
+    (lambda (p) p)
+      (let ((st empty-state))
+        (let ((scope (subst-scope (state-S st))))
+          (let ((q (var scope)))
+            (map
+              (lambda (st0)
+                (let ((st (state-with-scope st0 nonlocal-scope)))
+                  ((reify q) st))
+              )
+              (takeMK 1 ((rel q) st))
+            )))))
+))
+
 (command-line
   #:program "compiler"
   #:once-each
@@ -110,9 +126,9 @@
   [("--firstQ") ""
       (begin
         (list-display
-          (run 1 (q) (eval-expo q '() `(val_ q))))
+          (run1 (lambda (q) (eval-expo q '() `(val_ ,q)))))
         (report_counters))]
-        #|
+#|
   [("--rev1") ""
       (begin
         (pretty-printf "~a\n"
@@ -124,5 +140,6 @@
         (pretty-printf "~a\n"
           (run 1 (q) (reverso q '(1 2)))
         )
-        (report_counters))] |#
+        (report_counters))] 
+|#
         )

@@ -8,15 +8,12 @@
 (provide *o build-num zeroo poso >1o expo logo)
 
 
-(define === (lambda (a b [msg ""])
-  ; (pretty-printf "partially applied unification ~a\n" msg)
+(define === (lambda (a b)
   (lambda (st)
     (begin
       (incr_counter)
       (unless (getenv "SILENT_UNIFICATIONS")
-        (pretty-printf "~a ~a~a\n" (trace_after_reify a st) (trace_after_reify b st) 
-            (if (equal? msg "") "" (~a "  " msg))
-          ))
+        (pretty-printf "~a ~a\n" (trace_after_reify a st) (trace_after_reify b st)))
       ((== a b) st)))
 ))
 
@@ -60,13 +57,13 @@
 (defrel (zeroo n)
   (=== '() n))
 
-(defrel (poso n [msg ""])
+(defrel (poso n)
   (fresh (a d)
-    (=== n `(,a . ,d) (~a "poso " msg))))
+    (=== n `(,a . ,d))))
 
 (defrel (>1o n)
   (fresh (a ad dd)
-    (=== n `(,a ,ad . ,dd) "gt1o")))
+    (=== n `(,a ,ad . ,dd))))
 
 ; (defrel (poso n)
 ;   (lambda (st)
@@ -172,7 +169,7 @@
 ; Adds a carry-in bit [d] to arbitrarily large numbers [n] and [m] to produce a number [r].
 (defrel (addero d n m r)
   (conde
-    ((=== 0 d 175.1) (=== m '() 175.2) (=== n r 175.3))
+    ((=== 0 d) (=== m '()) (=== n r))
     ((=== 0 d) (=== n '()) (=== m r)
      (poso m))
     ((=== 1 d) (=== m '())
@@ -291,15 +288,15 @@
 
 (defrel (bound-*o q p n m)
   (conde
-    ((=== q '() 294.1) (poso p 294.2))
+    ((=== q '()) (poso p))
     ((fresh (a0 a1 a2 a3 x y z)
-       (=== q `(,a0 . ,x) 296)
-       (=== p `(,a1 . ,y) 297)
+       (=== q `(,a0 . ,x))
+       (=== p `(,a1 . ,y))
        (conde
-         ((=== n '() 299)
-          (=== m `(,a2 . ,z) 300)
+         ((=== n '())
+          (=== m `(,a2 . ,z))
           (bound-*o x y z '()))
-         ((=== n `(,a3 . ,z) 302)
+         ((=== n `(,a3 . ,z))
           (bound-*o x y z m)))))))
 
 ; (defrel (bound-*o q p n m)
@@ -347,28 +344,28 @@
 
 (defrel (*o n m p)
   (conde
-    ((=== n '() 348.1) (=== p '() 348.2))
-    ((poso n 349.0) (=== m '() 349.1) (=== p '() 349.2))
-    ((=== n '(1) 350.1) (poso m 350.2) (=== m p 350.3))
-    ((>1o n) (=== m '(1) 351.1) (=== n p 351.2))
+    ((=== n '()) (=== p '()))
+    ((poso n) (=== m '()) (=== p '()))
+    ((=== n '(1)) (poso m) (=== m p))
+    ((>1o n) (=== m '(1)) (=== n p))
     ((fresh (x z)
-       (=== n `(0 . ,x) 353) 
-       (poso x 173)
-       (=== p `(0 . ,z) 354) 
-       (poso z 174)
+       (=== n `(0 . ,x) ) 
+       (poso x )
+       (=== p `(0 . ,z) ) 
+       (poso z )
        (>1o m)
        (*o x m z)))
     ((fresh (x y)
-       (=== n `(1 . ,x) 358) 
-       (poso x 179)
-       (=== m `(0 . ,y) 359) 
-       (poso y 181)
+       (=== n `(1 . ,x) ) 
+       (poso x )
+       (=== m `(0 . ,y) ) 
+       (poso y )
        (*o m n p)))
     ((fresh (x y)
-       (=== n `(1 . ,x) 362) 
-       (poso x 178)
-       (=== m `(1 . ,y) 364) 
-       (poso y 180)
+       (=== n `(1 . ,x) ) 
+       (poso x )
+       (=== m `(1 . ,y) ) 
+       (poso y )
        (odd-*o x n m p)))))
 
 ; (defrel (*o n m p)
@@ -606,9 +603,9 @@
 
 (defrel (logo n b q r)
   (conde
-    ((=== n '(1) 609.1) (poso b 609.2) (=== q '() 609.3) (=== r '()))
-    ((=== q '() 610.1) (<o n b) (pluso r '(1) n))
-    ((=== q '(1) 611.1) (>1o b) (=lo n b) (pluso r b n))
+    ((=== n '(1)) (poso b) (=== q '()) (=== r '()))
+    ((=== q '()) (<o n b) (pluso r '(1) n))
+    ((=== q '(1)) (>1o b) (=lo n b) (pluso r b n))
     ((=== q '(1)) (poso q) (pluso r '(1) n))
     ((=== b '()) (poso q) (=== r n))
     ((=== b '(0 1))

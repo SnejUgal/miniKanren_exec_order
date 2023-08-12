@@ -14,20 +14,16 @@
 (define run1 (lambda (rel)
   (map
     (lambda (p) p)
-      ;(let ((q (car p)) (st0 (cdr p)))
-      ;(let ((st (state-with-scope st0 nonlocal-scope)))
-      ;  ((reify q) st))))
-
-    (let ((st empty-state))
-      (let ((scope (subst-scope (state-S st))))
-        (let ((q (var scope)))
-          (map
-            (lambda (st0)
-              (let ((st (state-with-scope st0 nonlocal-scope)))
-                ((reify q) st))
-            )
-            (takeMK 1 ((rel q) st))
-          )))))
+      (let ((st empty-state))
+        (let ((scope (subst-scope (state-S st))))
+          (let ((q (var scope)))
+            (map
+              (lambda (st0)
+                (let ((st (state-with-scope st0 nonlocal-scope)))
+                  ((reify q) st))
+              )
+              (takeMK 1 ((rel q) st))
+            )))))
 ))
 
 (command-line

@@ -138,7 +138,7 @@ let zero : injected = Std.nil ()
 let one : injected = !<(!!1)
 let three : injected = !!1 % !<(!!1)
 let zeroo n = zero === n
-let poso ?(q = "") n = fresh (h t) (( === ) ~msg:("poso " ^ q) n (h % t))
+let poso n = fresh (h t) (( === ) n (h % t))
 (* let poso n st =
    pause (fun () ->
    let a = State.fresh st in
@@ -151,7 +151,7 @@ let poso ?(q = "") n = fresh (h t) (( === ) ~msg:("poso " ^ q) n (h % t))
    (( === ) ~msg:"poso" n (a % d)) st)
    ;; *)
 
-let gt1o n = fresh (a ad dd) (( === ) ~msg:"gt1o" n (a % (ad % dd)))
+let gt1o n = fresh (a ad dd) (( === ) n (a % (ad % dd)))
 (* let gt1o n st =
    pause (fun () ->
    let a = State.fresh st in
@@ -290,53 +290,53 @@ and gen_addero d n m r =
    let st = State.new_scope st in
    mplus
    (bind
-   (bind ((( ==== ) ~msg:"50" !0 d) st) (( === ) ~msg:"51" (nil ()) m))
-   (( === ) ~msg:"52" n r))
+   (bind ((( ==== ) !0 d) st) (( === ) (nil ()) m))
+   (( === ) n r))
    (pause (fun () ->
    log "  addero after 2nd pause\n";
    mplus
    (bind
    (bind
-   (bind ((( ==== ) ~msg:"53" !0 d) st) (( === ) ~msg:"54" (nil ()) n))
-   (( === ) ~msg:"55" m r))
+   (bind ((( ==== ) !0 d) st) (( === ) (nil ()) n))
+   (( === ) m r))
    (poso m))
    (pause (fun () ->
    log "  addero after 3rd pause\n";
    mplus
    (bind
-   (bind ((( ==== ) ~msg:"56" !1 d) st) (nil () === m))
+   (bind ((( ==== ) !1 d) st) (nil () === m))
    (addero !0 n one r))
    (pause (fun () ->
    log "  addero after 4th pause\n";
    mplus
    (bind
    (bind
-   (bind ((!1 ==== d) st) (( === ) ~msg:"59" (nil ()) n))
+   (bind ((!1 ==== d) st) (( === ) (nil ()) n))
    (poso m))
    (addero !0 m one r))
    (pause (fun () ->
    log "  addero after 5th pause\n";
    mplus
    (bind
-   (bind ((( === ) ~msg:"60" n one) st) (( === ) ~msg:"61" m one))
+   (bind ((( === ) n one) st) (( === ) m one))
    (fun st ->
    pause (fun () ->
    log "  addero after 6th pause\n";
    let a = State.fresh st in
    let c = State.fresh st in
    bind
-   ((( === ) ~msg:"62" (a %< c) r) st)
+   ((( === ) (a %< c) r) st)
    (full_addero d !1 !1 a c))))
    (pause (fun () ->
    log "  addero after 7th pause\n";
    mplus
-   (bind ((( === ) ~msg:"63" n one) st) (gen_addero d n m r))
+   (bind ((( === ) n one) st) (gen_addero d n m r))
    (pause (fun () ->
    log "  addero after 8th pause\n";
    mplus
    (bind
    (bind
-   (bind ((( === ) ~msg:"64" m one) st) (gt1o n))
+   (bind ((( === ) m one) st) (gt1o n))
    (gt1o r))
    (addero d one n r))
    (pause (fun () ->
@@ -366,9 +366,9 @@ and gen_addero d n m r =
    (bind
    (bind
    (bind
-   (bind ((( === ) ~msg:"30" (a % x) n) st) (( === ) ~msg:"31" (b % y) m))
+   (bind ((( === ) (a % x) n) st) (( === ) (b % y) m))
    (poso y))
-   (( === ) ~msg:"32" (c % z) r))
+   (( === ) (c % z) r))
    (poso z))
    (full_addero d a b c e))
    (addero e x y z))
@@ -395,24 +395,24 @@ let rec bound_multo q p n m =
 (* asdfasdfasdfas *)
 (* let rec multo n m p =
    conde
-   [ ((===) ~msg:"348.1" n zero) &&& (p === zero)
+   [ ((===) n zero) &&& (p === zero)
     ; poso n &&& (m === zero) &&& (p === zero)
-    ; ((===) n one ~msg:"350") &&& poso m &&& (m === p)
-    ; gt1o n &&& ((===) m one ~msg:"351.2") &&& (n === p)
+    ; ((===) n one) &&& poso m &&& (m === p)
+    ; gt1o n &&& ((===) m one) &&& (n === p)
     ; fresh (x z) 
-         ((===) ~msg:"353" n (!0 % x)) (poso ~q:"173" x) 
-         ((===) ~msg:"354" p (!0 % z)) (poso ~q:"174" z) 
+         ((===) n (!0 % x)) (poso x) 
+         ((===) p (!0 % z)) (poso z) 
          (gt1o m) 
          (multo x m z)
     ; fresh (x y) 
-        ((===) n (!1 % x) ~msg:"358")
-        (poso x ~q:"179") 
+        ((===) n (!1 % x))
+        (poso x) 
         (m === !0 % y) 
-        (poso y ~q:"181") 
+        (poso y) 
         (multo m n p)
     ; fresh (x y) 
-        ((===) ~msg:"362" n (!1 % x)) 
-        (poso x ~q:"178") 
+        ((===) n (!1 % x)) 
+        (poso x) 
         (m === !1 % y) (poso y) 
         (odd_multo x n m p)
     ] *)
@@ -420,16 +420,16 @@ let rec multo n m p st =
   pause (fun () ->
     let st = State.new_scope st in
     mplus
-      (bind ((( === ) ~msg:"348.1" n zero) st) (p === zero))
+      (bind ((( === ) n zero) st) (p === zero))
       (pause (fun () ->
          mplus
            (bind (bind ((poso n) st) (m === zero)) (p === zero))
            (pause (fun () ->
               mplus
-                (bind (bind ((( === ) n one ~msg:"350") st) (poso m)) (m === p))
+                (bind (bind ((( === ) n one) st) (poso m)) (m === p))
                 (pause (fun () ->
                    mplus
-                     (bind (bind ((gt1o n) st) (( === ) m one ~msg:"351.2")) (n === p))
+                     (bind (bind ((gt1o n) st) (( === ) m one)) (n === p))
                      (pause (fun () ->
                         mplus
                           ((fun st ->
@@ -441,10 +441,10 @@ let rec multo n m p st =
                                     (bind
                                        (bind
                                           (bind
-                                             ((( === ) ~msg:"353" n (!0 % x)) st)
-                                             (poso ~q:"173" x))
-                                          (( === ) ~msg:"354" p (!0 % z)))
-                                       (poso ~q:"174" z))
+                                             ((( === ) n (!0 % x)) st)
+                                             (poso x))
+                                          (( === ) p (!0 % z)))
+                                       (poso z))
                                     (gt1o m))
                                  (multo x m z)))
                              st)
@@ -458,10 +458,10 @@ let rec multo n m p st =
                                       (bind
                                          (bind
                                             (bind
-                                               ((( === ) n (!1 % x) ~msg:"358") st)
-                                               (poso x ~q:"179"))
+                                               ((( === ) n (!1 % x)) st)
+                                               (poso x))
                                             (m === !0 % y))
-                                         (poso y ~q:"181"))
+                                         (poso y))
                                       (multo m n p)))
                                   st)
                                (pause (fun () ->
@@ -473,8 +473,8 @@ let rec multo n m p st =
                                         (bind
                                            (bind
                                               (bind
-                                                 ((( === ) ~msg:"362" n (!1 % x)) st)
-                                                 (poso x ~q:"178"))
+                                                 ((( === ) n (!1 % x)) st)
+                                                 (poso x))
                                               (m === !1 % y))
                                            (poso y))
                                         (odd_multo x n m p)))
@@ -512,16 +512,16 @@ and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 %
    (bit_trace_after_reify a2 st)
    (bit_trace_after_reify a3 st);
    bind
-   (bind ((( === ) ~msg:"20" q (a0 % x)) st) (( === ) ~msg:"21" p (a1 % y)))
+   (bind ((( === ) q (a0 % x)) st) (( === ) p (a1 % y)))
    (fun st ->
    pause (fun () ->
    let st = State.new_scope st in
    mplus
    (bind
-   (bind ((( === ) ~msg:"22" n zero) st) (( === ) ~msg:"23" m (a2 % z)))
+   (bind ((( === ) n zero) st) (( === ) m (a2 % z)))
    (bound_multo x y z zero))
    (pause (fun () ->
-   bind ((( === ) ~msg:"24" n (a3 % z)) st) (bound_multo x y z m)))))))
+   bind ((( === ) n (a3 % z)) st) (bound_multo x y z m)))))))
    st)))
    ;;
 
@@ -536,19 +536,19 @@ and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 %
    Printf.printf "\tmulto after 1st pause\n";
    let st = State.new_scope st in
    mplus
-   (bind ((( === ) ~msg:"1" n zero) st) (( === ) ~msg:"2" p zero))
+   (bind ((( === ) n zero) st) (( === ) p zero))
    (pause (fun () ->
    Printf.printf "\tmulto after 2nd pause\n";
    mplus
-   (bind (bind ((poso n) st) (( === ) ~msg:"3" m zero)) (( === ) ~msg:"4" p zero))
+   (bind (bind ((poso n) st) (( === ) m zero)) (( === ) p zero))
    (pause (fun () ->
    mplus
-   (bind (bind ((( === ) ~msg:"5" n one) st) (poso m)) (( === ) ~msg:"6" m p))
+   (bind (bind ((( === ) n one) st) (poso m)) (( === ) m p))
    (pause (fun () ->
    mplus
    (bind
-   (bind ((gt1o n) st) (( === ) ~msg:"7" m one))
-   (( === ) ~msg:"8" n p))
+   (bind ((gt1o n) st) (( === ) m one))
+   (( === ) n p))
    (pause (fun () ->
    mplus
    ((fun st ->
@@ -563,8 +563,8 @@ and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 %
    (bind
    (bind
    (bind
-   (bind ((( === ) n ~msg:"9" (!0 % x)) st) (poso x))
-   (( === ) p (!0 % z) ~msg:"10"))
+   (bind ((( === ) n (!0 % x)) st) (poso x))
+   (( === ) p (!0 % z)))
    (poso z))
    (gt1o m))
    (multo x m z)))
@@ -583,9 +583,9 @@ and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 %
    (bind
    (bind
    (bind
-   ((( === ) n (!1 % x) ~msg:"11") st)
+   ((( === ) n (!1 % x)) st)
    (poso x))
-   (( === ) ~msg:"12" m (!0 % y)))
+   (( === ) m (!0 % y)))
    (poso y))
    (multo m n p)))
    st)
@@ -602,9 +602,9 @@ and odd_multo x n m p = fresh q (bound_multo q p n m) (multo x m q) (pluso (!0 %
    (bind
    (bind
    (bind
-   ((( === ) n (!1 % x) ~msg:"13") st)
+   ((( === ) n (!1 % x)) st)
    (poso x))
-   (( === ) m (!1 % y) ~msg:"14"))
+   (( === ) m (!1 % y)))
    (poso y))
    (odd_multo x n m p)))
    st)))))))))))))

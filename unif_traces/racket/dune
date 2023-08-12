@@ -9,6 +9,7 @@
   %{project_root}/racket/expo5.rkt
   %{project_root}/racket/debug_stuff.rkt
   %{project_root}/racket/numbers.rkt
+  %{project_root}/racket/quines.rkt
   %{project_root}/racket/mk.rkt
   ;
   ))
