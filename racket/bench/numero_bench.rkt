@@ -1,14 +1,20 @@
 #lang racket
-(require benchmark plot/pict)
+(require math/statistics pretty-format benchmark plot/pict)
 
 (require "../../faster-miniKanren/mk.rkt")
 (include "../../faster-miniKanren/numbers.scm")
 
-(pretty-print
+
+(define results
     (run-benchmarks
         ; operations (whats)
-        (list 'mul255x255
-            'mul127x127 'log243base3 'exp3x5 'exp7x2
+        (list
+            ;'mul255x255
+            ;'mul127x127 
+            'log243base3
+            'exp3x5
+            ;'exp7x2
+            ;'sleepHalf
         )
         ; list of options (hows)
         (list)
@@ -20,11 +26,17 @@
             ['log243base3 (run 1 (p) (logo (build-num 243) (build-num 3) p (build-num 0)))]
             ['exp3x5 (run 1 (p) (expo (build-num 3) (build-num 5) p))]
             ['exp7x2 (run 1 (p) (expo (build-num 7) (build-num 2) p))]
+            ['sleepHalf (sleep 0.5)]
             ))
         ; don't extract time, instead time (run ...)
         #:extract-time 'delta-time
-        #:num-trials 40 ; TODO: 40 is better
+        #:num-trials 4 ; TODO: 40 is better
         #:results-file "numero_bench_racket.sexp"
     ))
 
 ; TODO: plot
+(for ([i results])
+  (pretty-printf "~a: ~a\n"
+    (benchmark-result-name i)
+    (mean (benchmark-result-trial-times i)))
+)
