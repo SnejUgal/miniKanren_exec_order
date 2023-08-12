@@ -12,6 +12,7 @@
   ; ./src/test/kotlin/ReversoTest.kt
   ; ./src/test/kotlin/AppendoTest.kt
   ./src/test/kotlin/OlegNumbersTest.kt
+  ./src/test/kotlin/QuinesTest.kt
   ; ./src/test/kotlin/ExportedNumbersTest.kt
   ; ./src/test/kotlin/utils/Utils.kt
   ; ./src/test/kotlin/utils/LogicInt.kt

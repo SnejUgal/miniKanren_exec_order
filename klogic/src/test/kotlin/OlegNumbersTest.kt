@@ -46,7 +46,7 @@ class OlegNumbersTest {
             val first = (5u).toOlegLogicNumber()
             val second = (5u).toOlegLogicNumber()
 
-            val answer = run(1, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
+            @Suppress("UNUSED_VARIABLE") val answer = run(1, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
 
             println("Unifications: ${unificationCounter.counter}")
         }
@@ -62,7 +62,7 @@ class OlegNumbersTest {
             val first = (5u).toOlegLogicNumber()
             val second = (5u).toOlegLogicNumber()
 
-            val answer = run(100, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
+            run(100, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
 
             println("Unifications: ${unificationCounter.counter}")
         }
