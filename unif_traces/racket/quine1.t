@@ -1,4 +1,4 @@
-  $ racket ../../racket/quines.rkt --firstQ | nl -ba -v1
+  $ racket ../../racket/run_quines.rkt --firstQ | nl -ba -v1
        1	_.0 (seq ((symb 'quote) _.1))
        2	(val_ (seq ((symb 'quote) _.1))) (val_ _.1)
        3	_.0 (seq ((symb 'list) . _.2))

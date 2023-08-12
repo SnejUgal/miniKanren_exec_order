@@ -10,6 +10,7 @@
   %{project_root}/racket/debug_stuff.rkt
   %{project_root}/racket/numbers.rkt
   %{project_root}/racket/quines.rkt
+  %{project_root}/racket/run_quines.rkt
   %{project_root}/racket/mk.rkt
   ;
   ))
