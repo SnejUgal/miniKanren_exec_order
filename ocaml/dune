@@ -157,8 +157,8 @@
    "ocaml/bench/pp5+dump.exe -D TRACE")))
 
 (executables
- (names quines twines thrines evalo)
- (modules quines twines thrines evalo)
+ (names run_scheme evalo)
+ (modules run_scheme evalo)
  (libraries OCanren scheme_interpret)
  (flags
   (:standard -rectypes))
@@ -175,10 +175,10 @@
   appendo.exe
   reverso.exe
   rewriter.exe
-  quines.exe
+  run_scheme.exe
   ;  quines_naive.exe
-  twines.exe
-  thrines.exe
+  ;   twines.exe
+  ;   thrines.exe
   numero.exe
   ;
   ))

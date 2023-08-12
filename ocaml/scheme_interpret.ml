@@ -265,14 +265,14 @@ let wrap_result rr = rr#reify gresult_reifier |> show_lresult
 let find_quines ~verbose n =
   run q quineso (fun r -> r#reify Gterm.reify)
   |> OCanren.Stream.take ~n
-  |> List.iter (fun q -> if verbose then printf "%s\n\n" (show_lterm q) else ())
+  |> List.iter (fun q -> if verbose then printf "%s\n" (show_lterm q) else ())
 ;;
 
 let find_twines ~verbose n =
   run qr twineso (fun q r -> q#reify Gterm.reify, r#reify Gterm.reify)
   |> OCanren.Stream.take ~n
   |> List.iter (fun (q, r) ->
-       if verbose then printf "%s,\n%s\n\n" (show_lterm q) (show_lterm r) else ())
+       if verbose then printf "%s,\n%s\n" (show_lterm q) (show_lterm r) else ())
 ;;
 
 let find_thrines ~verbose n =
@@ -281,6 +281,6 @@ let find_thrines ~verbose n =
   |> Stream.take ~n
   |> List.iter (fun (q, r, s) ->
        if verbose
-       then printf "%s,\n%s\,\n%s\n\n" (show_lterm q) (show_lterm r) (show_lterm s)
+       then printf "%s,\n%s\,\n%s\n" (show_lterm q) (show_lterm r) (show_lterm s)
        else ())
 ;;
