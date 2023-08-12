@@ -70,10 +70,12 @@ class OlegNumbersTest {
         }
     }
 
-    private fun testExpo(base: UInt, power: UInt) {
+    private fun testExpo(base: UInt, power: UInt, tracing: Boolean = false) {
         withEmptyContext {
             val unificationCounter = UnificationCounter()
             addUnificationListener(unificationCounter)
+            if (tracing)
+                addUnificationListener(unificationsTracer)
 
             println("$base ^ $power")
             run(1, { r: Term<OlegLogicNumber> ->
@@ -82,10 +84,12 @@ class OlegNumbersTest {
             println("Unification count: ${unificationCounter.counter}")
         }
     }
-    private fun testLogo(n: UInt, base: UInt) {
+    private fun testLogo(n: UInt, base: UInt, tracing: Boolean = false) {
         withEmptyContext {
             val unificationCounter = UnificationCounter()
             addUnificationListener(unificationCounter)
+            if (tracing)
+                addUnificationListener(unificationsTracer)
 
             println("logo $n base $base")
             run(1, { r: Term<OlegLogicNumber> ->
@@ -95,10 +99,12 @@ class OlegNumbersTest {
         }
     }
 
-    private fun testMulo(a: UInt, b: UInt) {
+    private fun testMulo(a: UInt, b: UInt, tracing: Boolean = false) {
         withEmptyContext {
             val unificationCounter = UnificationCounter()
             addUnificationListener(unificationCounter)
+            if (tracing)
+                addUnificationListener(unificationsTracer)
 
             println("$a * $b")
             run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a.toOlegLogicNumber(), b.toOlegLogicNumber(), r) })
@@ -152,10 +158,18 @@ class OlegNumbersTest {
     fun testExpo2x3() {
         testExpo(2u, 3u)
     }
+    @Test
+    fun testExpo2x3tracing() {
+        testExpo(2u, 3u, true)
+    }
 
     @Test
     fun testExpo3x5() {
         testExpo(3u, 5u)
+    }
+    @Test
+    fun testExpo3x5tracing() {
+        testExpo(3u, 5u, true)
     }
 
     @Test
@@ -165,6 +179,10 @@ class OlegNumbersTest {
     @Test
     fun testLogo8base2() {
         testLogo(8u, 2u)
+    }
+    @Test
+    fun testLogo8base2tracing() {
+        testLogo(8u, 2u, true)
     }
     @Test
     fun testLogo243base3() {
