@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.klogic.core.RelationalContext
 import org.klogic.core.Term
@@ -7,6 +6,8 @@ import org.klogic.core.useWith
 import org.klogic.utils.listeners.UnificationCounter
 import org.klogic.utils.terms.OlegLogicNumber
 import org.klogic.utils.terms.OlegLogicNumber.Companion.toOlegLogicNumber
+import org.klogic.utils.terms.expᴼ
+import org.klogic.utils.terms.logᴼ
 import org.klogic.utils.terms.mulᴼ
 
 class OlegNumbersTest {
@@ -31,7 +32,7 @@ class OlegNumbersTest {
             @Suppress("UNUSED_VARIABLE")
             val answer = run(1, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -48,9 +49,10 @@ class OlegNumbersTest {
 
             @Suppress("UNUSED_VARIABLE") val answer = run(1, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
+
     @Test
     fun testMul5x5WithTracingAll() {
         withEmptyContext {
@@ -64,19 +66,61 @@ class OlegNumbersTest {
 
             run(100, { q: Term<OlegLogicNumber> -> mulᴼ(first, second, q) })
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
-//    @Test
-//    fun testMul2x3() {
-//        val a = 2u.toOlegLogicNumber()
-//        val b = 3u.toOlegLogicNumber()
-//
-//        println("$a * $b")
-//        run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
+    private fun testExpo(base: UInt, power: UInt) {
+        withEmptyContext {
+            val unificationCounter = UnificationCounter()
+            addUnificationListener(unificationCounter)
+
+            println("$base ^ $power")
+            run(1, { r: Term<OlegLogicNumber> ->
+                expᴼ(base.toOlegLogicNumber(), power.toOlegLogicNumber(), r)
+            })
+            println("Unification count: ${unificationCounter.counter}")
+        }
+    }
+    private fun testLogo(n: UInt, base: UInt) {
+        withEmptyContext {
+            val unificationCounter = UnificationCounter()
+            addUnificationListener(unificationCounter)
+
+            println("logo $n base $base")
+            run(1, { r: Term<OlegLogicNumber> ->
+                logᴼ(n.toOlegLogicNumber(), base.toOlegLogicNumber(), r, 0u.toOlegLogicNumber())
+            })
+            println("Unification count: ${unificationCounter.counter}")
+        }
+    }
+
+    private fun testMulo(a: UInt, b: UInt) {
+        withEmptyContext {
+            val unificationCounter = UnificationCounter()
+            addUnificationListener(unificationCounter)
+
+            println("$a * $b")
+            run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a.toOlegLogicNumber(), b.toOlegLogicNumber(), r) })
+            println("Unification count: ${unificationCounter.counter}")
+        }
+    }
+
+    @Test
+    fun testMul2x3() {
+        testMulo(2u, 3u)
+    }
+
+    @Test
+    fun testMul127x127() {
+        testMulo(127u, 127u)
+    }
+
+    @Test
+    fun testMul255x255() {
+        testMulo(255u, 255u)
+    }
+
 //
 //    @Test
 //    fun testMul3x3() {
@@ -87,16 +131,7 @@ class OlegNumbersTest {
 //        run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
 //        UnificationsController.onFinish()
 //    }
-//
-//    @Test
-//    fun testMul5x5() {
-//        val a = 5u.toOlegLogicNumber()
-//        val b = 5u.toOlegLogicNumber()
-//
-//        println("$a * $b")
-//        run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
+
 //    @Test
 //    fun testMul5x5all() {
 //        val a = 5u.toOlegLogicNumber()
@@ -106,190 +141,33 @@ class OlegNumbersTest {
 //        run(5, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
 //        UnificationsController.onFinish()
 //    }
-//    @Test
-//    fun testMul127x127() {
-//        val a = 127u.toOlegLogicNumber()
-//        val b = 127u.toOlegLogicNumber()
-//
-//        println("$a * $b")
-//        run(5, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testMul255x255() {
-//        val a = 255u.toOlegLogicNumber()
-//        val b = 255u.toOlegLogicNumber()
-//
-//        println("$a * $b")
-//        run(5, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo1x2() {
-//        val base = 1u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo2x1() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 1u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo2x2() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo2x3() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 3u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo2x5() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 5u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo3x2() {
-//        val base = 3u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        println(answers[0].term)
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo3x5() {
-//        val base = 3u.toOlegLogicNumber()
-//        val power = 5u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        println(answers[0].term)
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo7x2() {
-//        val base = 7u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        println(answers[0].term)
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testLogo8base2() {
-//        val n = 8u.toOlegLogicNumber()
-//        val b = 2u.toOlegLogicNumber()
-//        val r = 0u.toOlegLogicNumber()
-//
-//        println("log $n base $b with reminder $r")
-//        run(1, { q: Term<OlegLogicNumber> -> logᴼ(n, b, q, r) })
-//
-//        UnificationsController.onFinish()
-//    }
-//    @Test
-//    fun testLogo243base3() {
-//        val n = 243u.toOlegLogicNumber()
-//        val b = 3u.toOlegLogicNumber()
-//        val r = 0u.toOlegLogicNumber()
-//
-//        println("log $n base $b with reminder $r")
-//        run(1, { q: Term<OlegLogicNumber> -> logᴼ(n, b, q, r) })
-//
-//        UnificationsController.onFinish()
-//    }
-//    @Test
-//    fun testExpo3() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo4() {
-//        val base = 2u.toOlegLogicNumber()
-//        val power = 1u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testExpo5() {
-//        val base = 3u.toOlegLogicNumber()
-//        val power = 2u.toOlegLogicNumber()
-//
-//        println("$base^$power")
-//        val answers = run(1, { r: Term<OlegLogicNumber> -> expᴼ(base, power, r) })
-//        println(answers[0].term)
-//        UnificationsController.onFinish()
-//    }
-//    @Test
-//    fun testMul1() {
-//        val a = 3u.toOlegLogicNumber()
-//        val b = 3u.toOlegLogicNumber()
-//
-//        println("$a * $b")
-//        run(1, { r: Term<OlegLogicNumber> -> mulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testRepeatedMul1() {
-//        val a = 3u.toOlegLogicNumber()
-//        val b = 2u.toOlegLogicNumber()
-//
-//        println("repeatedMul($a, $b, ?)")
-//        run(1, { r: Term<OlegLogicNumber> -> repeatedMulᴼ(a, b, r) })
-//        UnificationsController.onFinish()
-//    }
-//
-//    @Test
-//    fun testOddMul1() {
-//        val q = 1u.toOlegLogicNumber()
-//        val a = 3u.toOlegLogicNumber()
-//        val b = 3u.toOlegLogicNumber()
-//
-//        println("oddMulo($1, $a, $b)")
-//        run(1, { r: Term<OlegLogicNumber> -> oddMulᴼ(q, a, b, r) })
-//        UnificationsController.onFinish()
-//    }
 
+
+    @Test
+    fun testExpo2x1() {
+        testExpo(2u, 1u)
+    }
+
+    @Test
+    fun testExpo2x3() {
+        testExpo(2u, 3u)
+    }
+
+    @Test
+    fun testExpo3x5() {
+        testExpo(3u, 5u)
+    }
+
+    @Test
+    fun testExpo7x2() {
+        testExpo(7u, 2u)
+    }
+    @Test
+    fun testLogo8base2() {
+        testLogo(8u, 2u)
+    }
+    @Test
+    fun testLogo243base3() {
+        testLogo(243u, 3u)
+    }
 }

@@ -1,10 +1,6 @@
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.klogic.core.*
 import org.klogic.utils.listeners.UnificationCounter
-import org.klogic.utils.terms.OlegLogicNumber
-import org.klogic.utils.terms.OlegLogicNumber.Companion.toOlegLogicNumber
-import org.klogic.utils.terms.mulᴼ
 import org.klogic.utils.computing.*
 import org.klogic.utils.terms.LogicPair
 import org.klogic.utils.terms.Nil.nilLogicList
@@ -18,7 +14,7 @@ class QuinesTest {
 
     inline fun <R> withEmptyContext(block: RelationalContext.() -> R): R = RelationalContext().useWith { block() }
 
-    //    val quineso : (Term<Gterm>) -> Goal = { q ->
+//    val quineso : (Term<Gterm>) -> Goal = { q ->
 //        withEmptyContext {
 //            evalᴼ(q, nilLogicList(), Val(q))
 //        } }
@@ -31,7 +27,7 @@ class QuinesTest {
             val answer = run(1, { q: Term<Gterm> -> evalᴼ(q, nilLogicList(), Val(q)) })
             println(answer[0].term.asReified() as Seq);
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -46,7 +42,7 @@ class QuinesTest {
             val answer = run(1, { q: Term<Gterm> -> evalᴼ(q, nilLogicList(), Val(q)) })
             println(answer[0].term.asReified() as Seq);
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -60,7 +56,7 @@ class QuinesTest {
             val answer = run(n, { q: Term<Gterm> -> evalᴼ(q, nilLogicList(), Val(q)) })
             println("Quine ${n - 1}: ${answer[n - 1].term.asReified() as Seq}");
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -84,7 +80,7 @@ class QuinesTest {
 
             println("Twine ${n - 1}: ${rez}");
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -106,7 +102,7 @@ class QuinesTest {
             })
             val rez = answer[n - 1].term.asReified()
             println("Twine ${n - 1}: ${rez}");
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 
@@ -129,7 +125,7 @@ class QuinesTest {
             })
             println("Thrine 0: ${answer[0].term.asReified()}");
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
     @Test
@@ -151,7 +147,7 @@ class QuinesTest {
             })
             println("Thrine 0: ${answer[0].term.asReified()}");
 
-            println("Unifications: ${unificationCounter.counter}")
+            println("Unification count: ${unificationCounter.counter}")
         }
     }
 }

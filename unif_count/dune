@@ -1,13 +1,20 @@
 (cram
- (deps ../ocaml_ext2/hack_numero.exe ../ocaml/numero.exe))
+ (applies_to ocaml_ext2)
+ (deps ../ocaml_ext2/hack_numero.exe))
 
 (cram
+ (applies_to ocaml)
+ (deps ../ocaml/numero.exe ../ocaml/run_scheme.exe))
+
+(cram
+ (applies_to kotlin_gen kotlin)
  (deps
   ../klogic/klogic.jar
   ;
   ))
 
 (cram
+ (applies_to racket)
  (deps
   %{project_root}/racket/appendo.rkt
   %{project_root}/racket/reverso.rkt
@@ -19,11 +26,6 @@
   %{project_root}/racket/debug_stuff.rkt
   %{project_root}/racket/numbers.rkt
   %{project_root}/racket/mk.rkt
-  ;
-  ))
-
-(cram
- (deps
   %{project_root}/faster-miniKanren/private-unstable.rkt
   %{project_root}/faster-miniKanren/mk.scm
   ;

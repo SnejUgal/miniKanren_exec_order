@@ -26,7 +26,7 @@
   (run
    sh
    -c
-   "sh ./gradlew shadowJar --no-daemon && cp build/libs/klogic.jar . ")))
+   "sh ./gradlew shadowJar && cp build/libs/klogic.jar . && sh ./gradlew --stop")))
 
 (cram
  (deps klogic.jar))
