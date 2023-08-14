@@ -2,7 +2,7 @@
 
 (include "../faster-miniKanren/mk-vicare.scm")
 (include "../faster-miniKanren/mk.scm")
-;(include "../faster-miniKanren/numbers.scm")
+
 
 (define-syntax defrel
   (syntax-rules ()
@@ -13,6 +13,8 @@
    ((_ (name arg ...) g ...)
     (define (name arg ...) (fresh () g ...)))))
 
+(include "../faster-miniKanren/numbers.scm")
+#|
 (define appendo (lambda (l s out)
   (conde
     [(== '() l) (== s out)]
@@ -293,7 +295,7 @@
 
 (defrel (expo b q n)
   (logo n b q '()))
-
+|#
 
 (printf "HERE\n")
 (display

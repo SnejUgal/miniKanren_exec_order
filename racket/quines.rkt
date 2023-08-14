@@ -1,9 +1,7 @@
-#lang racket
+#lang racket ;; RACKET
 
-(provide eval-expo run1)
-(require "mk.rkt")
-
-;(require "debug_stuff.rkt")
+(provide eval-expo run1)  ;; RACKET
+(require "mk.rkt")  ;; RACKET
 
 
 (define (list-display lis)
