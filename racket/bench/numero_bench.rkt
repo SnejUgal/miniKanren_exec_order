@@ -4,6 +4,28 @@
 (require "../../faster-miniKanren/mk.rkt")
 (include "../../faster-miniKanren/numbers.scm")
 
+;(define MAX-BYTES (* 4 1000 1000))
+;(custodian-limit-memory (current-custodian) MAX-BYTES)
+;(pretty-printf " ~a\n" (current-memory-use))
+
+; HEAP default 822,640,848 bytes allocated in the heap
+; 1,487,594,288 bytes allocated in the heap
+;(pretty-printf "Warmup:\n  ~a\n"
+;    (run 1 (p) (*o (build-num 255) (build-num 255) p))
+;)
+
+; 863,479,760
+;(pretty-printf "Warmup:\n  ~a\n"
+;    (run 1 (p) (logo (build-num 243) (build-num 3) p (build-num 0)))
+;)
+; 1,076,888,032 bytes
+;(pretty-printf "~a\n" (run 1 (p) (expo (build-num 3) (build-num 5) p)))
+; 1,026,717,712 bytes allocated in the heap
+;(pretty-printf "~a\n" (run 1 (p) (expo (build-num 7) (build-num 2) p)))
+
+;(pretty-printf " ~a\n" (current-memory-use))
+;(pretty-printf " ~a\n" (dump-memory-stats))
+
 
 (define results
     (run-benchmarks

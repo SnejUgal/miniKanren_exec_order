@@ -7,11 +7,20 @@
 (printf "HERE\n")
 |#
 
-(printf "~a\n" (statistics))
+#|
+(define col_count (collections))
+(define  cur_bytes_allocated (bytes-allocated))
+(printf "current-memory-bytes ~a\nmaximum-memory-bytes: ~a\n" (current-memory-bytes) (maximum-memory-bytes) )
+(printf "(bytes-allocated)  ~a\n" (bytes-allocated) )
+|#
 (printf "Warmup\n ~a\n"
     (run 1 (p) (*o (build-num 255) (build-num 255) p)))
-(printf "~a\n" (statistics))
-  
+#|
+(set! col_count (-  (collections) col_count))
+(printf "current-memory-bytes ~a\nmaximum-memory-bytes: ~a\n" (current-memory-bytes) (maximum-memory-bytes) )
+(printf "delta (bytes-allocated)  ~a\n" (- (bytes-allocated) cur_bytes_allocated))
+|#
+
 (define time_acc 0.0)
 (define iter (lambda (n f)
   (cond

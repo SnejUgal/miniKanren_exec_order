@@ -90,15 +90,27 @@
               (takeMK 1 ((rel q) st))
             )))))
 ))
+; default 755,704,976 
+; 755,833,664
+;(pretty-printf "~a\n" (myrun 1 (lambda (q) (eval-expo q '() `(val_ ,q)))))
+; 100 quines: 1,142,906,896
+;(pretty-printf "~a\n" (myrun 100 (lambda (q) (eval-expo q '() `(val_ ,q)))))
+; 15 twines : 1,041,180,816
+; (pretty-printf "~a\n" (myrun 15 (lambda (p)
+;                             (fresh (q r)
+;                                 (== p `(,q ,r))
+;                                 (eval-expo q '() `(val_ ,r))
+;                                 (eval-expo r '() `(val_ ,q)))
+;                         )))
+; 2 thrines: 1,093,984,848 bytes 
+; (pretty-printf "~a\n" (myrun 2 (lambda (p)
+;                             (fresh (q r s)
+;                                 (== p `(,q ,r s))
+;                                 (eval-expo q '() `(val_ ,r))
+;                                 (eval-expo r '() `(val_ ,s))
+;                                 (eval-expo s '() `(val_ ,q)))
+;                         )))
 
-; (display "Warmup...\n")
-; (display (run* (q) (== q '(123) )))
-; (display "Warmup...\n")
-; (display (run 1 (q) (eval-expo q '() `(val_ ,q))))
-; (display "Warmup...\n")
-; (display (run1 (lambda (q) (=/= q `(123) ))))
-; (display "Warmup...\n")
-; (display (run* (q) (eval-expo q '() `(val ,q))))
 
 ; (display (myrun 1 (lambda (q) (eval-expo q '() `(val ,q)))))
 (display "Benchmarking...\n")
@@ -108,7 +120,7 @@
         (list
             ;'mul255x255
             ;'mul127x127
-            'quines1
+            ;'quines1
             'quines100
             'twines15
             'thrines2
@@ -149,7 +161,7 @@
             ))
         ; don't extract time, instead time (run ...)
         #:extract-time 'delta-time
-        #:num-trials 4 ; TODO: 40 is better
+        #:num-trials 10 ; TODO: 40 is better
         #:results-file "quines_bench_racket.sexp"
     ))
 
