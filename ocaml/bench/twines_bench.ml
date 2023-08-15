@@ -1,7 +1,7 @@
 open Scheme_interpret_nolog
 open Benchmark
 
-let count = 30
+let count = 15
 let repeat = 2
 
 let warmup () =

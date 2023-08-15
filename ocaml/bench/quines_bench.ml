@@ -1,7 +1,7 @@
 (* Execute as:
-    sudo cpupower frequency-set --governor performance
-    taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
-  *)
+   sudo cpupower frequency-set --governor performance
+   taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
+*)
 
 open Scheme_interpret_nolog
 open Benchmark
@@ -9,7 +9,7 @@ open Benchmark
 type config = { mutable print_raw : bool }
 
 let config = { print_raw = false }
-let count = 200
+let count = 100
 let repeat = 2
 
 let () =

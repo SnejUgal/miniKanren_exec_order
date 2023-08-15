@@ -19,7 +19,7 @@
 (library
  (name scheme_interpret_nolog)
  (modules scheme_interpret_nolog)
- (libraries OCanren counters)
+ (libraries OCanren counters scheme_interpret)
  (wrapped false)
  (flags
   (:standard -rectypes))

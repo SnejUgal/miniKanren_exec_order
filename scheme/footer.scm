@@ -7,6 +7,11 @@
 (printf "HERE\n")
 |#
 
+(printf "~a\n" (statistics))
+(printf "Warmup\n ~a\n"
+    (run 1 (p) (*o (build-num 255) (build-num 255) p)))
+(printf "~a\n" (statistics))
+  
 (define time_acc 0.0)
 (define iter (lambda (n f)
   (cond
