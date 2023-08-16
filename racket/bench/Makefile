@@ -1,3 +1,5 @@
+all: quines_bench_racket.sexp numero_bench_racket.sexp
+
 numero_bench.exe: numero_bench.rkt
 	@$(RM) $@
 	raco exe -v --cs -o $@ $^
@@ -16,13 +18,15 @@ quines_demo.exe: quines_demo.rkt
 
 .PHONY: numero_bench_racket.sexp
 numero_bench_racket.sexp: numero_bench.exe
-	@/usr/bin/time -f "%U" $(RM) $@   # %U means seconds
-	./$^
+	@$(RM) $@   # %U means seconds
+	sudo cpupower frequency-set --governor performance
+	taskset -c 0 ./$^
 
 .PHONY: quines_bench_racket.sexp
 quines_bench_racket.sexp: quines_bench.exe
 	@ $(RM) $@
-	./$^
+	sudo cpupower frequency-set --governor performance
+	taskset -c 0 ./$^
 
 #quines.so: quines.scm
 #echo '(compile-file "quines.scm")' | scheme -q

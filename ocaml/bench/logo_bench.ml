@@ -1,9 +1,10 @@
 (* Execute as:
-    sudo cpupower frequency-set --governor performance
-    taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
-  *)
+   sudo cpupower frequency-set --governor performance
+   taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
+*)
 
 open Numero_decls_nolog
+open Scheme_interpret_nolog
 open Benchmark
 
 type config = { mutable print_raw : bool }

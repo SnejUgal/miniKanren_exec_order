@@ -284,3 +284,7 @@ let find_thrines ~verbose n =
        then printf "%s,\n%s\,\n%s\n" (show_lterm q) (show_lterm r) (show_lterm s)
        else ())
 ;;
+
+let find100quines = find_quines 100
+let find15twines = find_twines 15
+let find2thrines = find_thrines 2

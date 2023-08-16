@@ -90,6 +90,13 @@
   (:standard -rectypes -warn-error -32-69 -open Numero_decls_nolog))
  (libraries benchmark numero_decls_nolog))
 
+(executable
+ (name all_benchmakrs)
+ (modules all_benchmakrs)
+ (flags
+  (:standard -rectypes -warn-error -32-69 -open Numero_decls_nolog))
+ (libraries benchmark numero_decls_nolog scheme_interpret_nolog))
+
 (cram
  (deps ./expo_bench.exe))
 

@@ -4,9 +4,6 @@
 # taskset -c 0 ../../_build/default/ocaml/bench/twines_bench.exe -raw
 
 all:
-	export OCAMLRUNPARAM='s=250M,h=250M'
-	dune exec ./quines_bench.exe --profile=release
-	dune exec ./twines_bench.exe --profile=release
-	dune exec ./thrines_bench.exe --profile=release
-	dune exec ./expo_bench.exe --profile=release
-	dune exec ./logo_bench.exe --profile=release
+	dune b ./all_benchmakrs.exe --profile=release
+	sudo cpupower frequency-set --governor performance
+	OCAMLRUNPARAM='s=500M,h=500M' taskset -c 0 ../../_build/default/ocaml/bench/all_benchmakrs.exe -raw
