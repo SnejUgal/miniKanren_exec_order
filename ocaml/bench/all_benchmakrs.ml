@@ -11,7 +11,7 @@ type config =
   ; mutable repeat : int
   }
 
-let config = { print_raw = false; repeat = 1 }
+let config = { print_raw = false; repeat = 2 }
 
 let () =
   Arg.parse
@@ -73,7 +73,23 @@ let warmup () =
   ()
 ;;
 
-let bench1 name rel =
+type timings =
+  { mutable expo : float
+  ; mutable logo : float
+  ; mutable qiunes : float
+  ; mutable twines : float
+  ; mutable thrines : float
+  }
+
+let timinigs = { expo = 0.0; logo = 0.0; qiunes = 0.0; twines = 0.0; thrines = 0.0 }
+
+let avg xs =
+  let n = List.length xs |> float_of_int in
+  let sum = List.fold_left (fun acc { Benchmark.wall; _ } -> acc +. wall) 0.0 xs in
+  sum /. n
+;;
+
+let bench1 name rel update =
   Gc.minor ();
   Gc.compact ();
   let iterations = 10 in
@@ -85,59 +101,60 @@ let bench1 name rel =
   then (
     Printf.printf "res length = %d\n" (List.length res);
     let _, data = List.hd res in
-    List.iter
-      (fun { Benchmark.wall; _ } ->
-        Printf.printf "%f per iteration. " (wall /. float_of_int iterations))
-      data;
-    Printf.printf "\n")
+    (* TODO: calculate average *)
+    let avg = avg data *. (1000. /. float_of_int iterations) in
+    update avg;
+    Printf.printf "avg = %fms\n" avg
+    (* List.iteri
+      (fun i { Benchmark.wall; _ } ->
+        let time = wall /. float_of_int iterations in
+        if i = 0 then update time;
+        Printf.printf "%f; " time)
+      data; *))
 ;;
 
 let () =
   warmup ();
   print_endline "Benching...";
-  bench1 "3^5" (wrap_test ~n:1 ~reifier:num_reifier (expo (build_num 3) (build_num 5)));
+  bench1
+    "3^5"
+    (wrap_test ~n:1 ~reifier:num_reifier (expo (build_num 3) (build_num 5)))
+    (fun t -> timinigs.expo <- t);
   bench1
     "log_3 243"
     (wrap_test ~n:1 ~reifier:num_reifier (fun q ->
        logo (build_num 243) (build_num 3) q zero))
+    (fun t -> timinigs.logo <- t);
+  bench1
+    "100 quines"
+    (fun () ->
+      OCanren.(run q) quineso (fun rr -> rr#reify OCanren.Reifier.id)
+      |> OCanren.Stream.take ~n:100
+      |> ignore)
+    (fun t -> timinigs.qiunes <- t);
+  bench1
+    "15 twines"
+    (fun () ->
+      OCanren.(run qr) twineso (fun rr _ -> rr#reify OCanren.Reifier.id)
+      |> OCanren.Stream.take ~n:15
+      |> ignore)
+    (fun t -> timinigs.twines <- t);
+  bench1
+    "2 thrines"
+    (fun () ->
+      OCanren.(run qrs) thrineso (fun rr _ _ -> rr#reify OCanren.Reifier.id)
+      |> OCanren.Stream.take ~n:2
+      |> ignore)
+    (fun t -> timinigs.thrines <- t)
 ;;
-(*
-   (  let res =
-    latencyN
-      ~style:Nil
-      ~repeat:config.repeat
-      4L
-      [ "3^5", wrap_test ~n:1 ~reifier:num_reifier (expo (build_num 3) (build_num 5)), ()
-      ; ( "log_3 243"
-        , wrap_test ~n:1 ~reifier:num_reifier (fun q ->
-            logo (build_num 243) (build_num 3) q zero)
-        , () )
-        (* ; ( "100 quines"
-           , (fun () ->
-           OCanren.(run q) quineso (fun rr -> rr#reify OCanren.Reifier.id)
-           |> OCanren.Stream.take ~n:100
-           |> ignore)
-           , () )
-           ; ( "15 twines"
-           , (fun () ->
-           OCanren.(run qr) twineso (fun rr _ -> rr#reify OCanren.Reifier.id)
-           |> OCanren.Stream.take ~n:15
-           |> ignore)
-           , () )
-           ; ( "2 thrines"
-           , (fun () ->
-           OCanren.(run qrs) thrineso (fun rr _ _ -> rr#reify OCanren.Reifier.id)
-           |> OCanren.Stream.take ~n:2
-           |> ignore)
-           , () ) *)
-      ]
-  in
-  print_newline ();
-  tabulate res;
-  if config.print_raw
-  then (
-    Printf.printf "res length = %d\n" (List.length res);
-    let _, data = List.hd res in
-    List.iter (fun { Benchmark.wall; _ } -> Printf.printf "%f " wall) data;
-    Printf.printf "\n"))
-*)
+
+let () =
+  Printf.printf
+    "Latency[%S] = [%f, %f, %f, %f, %f]"
+    "OCanren"
+    timinigs.expo
+    timinigs.logo
+    timinigs.qiunes
+    timinigs.twines
+    timinigs.thrines
+;;

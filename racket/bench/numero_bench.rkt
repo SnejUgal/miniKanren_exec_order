@@ -33,8 +33,8 @@
         (list
             ;'mul255x255
             ;'mul127x127 
-            'log243base3
             'exp3x5
+            'log243base3
             ;'exp7x2
             ;'sleepHalf
         )
@@ -52,7 +52,7 @@
             ))
         ; don't extract time, instead time (run ...)
         #:extract-time 'delta-time
-        #:num-trials 4 ; TODO: 40 is better
+        #:num-trials 40 ; TODO: 40 is better
         #:results-file "numero_bench_racket.sexp"
     ))
 

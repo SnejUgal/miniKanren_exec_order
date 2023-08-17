@@ -28,11 +28,5 @@ quines_bench_racket.sexp: quines_bench.exe
 	sudo cpupower frequency-set --governor performance
 	taskset -c 0 ./$^
 
-#quines.so: quines.scm
-#echo '(compile-file "quines.scm")' | scheme -q
-
-#quines.chez.sexp: quines.so
-#scheme --program $^
-
 clean:
-	$(RM) numero_bench_racket.sexp numero_bench_racket.sexp quines_bench.exe numero_bench.exe
+	$(RM) numero_bench_racket.sexp* numero_bench_racket.sexp* quines_bench.exe numero_bench.exe

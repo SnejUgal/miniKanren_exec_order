@@ -161,7 +161,7 @@
             ))
         ; don't extract time, instead time (run ...)
         #:extract-time 'delta-time
-        #:num-trials 10 ; TODO: 40 is better
+        #:num-trials 40 ; TODO: 40 is better
         #:results-file "quines_bench_racket.sexp"
     ))
 
