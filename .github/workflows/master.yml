@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - 'master'
+env:
+  OPAMROOT: /home/user/.opam
+  OPAMYES: true
 
 jobs:
   build:
@@ -13,7 +16,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: kakadu18/ocaml:pltlab
+      image: kakadu18/ocaml:minikanren2023
       options: --user user
 
     steps:
@@ -32,13 +35,15 @@ jobs:
         with:
           submodules: true
 
-      - run: |
+      - if: false
+        run: |
           sudo apt-get update
           sudo apt-get install racket racket-doc libssl-dev openjdk-17-jdk -y --no-install-recommends
       # https://github.com/racket/racket/issues/4306
       # libssl-dev might be mandatory
       # https://github.com/racket/racket/issues/2691#issuecomment-812963346
-      - name: Install Racket dependencies
+      - if: false
+        name: Install Racket dependencies
         run: |
           sudo chown `whoami` -R /usr/share/racket/collects/
           sudo chown `whoami` -R /usr/share/racket/pkgs
@@ -46,6 +51,7 @@ jobs:
           raco setup --doc-index --force-user-docs
           raco pkg install --skip-installed --user benchmark pretty-format
 
-      - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
+      - if: false
+        run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
-      - run: opam exec -- make test
+      - run: opam exec -- make test build_benches

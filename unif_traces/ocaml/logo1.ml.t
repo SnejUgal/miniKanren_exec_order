@@ -1,5 +1,3 @@
-  $ echo "obase=2;243" | bc
-  11110011
   $ ../../ocaml/numero.exe -logo1
   ../../ocaml/numero.exe: unknown option '-logo1'.
   

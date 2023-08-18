@@ -17,8 +17,8 @@
     0:	[1; 0; 0; 1; 1]
   unifications: 371
 
-  $ echo "obase=2;255*255" | bc
-  1111111000000001
+$ echo "obase=2;255*255" | bc
+1111111000000001
 
   $ ../ocaml/numero.exe --mul127x127
   multo (build_num 127) (build_num 127)
