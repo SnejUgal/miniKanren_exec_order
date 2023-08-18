@@ -1,43 +1,39 @@
-.PHONY: test test_kotlin test_ocaml test_caml test_racket
+.PHONY: test test_kotlin test_ocaml test_racket deps
 PROMOTE ?=
 
-.DEFAULT_GOAL := test
+DUNE_OPTIONS = --profile=release $(PROMOTE)
+.DEFAULT_GOAL := all
+all: test_kotlin
 
 test_kotlin:
-	dune b $(PROMOTE) \
-		@appendo1.kotlin \
-		@appendo2.kotlin \
-		@reverso.kotlin \
-		@expo1.kotlin \
-		@logo1.kotlin \
+	dune b    @unif_count/kotlin $(DUNE_OPTIONS)
+	dune test unif_traces/kotlin $(DUNE_OPTIONS)
 
 test_racket:
-	dune b $(PROMOTE) \
-		@appendo1.rkt \
-		@appendo2.rkt \
+	dune b    @unif_count/racket $(DUNE_OPTIONS)
+	dune test unif_traces/racket $(DUNE_OPTIONS)
 
-test_ocaml: test_caml
-test_caml:
-	dune b $(PROMOTE) \
-		@appendo1.ml \
-		@appendo2.ml \
-		@expo1.ml \
-		@logo1.ml \
-		#@quines.ml \
-		#@twines.ml \
-		#@thrines.ml \
+
+test_ocaml:
+	dune b    @unif_count/ocaml $(DUNE_OPTIONS)
+	dune test unif_traces/ocaml $(DUNE_OPTIONS)
 
 test: test_caml test_kotlin #test_racket
 
 clean:
 	dune clean
-	$(RM) -r klogic/build
+	$(RM) -r klogic/build *racket.sexp*
+
+deps:
+	sudo apt-get install racket racket-doc libssl-dev openjdk-17-jdk -y --no-install-recommends
+	raco setup --doc-index --force-user-docs
+	raco pkg install benchmark pretty-format --skip-installed --user
 
 
-.PHONY: check 
-CHARG ?= mul5x5	
-check:
-	dune exec ocaml_ext2/hack_numero.exe --display=quiet -- --$(CHARG) | tail -n +2 | nl -ba > ocaml.log && \
-	racket racket/mulo1.rkt --$(CHARG) | nl -ba > racket.log && \
-	grc diff -u ocaml.log racket.log
+# .PHONY: check 
+# CHARG ?= mul5x5	
+# check:
+# 	dune exec ocaml_ext2/hack_numero.exe --display=quiet -- --$(CHARG) | tail -n +2 | nl -ba > ocaml.log && \
+# 	racket racket/mulo1.rkt --$(CHARG) | nl -ba > racket.log && \
+# 	grc diff -u ocaml.log racket.log
 

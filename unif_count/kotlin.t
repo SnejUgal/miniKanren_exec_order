@@ -44,22 +44,22 @@ TODO: expo 255^2
 
   $ java -jar ../klogic/klogic.jar quine1
   ((lambda, (_.1901), (list, _.1901, (list, (quote, quote), _.1901))), (quote, (lambda, (_.1901), (list, _.1901, (list, (quote, quote), _.1901)))))
-  Unifications: 2085
+  Unification count: 2085
   $ java -jar ../klogic/klogic.jar quines100
   Quine 99: (((lambda, (_.94787), (lambda, (_.171811), (list, _.171811, (list, ((lambda, (_.126790), _.126790), (quote, quote)), _.171811)))), (quote, _.106)), (quote, ((lambda, (_.94787), (lambda, (_.171811), (list, _.171811, (list, ((lambda, (_.126790), _.126790), (quote, quote)), _.171811)))), (quote, _.106))))
-  Unifications: 150732
+  Unification count: 150732
 
 # twines and thrines will have +1 unification comparately to OCanren
 # because of packaging result into a tuple
   $ java -jar ../klogic/klogic.jar twine1
   Twine 0: (quote, ((lambda, (_.15542), (list, (quote, quote), (list, _.15542, (list, (quote, quote), _.15542)))), (quote, (lambda, (_.15542), (list, (quote, quote), (list, _.15542, (list, (quote, quote), _.15542))))))), ((lambda, (_.15542), (list, (quote, quote), (list, _.15542, (list, (quote, quote), _.15542)))), (quote, (lambda, (_.15542), (list, (quote, quote), (list, _.15542, (list, (quote, quote), _.15542))))))
-  Unifications: 16584
+  Unification count: 16584
   $ java -jar ../klogic/klogic.jar twines15
   Twine 14: (quote, (((lambda, (_.84534), (lambda, (_.145306), (list, (quote, quote), (list, _.145306, (list, (quote, quote), _.145306))))), (quote, _.248)), (quote, ((lambda, (_.84534), (lambda, (_.145306), (list, (quote, quote), (list, _.145306, (list, (quote, quote), _.145306))))), (quote, _.248))))), (((lambda, (_.84534), (lambda, (_.145306), (list, (quote, quote), (list, _.145306, (list, (quote, quote), _.145306))))), (quote, _.248)), (quote, ((lambda, (_.84534), (lambda, (_.145306), (list, (quote, quote), (list, _.145306, (list, (quote, quote), _.145306))))), (quote, _.248))))
-  Unifications: 148526
+  Unification count: 148526
   $ java -jar ../klogic/klogic.jar thrine1
   Thrine 0: (quote, (quote, ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))))))), (quote, ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152)))))))), ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152)))))))
-  Unifications: 66827
+  Unification count: 66827
   $ java -jar ../klogic/klogic.jar thrines2
   Thrine 0: (quote, (quote, ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))))))), (quote, ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152)))))))), ((lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152))))), (quote, (lambda, (_.62152), (list, (quote, quote), (list, (quote, quote), (list, _.62152, (list, (quote, quote), _.62152)))))))
-  Unifications: 224659
+  Unification count: 224659

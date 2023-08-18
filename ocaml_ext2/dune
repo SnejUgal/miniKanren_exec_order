@@ -32,7 +32,7 @@
  (flags
   (:standard
    -rectypes
-   -dsource
+   ;-dsource
    ;
    ))
  (preprocessor_deps %{project_root}/ocaml/bench/pp5+dump.exe)

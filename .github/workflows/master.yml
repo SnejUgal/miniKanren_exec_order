@@ -33,15 +33,15 @@ jobs:
           submodules: true
 
       - run: |
-          sudo apt update
-          sudo apt install racket racket-doc libssl-dev openjdk-18-jdk -y --no-install-recommends
+          sudo apt-get update
+          sudo apt-get install racket racket-doc libssl-dev openjdk-17-jdk -y --no-install-recommends
       # https://github.com/racket/racket/issues/4306
       # libssl-dev might be mandatory
       # https://github.com/racket/racket/issues/2691#issuecomment-812963346
       - name: Install Racket dependencies
         run: |
-          sudo raco setup --doc-index --force-user-docs
-          sudo raco pkg install benchmark pretty-format
+          raco setup --doc-index --force-user-docs
+          raco pkg install benchmark pretty-format --skip-installed --user
 
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
