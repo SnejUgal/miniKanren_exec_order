@@ -48,4 +48,4 @@ jobs:
 
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
-      - run: opam exec -- dune test # dune runtest
+      - run: opam exec -- make test
