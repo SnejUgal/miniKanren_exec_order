@@ -44,7 +44,7 @@ jobs:
           sudo chown `whoami` -R /usr/share/racket/pkgs
           sudo chown `whoami` -R /usr/share/doc/racket
           raco setup --doc-index --force-user-docs
-          raco pkg install benchmark pretty-format  --user
+          raco pkg install --skip-installed --user benchmark pretty-format
 
       - run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
 
