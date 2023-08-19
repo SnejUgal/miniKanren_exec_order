@@ -42,14 +42,12 @@ jobs:
       # https://github.com/racket/racket/issues/4306
       # libssl-dev might be mandatory
       # https://github.com/racket/racket/issues/2691#issuecomment-812963346
-      - if: false
-        name: Install Racket dependencies
+      
+      - name: Install Racket dependencies
         run: |
-          sudo chown `whoami` -R /usr/share/racket/collects/
-          sudo chown `whoami` -R /usr/share/racket/pkgs
-          sudo chown `whoami` -R /usr/share/doc/racket
-          raco setup --doc-index --force-user-docs
           raco pkg install --skip-installed --user benchmark pretty-format
+
+      - run: raco pkg show
 
       - if: false
         run: opam install OCanren OCanren-ppx --yes --deps-only --with-test #--with-doc
