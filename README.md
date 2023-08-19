@@ -1,13 +1,14 @@
 #### Collecting traces
 
-  dune test
+After `dune test` they would be found in `/unif_count` and `unif_traces` directories. The counts and traces should be the same (miniKanren's should execute similarly)
 
 
 #### Tests
 
+  * `mkae -C racket/bench` to calculate Racket benchmarks
+  * `make -C ocaml/bench` to calculate OCaml benchmarks
   * `dune test unif_count` to calculate count of unifications
   * `dune test unif_trace` to calculate count of unifications and get unification traces
-  * `mkae -C racket/bench numero_bench_racket.sexp` to calculate racket benchmarks
   * OCanren benchmarks
       ````
         sudo cpupower frequency-set --governor performance

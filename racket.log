@@ -1,0 +1,31 @@
+➜  miniKanren_exec_order git:(master) ✗ mkae -C racket/bench                                4.14.1+flambda
+make: Entering directory '/home/kakadu/asp/miniKanren_exec_order/racket/bench'
+sudo cpupower frequency-set --governor performance
+Setting cpu: 0
+Setting cpu: 1
+Setting cpu: 2
+Setting cpu: 3
+Setting cpu: 4
+Setting cpu: 5
+Setting cpu: 6
+Setting cpu: 7
+taskset -c 0 ./quines_bench.exe
+Benchmarking...
+quines100: 334.35740966796874
+twines15: 321.2711120605469
+thrines2: 548.3818664550781
+raco exe -v --cs -o numero_bench.exe numero_bench.rkt
+[output to "numero_bench.exe"]
+sudo cpupower frequency-set --governor performance
+Setting cpu: 0
+Setting cpu: 1
+Setting cpu: 2
+Setting cpu: 3
+Setting cpu: 4
+Setting cpu: 5
+Setting cpu: 6
+Setting cpu: 7
+taskset -c 0 ./numero_bench.exe
+exp3x5: 150.6388732910156 (mean for 40 repeatitions)
+log243base3: 22.239837646484375 (mean for 40 repeatitions)
+make: Leaving directory '/home/kakadu/asp/miniKanren_exec_order/racket/bench'

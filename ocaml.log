@@ -1,0 +1,318 @@
+➜  miniKanren_exec_order git:(master) ✗ make -C ocaml/bench                                 4.14.1+flambda
+make: Entering directory '/home/kakadu/asp/miniKanren_exec_order/ocaml/bench'
+dune b ./all_benchmarks.exe --profile=release
+Entering directory '/home/kakadu/asp/miniKanren_exec_order'
+sudo cpupower frequency-set --governor performance
+[sudo] password for kakadu: 
+Setting cpu: 0
+Setting cpu: 1
+Setting cpu: 2
+Setting cpu: 3
+Setting cpu: 4
+Setting cpu: 5
+Setting cpu: 6
+Setting cpu: 7
+OCAMLRUNPARAM='s=500M,h=500M' taskset -c 0 \
+../../_build/default/ocaml/bench/all_benchmarks.exe -raw -r 40
+collections during warmup of "3^5":
+minor_col-s = 0
+major_col-s = 0
+heap_words = 0
+D major words:         0
+D minor words:        48
+collections during warmup of "log 243":
+minor_col-s = 0
+major_col-s = 0
+heap_words = 0
+D major words:         0
+D minor words:        24
+collections during warmup of "100 quines":
+minor_col-s = 0
+major_col-s = 0
+heap_words = 0
+D major words:         0
+D minor words:  90928257
+collections during warmup of "15 twines":
+minor_col-s = 0
+major_col-s = 0
+heap_words = 0
+D major words:         0
+D minor words:  92498267
+collections during warmup of "2 thrines":
+minor_col-s = 0
+major_col-s = 0
+heap_words = 0
+D major words:         0
+D minor words: 143052169
+Benching...
+Latencies for 10 iterations of "3^5" (40 runs):
+3^5:  5.49 WALL ( 5.26 usr +  0.22 sys =  5.47 CPU) @  1.83/s (n=10)
+5.21 WALL ( 5.20 usr +  0.00 sys =  5.20 CPU) @  1.92/s (n=10)
+5.31 WALL ( 5.30 usr +  0.00 sys =  5.30 CPU) @  1.89/s (n=10)
+5.68 WALL ( 5.67 usr +  0.00 sys =  5.67 CPU) @  1.76/s (n=10)
+5.44 WALL ( 5.42 usr +  0.00 sys =  5.42 CPU) @  1.85/s (n=10)
+5.27 WALL ( 5.25 usr +  0.00 sys =  5.25 CPU) @  1.90/s (n=10)
+5.18 WALL ( 5.16 usr +  0.00 sys =  5.16 CPU) @  1.94/s (n=10)
+5.27 WALL ( 5.25 usr +  0.00 sys =  5.25 CPU) @  1.90/s (n=10)
+5.19 WALL ( 5.17 usr +  0.00 sys =  5.17 CPU) @  1.93/s (n=10)
+5.18 WALL ( 5.16 usr +  0.00 sys =  5.16 CPU) @  1.94/s (n=10)
+5.95 WALL ( 5.93 usr +  0.00 sys =  5.93 CPU) @  1.69/s (n=10)
+6.04 WALL ( 6.03 usr +  0.00 sys =  6.03 CPU) @  1.66/s (n=10)
+5.68 WALL ( 5.66 usr +  0.00 sys =  5.66 CPU) @  1.77/s (n=10)
+5.24 WALL ( 5.23 usr +  0.00 sys =  5.23 CPU) @  1.91/s (n=10)
+5.18 WALL ( 5.17 usr +  0.00 sys =  5.17 CPU) @  1.93/s (n=10)
+5.21 WALL ( 5.19 usr +  0.00 sys =  5.19 CPU) @  1.93/s (n=10)
+5.19 WALL ( 5.18 usr +  0.00 sys =  5.18 CPU) @  1.93/s (n=10)
+5.24 WALL ( 5.21 usr +  0.02 sys =  5.22 CPU) @  1.91/s (n=10)
+5.17 WALL ( 5.14 usr +  0.01 sys =  5.15 CPU) @  1.94/s (n=10)
+5.28 WALL ( 5.26 usr +  0.00 sys =  5.26 CPU) @  1.90/s (n=10)
+5.18 WALL ( 5.16 usr +  0.00 sys =  5.16 CPU) @  1.94/s (n=10)
+5.33 WALL ( 5.32 usr +  0.00 sys =  5.32 CPU) @  1.88/s (n=10)
+5.44 WALL ( 5.42 usr +  0.00 sys =  5.42 CPU) @  1.84/s (n=10)
+5.36 WALL ( 5.34 usr +  0.00 sys =  5.34 CPU) @  1.87/s (n=10)
+5.58 WALL ( 5.56 usr +  0.00 sys =  5.56 CPU) @  1.80/s (n=10)
+5.59 WALL ( 5.58 usr +  0.00 sys =  5.58 CPU) @  1.79/s (n=10)
+5.31 WALL ( 5.30 usr +  0.00 sys =  5.30 CPU) @  1.89/s (n=10)
+5.22 WALL ( 5.21 usr +  0.00 sys =  5.21 CPU) @  1.92/s (n=10)
+5.25 WALL ( 5.24 usr +  0.00 sys =  5.24 CPU) @  1.91/s (n=10)
+6.52 WALL ( 6.49 usr +  0.00 sys =  6.49 CPU) @  1.54/s (n=10)
+5.60 WALL ( 5.58 usr +  0.00 sys =  5.58 CPU) @  1.79/s (n=10)
+5.56 WALL ( 5.54 usr +  0.00 sys =  5.54 CPU) @  1.80/s (n=10)
+5.96 WALL ( 5.94 usr +  0.00 sys =  5.94 CPU) @  1.68/s (n=10)
+5.36 WALL ( 5.34 usr +  0.00 sys =  5.34 CPU) @  1.87/s (n=10)
+5.74 WALL ( 5.73 usr +  0.00 sys =  5.73 CPU) @  1.75/s (n=10)
+5.33 WALL ( 5.32 usr +  0.00 sys =  5.32 CPU) @  1.88/s (n=10)
+5.23 WALL ( 5.19 usr +  0.02 sys =  5.21 CPU) @  1.92/s (n=10)
+5.23 WALL ( 5.21 usr +  0.00 sys =  5.22 CPU) @  1.92/s (n=10)
+5.33 WALL ( 5.31 usr +  0.01 sys =  5.32 CPU) @  1.88/s (n=10)
+5.21 WALL ( 5.19 usr +  0.00 sys =  5.20 CPU) @  1.92/s (n=10)
+
+Rate       3^5
+3^5 1.86+-0.09/s  --
+res length = 1
+avg = 541.803622ms
+Latencies for 10 iterations of "log_3 243" (40 runs):
+log_3 243:  0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.89/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.83/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.69/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.84/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.86/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.87/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.93/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.66/s (n=10)
+(warning: too few iterations for a reliable count)
+0.74 WALL ( 0.74 usr +  0.00 sys =  0.74 CPU) @ 13.59/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.94/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.79/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.85/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.84/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.91/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.92/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.89/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.90/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.87/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.89/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.91/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.90/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.71/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.88/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.83/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.71/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.80/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.86/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.85/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.83/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.80/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.84/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.82/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.92/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.91/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.81/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.89/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.85/s (n=10)
+(warning: too few iterations for a reliable count)
+0.72 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.83/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.73 usr +  0.00 sys =  0.73 CPU) @ 13.73/s (n=10)
+(warning: too few iterations for a reliable count)
+0.73 WALL ( 0.72 usr +  0.00 sys =  0.72 CPU) @ 13.82/s (n=10)
+(warning: too few iterations for a reliable count)
+
+Rate      log_3 243
+log_3 243 13.8+-0.1/s        --
+res length = 1
+avg = 72.480947ms
+Latencies for 10 iterations of "100 quines" (40 runs):
+100 quines:  5.64 WALL ( 5.55 usr +  0.08 sys =  5.63 CPU) @  1.78/s (n=10)
+5.68 WALL ( 5.58 usr +  0.09 sys =  5.67 CPU) @  1.76/s (n=10)
+5.67 WALL ( 5.58 usr +  0.08 sys =  5.66 CPU) @  1.77/s (n=10)
+5.67 WALL ( 5.57 usr +  0.08 sys =  5.66 CPU) @  1.77/s (n=10)
+5.66 WALL ( 5.57 usr +  0.08 sys =  5.65 CPU) @  1.77/s (n=10)
+5.70 WALL ( 5.59 usr +  0.09 sys =  5.68 CPU) @  1.76/s (n=10)
+5.68 WALL ( 5.57 usr +  0.10 sys =  5.67 CPU) @  1.76/s (n=10)
+5.65 WALL ( 5.54 usr +  0.09 sys =  5.63 CPU) @  1.78/s (n=10)
+5.68 WALL ( 5.57 usr +  0.09 sys =  5.66 CPU) @  1.77/s (n=10)
+5.71 WALL ( 5.60 usr +  0.09 sys =  5.69 CPU) @  1.76/s (n=10)
+5.68 WALL ( 5.58 usr +  0.08 sys =  5.66 CPU) @  1.77/s (n=10)
+5.69 WALL ( 5.59 usr +  0.08 sys =  5.68 CPU) @  1.76/s (n=10)
+5.68 WALL ( 5.61 usr +  0.06 sys =  5.66 CPU) @  1.77/s (n=10)
+5.68 WALL ( 5.61 usr +  0.06 sys =  5.67 CPU) @  1.76/s (n=10)
+5.67 WALL ( 5.63 usr +  0.04 sys =  5.66 CPU) @  1.77/s (n=10)
+5.68 WALL ( 5.58 usr +  0.08 sys =  5.67 CPU) @  1.76/s (n=10)
+5.68 WALL ( 5.61 usr +  0.06 sys =  5.67 CPU) @  1.76/s (n=10)
+5.68 WALL ( 5.58 usr +  0.09 sys =  5.67 CPU) @  1.76/s (n=10)
+5.76 WALL ( 5.67 usr +  0.08 sys =  5.75 CPU) @  1.74/s (n=10)
+5.79 WALL ( 5.71 usr +  0.07 sys =  5.78 CPU) @  1.73/s (n=10)
+5.64 WALL ( 5.57 usr +  0.06 sys =  5.63 CPU) @  1.78/s (n=10)
+5.62 WALL ( 5.55 usr +  0.06 sys =  5.61 CPU) @  1.78/s (n=10)
+5.79 WALL ( 5.70 usr +  0.07 sys =  5.77 CPU) @  1.73/s (n=10)
+5.69 WALL ( 5.59 usr +  0.09 sys =  5.68 CPU) @  1.76/s (n=10)
+5.69 WALL ( 5.57 usr +  0.10 sys =  5.67 CPU) @  1.76/s (n=10)
+5.73 WALL ( 5.62 usr +  0.10 sys =  5.72 CPU) @  1.75/s (n=10)
+5.68 WALL ( 5.59 usr +  0.08 sys =  5.67 CPU) @  1.76/s (n=10)
+5.69 WALL ( 5.57 usr +  0.10 sys =  5.67 CPU) @  1.76/s (n=10)
+5.62 WALL ( 5.51 usr +  0.09 sys =  5.60 CPU) @  1.78/s (n=10)
+5.67 WALL ( 5.57 usr +  0.09 sys =  5.66 CPU) @  1.77/s (n=10)
+5.64 WALL ( 5.55 usr +  0.07 sys =  5.62 CPU) @  1.78/s (n=10)
+5.63 WALL ( 5.54 usr +  0.08 sys =  5.62 CPU) @  1.78/s (n=10)
+5.61 WALL ( 5.56 usr +  0.04 sys =  5.60 CPU) @  1.79/s (n=10)
+5.68 WALL ( 5.60 usr +  0.07 sys =  5.67 CPU) @  1.76/s (n=10)
+5.67 WALL ( 5.59 usr +  0.07 sys =  5.66 CPU) @  1.77/s (n=10)
+5.63 WALL ( 5.58 usr +  0.04 sys =  5.62 CPU) @  1.78/s (n=10)
+5.63 WALL ( 5.54 usr +  0.08 sys =  5.62 CPU) @  1.78/s (n=10)
+5.71 WALL ( 5.62 usr +  0.07 sys =  5.69 CPU) @  1.76/s (n=10)
+5.69 WALL ( 5.61 usr +  0.07 sys =  5.68 CPU) @  1.76/s (n=10)
+5.65 WALL ( 5.56 usr +  0.08 sys =  5.63 CPU) @  1.77/s (n=10)
+
+Rate       100 quines
+100 quines 1.77+-0.01/s         --
+res length = 1
+avg = 567.752202ms
+Latencies for 10 iterations of "15 twines" (40 runs):
+15 twines:  4.96 WALL ( 4.91 usr +  0.04 sys =  4.95 CPU) @  2.02/s (n=10)
+5.03 WALL ( 4.97 usr +  0.05 sys =  5.02 CPU) @  1.99/s (n=10)
+4.96 WALL ( 4.92 usr +  0.02 sys =  4.94 CPU) @  2.02/s (n=10)
+4.95 WALL ( 4.91 usr +  0.02 sys =  4.93 CPU) @  2.03/s (n=10)
+4.94 WALL ( 4.89 usr +  0.04 sys =  4.93 CPU) @  2.03/s (n=10)
+4.98 WALL ( 4.93 usr +  0.04 sys =  4.97 CPU) @  2.01/s (n=10)
+4.96 WALL ( 4.90 usr +  0.05 sys =  4.95 CPU) @  2.02/s (n=10)
+5.00 WALL ( 4.94 usr +  0.04 sys =  4.99 CPU) @  2.01/s (n=10)
+5.14 WALL ( 5.08 usr +  0.04 sys =  5.13 CPU) @  1.95/s (n=10)
+5.06 WALL ( 5.02 usr +  0.03 sys =  5.04 CPU) @  1.98/s (n=10)
+5.07 WALL ( 4.98 usr +  0.08 sys =  5.06 CPU) @  1.98/s (n=10)
+4.96 WALL ( 4.92 usr +  0.03 sys =  4.95 CPU) @  2.02/s (n=10)
+4.97 WALL ( 4.93 usr +  0.02 sys =  4.95 CPU) @  2.02/s (n=10)
+4.95 WALL ( 4.90 usr +  0.04 sys =  4.94 CPU) @  2.02/s (n=10)
+4.95 WALL ( 4.91 usr +  0.04 sys =  4.94 CPU) @  2.02/s (n=10)
+4.95 WALL ( 4.90 usr +  0.04 sys =  4.94 CPU) @  2.02/s (n=10)
+4.98 WALL ( 4.93 usr +  0.03 sys =  4.96 CPU) @  2.01/s (n=10)
+4.99 WALL ( 4.94 usr +  0.04 sys =  4.98 CPU) @  2.01/s (n=10)
+5.16 WALL ( 5.10 usr +  0.04 sys =  5.15 CPU) @  1.94/s (n=10)
+4.99 WALL ( 4.94 usr +  0.03 sys =  4.97 CPU) @  2.01/s (n=10)
+4.99 WALL ( 4.94 usr +  0.04 sys =  4.97 CPU) @  2.01/s (n=10)
+5.15 WALL ( 5.12 usr +  0.02 sys =  5.14 CPU) @  1.95/s (n=10)
+5.00 WALL ( 4.94 usr +  0.04 sys =  4.99 CPU) @  2.01/s (n=10)
+4.98 WALL ( 4.94 usr +  0.03 sys =  4.97 CPU) @  2.01/s (n=10)
+4.98 WALL ( 4.91 usr +  0.06 sys =  4.97 CPU) @  2.01/s (n=10)
+4.99 WALL ( 4.93 usr +  0.04 sys =  4.98 CPU) @  2.01/s (n=10)
+4.95 WALL ( 4.92 usr +  0.02 sys =  4.94 CPU) @  2.02/s (n=10)
+4.94 WALL ( 4.88 usr +  0.05 sys =  4.93 CPU) @  2.03/s (n=10)
+5.01 WALL ( 4.94 usr +  0.05 sys =  4.99 CPU) @  2.00/s (n=10)
+4.96 WALL ( 4.90 usr +  0.04 sys =  4.94 CPU) @  2.02/s (n=10)
+4.93 WALL ( 4.88 usr +  0.04 sys =  4.92 CPU) @  2.03/s (n=10)
+4.98 WALL ( 4.93 usr +  0.04 sys =  4.96 CPU) @  2.01/s (n=10)
+4.93 WALL ( 4.88 usr +  0.04 sys =  4.92 CPU) @  2.03/s (n=10)
+4.93 WALL ( 4.85 usr +  0.07 sys =  4.92 CPU) @  2.03/s (n=10)
+4.96 WALL ( 4.90 usr +  0.05 sys =  4.95 CPU) @  2.02/s (n=10)
+4.97 WALL ( 4.92 usr +  0.04 sys =  4.95 CPU) @  2.02/s (n=10)
+5.46 WALL ( 5.40 usr +  0.04 sys =  5.44 CPU) @  1.84/s (n=10)
+5.02 WALL ( 4.97 usr +  0.04 sys =  5.01 CPU) @  2.00/s (n=10)
+5.39 WALL ( 5.34 usr +  0.04 sys =  5.37 CPU) @  1.86/s (n=10)
+5.72 WALL ( 5.66 usr +  0.04 sys =  5.70 CPU) @  1.75/s (n=10)
+
+Rate       15 twines
+15 twines 2.00+-0.05/s        --
+res length = 1
+avg = 502.905198ms
+Latencies for 10 iterations of "2 thrines" (40 runs):
+2 thrines:  8.04 WALL ( 7.96 usr +  0.06 sys =  8.01 CPU) @  1.25/s (n=10)
+8.70 WALL ( 8.63 usr +  0.04 sys =  8.67 CPU) @  1.15/s (n=10)
+8.43 WALL ( 8.33 usr +  0.07 sys =  8.41 CPU) @  1.19/s (n=10)
+7.98 WALL ( 7.90 usr +  0.06 sys =  7.96 CPU) @  1.26/s (n=10)
+8.60 WALL ( 8.53 usr +  0.04 sys =  8.58 CPU) @  1.17/s (n=10)
+8.31 WALL ( 8.22 usr +  0.07 sys =  8.29 CPU) @  1.21/s (n=10)
+8.25 WALL ( 8.15 usr +  0.07 sys =  8.23 CPU) @  1.22/s (n=10)
+8.60 WALL ( 8.54 usr +  0.04 sys =  8.58 CPU) @  1.17/s (n=10)
+8.25 WALL ( 8.19 usr +  0.04 sys =  8.22 CPU) @  1.22/s (n=10)
+8.45 WALL ( 8.38 usr +  0.04 sys =  8.42 CPU) @  1.19/s (n=10)
+8.78 WALL ( 8.70 usr +  0.06 sys =  8.76 CPU) @  1.14/s (n=10)
+8.09 WALL ( 8.01 usr +  0.06 sys =  8.07 CPU) @  1.24/s (n=10)
+9.28 WALL ( 9.21 usr +  0.04 sys =  9.25 CPU) @  1.08/s (n=10)
+7.94 WALL ( 7.87 usr +  0.05 sys =  7.91 CPU) @  1.26/s (n=10)
+8.02 WALL ( 7.94 usr +  0.06 sys =  8.00 CPU) @  1.25/s (n=10)
+8.53 WALL ( 8.44 usr +  0.06 sys =  8.51 CPU) @  1.18/s (n=10)
+10.07 WALL ( 9.99 usr +  0.04 sys = 10.04 CPU) @  1.00/s (n=10)
+8.74 WALL ( 8.63 usr +  0.09 sys =  8.72 CPU) @  1.15/s (n=10)
+8.16 WALL ( 8.06 usr +  0.08 sys =  8.14 CPU) @  1.23/s (n=10)
+8.11 WALL ( 8.03 usr +  0.06 sys =  8.09 CPU) @  1.24/s (n=10)
+7.97 WALL ( 7.89 usr +  0.06 sys =  7.95 CPU) @  1.26/s (n=10)
+7.97 WALL ( 7.89 usr +  0.05 sys =  7.95 CPU) @  1.26/s (n=10)
+7.96 WALL ( 7.86 usr +  0.08 sys =  7.94 CPU) @  1.26/s (n=10)
+7.93 WALL ( 7.82 usr +  0.09 sys =  7.91 CPU) @  1.26/s (n=10)
+8.03 WALL ( 7.94 usr +  0.07 sys =  8.01 CPU) @  1.25/s (n=10)
+8.52 WALL ( 8.45 usr +  0.05 sys =  8.50 CPU) @  1.18/s (n=10)
+9.26 WALL ( 9.17 usr +  0.06 sys =  9.23 CPU) @  1.08/s (n=10)
+8.25 WALL ( 8.16 usr +  0.07 sys =  8.23 CPU) @  1.22/s (n=10)
+8.14 WALL ( 8.06 usr +  0.06 sys =  8.12 CPU) @  1.23/s (n=10)
+8.26 WALL ( 8.20 usr +  0.04 sys =  8.24 CPU) @  1.21/s (n=10)
+8.51 WALL ( 8.40 usr +  0.08 sys =  8.49 CPU) @  1.18/s (n=10)
+8.13 WALL ( 8.03 usr +  0.08 sys =  8.11 CPU) @  1.23/s (n=10)
+8.32 WALL ( 8.24 usr +  0.06 sys =  8.30 CPU) @  1.20/s (n=10)
+8.52 WALL ( 8.42 usr +  0.08 sys =  8.50 CPU) @  1.18/s (n=10)
+8.37 WALL ( 8.30 usr +  0.05 sys =  8.35 CPU) @  1.20/s (n=10)
+8.29 WALL ( 8.20 usr +  0.07 sys =  8.27 CPU) @  1.21/s (n=10)
+8.46 WALL ( 8.39 usr +  0.05 sys =  8.44 CPU) @  1.19/s (n=10)
+8.37 WALL ( 8.26 usr +  0.08 sys =  8.35 CPU) @  1.20/s (n=10)
+8.44 WALL ( 8.35 usr +  0.07 sys =  8.42 CPU) @  1.19/s (n=10)
+8.49 WALL ( 8.40 usr +  0.06 sys =  8.46 CPU) @  1.18/s (n=10)
+
+Rate       2 thrines
+2 thrines 1.20+-0.05/s        --
+res length = 1
+avg = 838.775028ms
+Latency["OCanren"] = [541.803622, 72.480947, 567.752202, 502.905198, 838.775028]make: Leaving directory '/home/kakadu/asp/miniKanren_exec_order/ocaml/bench'

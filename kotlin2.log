@@ -1,0 +1,215 @@
+➜  klogic git:(tracing) ✗ ./gradlew jmh
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :klogic-benchmarks:jmhRunBytecodeGenerator
+Processing 0 classes from /home/kakadu/asp/klogic/klogic-benchmarks/build/classes/java/jmh with "reflection" generator
+Writing out Java source to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-sources and resources to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-resources
+Processing 9 classes from /home/kakadu/asp/klogic/klogic-benchmarks/build/classes/kotlin/jmh with "reflection" generator
+Writing out Java source to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-sources and resources to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-resources
+Processing 0 classes from /home/kakadu/asp/klogic/klogic-benchmarks/build/classes/java/test with "reflection" generator
+Writing out Java source to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-sources and resources to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-resources
+Processing 0 classes from /home/kakadu/asp/klogic/klogic-benchmarks/build/classes/kotlin/test with "reflection" generator
+Writing out Java source to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-sources and resources to /home/kakadu/asp/klogic/klogic-benchmarks/build/jmh-generated-resources
+
+> Task :klogic-benchmarks:jmh
+# JMH version: 1.36
+# VM version: JDK 17.0.8, OpenJDK 64-Bit Server VM, 17.0.8+7-Ubuntu-123.04
+# VM invoker: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# VM options: -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/kakadu/asp/klogic/klogic-benchmarks/build/tmp/jmh -Duser.country=US -Duser.language=en -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 10 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: org.klogic.benchmarks.ExponentBenchmark.benchmarkExponent
+
+# Run progress: 0.00% complete, ETA 00:10:50
+# Fork: 1 of 1
+# Warmup Iteration   1: 787.967 ms/op
+# Warmup Iteration   2: 740.540 ms/op
+# Warmup Iteration   3: 738.682 ms/op
+Iteration   1: 726.263 ms/opG [46s]
+Iteration   2: 712.084 ms/opG [56s]
+Iteration   3: 713.318 ms/opG [1m 6s]
+Iteration   4: 711.764 ms/opG [1m 17s]
+Iteration   5: 713.608 ms/opG [1m 28s]
+Iteration   6: 710.555 ms/opG [1m 39s]
+Iteration   7: 712.370 ms/opG [1m 49s]
+Iteration   8: 722.124 ms/opG [2m]
+Iteration   9: 713.652 ms/opG [2m 10s]
+Iteration  10: 714.872 ms/opG [2m 21s]
+
+
+Result "org.klogic.benchmarks.ExponentBenchmark.benchmarkExponent":
+715.061 ±(99.9%) 7.640 ms/op [Average]
+(min, avg, max) = (710.555, 715.061, 726.263), stdev = 5.053
+CI (99.9%): [707.421, 722.701] (assumes normal distribution)
+
+
+# JMH version: 1.36
+# VM version: JDK 17.0.8, OpenJDK 64-Bit Server VM, 17.0.8+7-Ubuntu-123.04
+# VM invoker: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# VM options: -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/kakadu/asp/klogic/klogic-benchmarks/build/tmp/jmh -Duser.country=US -Duser.language=en -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 10 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: org.klogic.benchmarks.LogarithmBenchmark.benchmarkLogarithm
+
+# Run progress: 20.00% complete, ETA 00:09:05
+# Fork: 1 of 1
+# Warmup Iteration   1: 114.438 ms/op]
+# Warmup Iteration   2: 104.934 ms/op]
+# Warmup Iteration   3: 105.527 ms/op]
+Iteration   1: 105.591 ms/opG [3m 1s]
+Iteration   2: 105.104 ms/opG [3m 11s]
+Iteration   3: 104.968 ms/opG [3m 21s]
+Iteration   4: 105.234 ms/opG [3m 31s]
+Iteration   5: 105.277 ms/opG [3m 41s]
+Iteration   6: 104.826 ms/opG [3m 51s]
+Iteration   7: 104.908 ms/opG [4m 1s]
+Iteration   8: 105.687 ms/opG [4m 12s]
+Iteration   9: 104.640 ms/opG [4m 22s]
+Iteration  10: 104.556 ms/opG [4m 32s]
+
+
+Result "org.klogic.benchmarks.LogarithmBenchmark.benchmarkLogarithm":
+105.079 ±(99.9%) 0.567 ms/op [Average]
+(min, avg, max) = (104.556, 105.079, 105.687), stdev = 0.375
+CI (99.9%): [104.512, 105.647] (assumes normal distribution)
+
+
+# JMH version: 1.36
+# VM version: JDK 17.0.8, OpenJDK 64-Bit Server VM, 17.0.8+7-Ubuntu-123.04
+# VM invoker: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# VM options: -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/kakadu/asp/klogic/klogic-benchmarks/build/tmp/jmh -Duser.country=US -Duser.language=en -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 10 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: org.klogic.benchmarks.QuinesBenchmark.benchmarkQuines
+
+# Run progress: 40.00% complete, ETA 00:06:40
+# Fork: 1 of 1
+# Warmup Iteration   1: 934.016 ms/op]
+# Warmup Iteration   2: 848.811 ms/op]
+# Warmup Iteration   3: 838.500 ms/op
+Iteration   1: 832.581 ms/opG [5m 12s]
+Iteration   2: 839.835 ms/opG [5m 23s]
+Iteration   3: 837.492 ms/opG [5m 33s]
+Iteration   4: 845.911 ms/opG [5m 43s]
+Iteration   5: 834.307 ms/opG [5m 54s]
+Iteration   6: 838.123 ms/opG [6m 4s]
+Iteration   7: 840.645 ms/opG [6m 14s]
+Iteration   8: 833.750 ms/opG [6m 24s]
+Iteration   9: 830.252 ms/opG [6m 34s]
+Iteration  10: 833.844 ms/opG [6m 44s]
+
+
+Result "org.klogic.benchmarks.QuinesBenchmark.benchmarkQuines":
+836.674 ±(99.9%) 7.020 ms/op [Average]
+(min, avg, max) = (830.252, 836.674, 845.911), stdev = 4.643
+CI (99.9%): [829.654, 843.693] (assumes normal distribution)
+
+
+# JMH version: 1.36
+# VM version: JDK 17.0.8, OpenJDK 64-Bit Server VM, 17.0.8+7-Ubuntu-123.04
+# VM invoker: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# VM options: -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/kakadu/asp/klogic/klogic-benchmarks/build/tmp/jmh -Duser.country=US -Duser.language=en -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 10 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: org.klogic.benchmarks.ThrinesBenchmark.benchmarkThrines
+
+# Run progress: 60.00% complete, ETA 00:04:27
+# Fork: 1 of 1
+# Warmup Iteration   1: 1317.212 ms/op
+# Warmup Iteration   2: 1159.742 ms/op
+# Warmup Iteration   3: 1159.419 ms/op
+Iteration   1: 1157.444 ms/op [7m 27s]
+Iteration   2: 1143.424 ms/op [7m 37s]
+Iteration   3: 1151.970 ms/op [7m 48s]
+Iteration   4: 1149.342 ms/op [7m 58s]
+Iteration   5: 1163.300 ms/op [8m 8s]
+Iteration   6: 1166.706 ms/op [8m 19s]
+Iteration   7: 1156.049 ms/op [8m 29s]
+Iteration   8: 1154.477 ms/op [8m 40s]
+Iteration   9: 1161.943 ms/op [8m 50s]
+Iteration  10: 1150.008 ms/op [9m 1s]
+
+
+Result "org.klogic.benchmarks.ThrinesBenchmark.benchmarkThrines":
+1155.466 ±(99.9%) 10.802 ms/op [Average]
+(min, avg, max) = (1143.424, 1155.466, 1166.706), stdev = 7.145
+CI (99.9%): [1144.664, 1166.268] (assumes normal distribution)
+
+
+# JMH version: 1.36
+# VM version: JDK 17.0.8, OpenJDK 64-Bit Server VM, 17.0.8+7-Ubuntu-123.04
+# VM invoker: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# VM options: -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/kakadu/asp/klogic/klogic-benchmarks/build/tmp/jmh -Duser.country=US -Duser.language=en -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 10 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: org.klogic.benchmarks.TwinesBenchmark.benchmarkTwines
+
+# Run progress: 80.00% complete, ETA 00:02:14
+# Fork: 1 of 1
+# Warmup Iteration   1: 809.930 ms/op]
+# Warmup Iteration   2: 722.078 ms/op]
+# Warmup Iteration   3: 720.983 ms/op]
+Iteration   1: 723.808 ms/opG [9m 42s]
+Iteration   2: 717.976 ms/opG [9m 52s]
+Iteration   3: 717.096 ms/opG [10m 2s]
+Iteration   4: 721.037 ms/opG [10m 12s]
+Iteration   5: 720.745 ms/opG [10m 22s]
+Iteration   6: 720.932 ms/opG [10m 32s]
+Iteration   7: 715.803 ms/opG [10m 42s]
+Iteration   8: 716.944 ms/opG [10m 53s]
+Iteration   9: 720.682 ms/opG [11m 3s]
+Iteration  10: 721.682 ms/opG [11m 13s]
+
+
+Result "org.klogic.benchmarks.TwinesBenchmark.benchmarkTwines":
+719.670 ±(99.9%) 3.861 ms/op [Average]
+(min, avg, max) = (715.803, 719.670, 723.808), stdev = 2.554
+CI (99.9%): [715.810, 723.531] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:11:08
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                              Mode  Cnt     Score    Error  Units
+ExponentBenchmark.benchmarkExponent    avgt   10   715.061 ±  7.640  ms/op
+LogarithmBenchmark.benchmarkLogarithm  avgt   10   105.079 ±  0.567  ms/op
+QuinesBenchmark.benchmarkQuines        avgt   10   836.674 ±  7.020  ms/op
+ThrinesBenchmark.benchmarkThrines      avgt   10  1155.466 ± 10.802  ms/op
+TwinesBenchmark.benchmarkTwines        avgt   10   719.670 ±  3.861  ms/op
+
+Benchmark result is saved to /home/kakadu/asp/klogic/klogic-benchmarks/build/results/jmh/results.txt
+
+BUILD SUCCESSFUL in 11m 25s
+25 actionable tasks: 10 executed, 15 up-to-date
+➜  klogic git:(tracing) ✗

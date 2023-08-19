@@ -25,7 +25,7 @@
 
 ;(pretty-printf " ~a\n" (current-memory-use))
 ;(pretty-printf " ~a\n" (dump-memory-stats))
-
+(define repeat 40)
 
 (define results
     (run-benchmarks
@@ -52,13 +52,15 @@
             ))
         ; don't extract time, instead time (run ...)
         #:extract-time 'delta-time
-        #:num-trials 40 ; TODO: 40 is better
+        #:num-trials repeat ; TODO: 40 is better
         #:results-file "numero_bench_racket.sexp"
     ))
 
 ; TODO: plot
 (for ([i results])
-  (pretty-printf "~a: ~a\n"
+  (pretty-printf "~a: ~a (mean for ~a repeatitions)\n"
     (benchmark-result-name i)
-    (mean (benchmark-result-trial-times i)))
+    (mean (benchmark-result-trial-times i))
+    repeat
+  )
 )
