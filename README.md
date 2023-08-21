@@ -5,23 +5,15 @@ After `dune test` they would be found in `/unif_count` and `unif_traces` directo
 
 #### Tests
 
+  * Getting OCanren benchmarks: `opam exec -- make -C ocaml/bench`
+  * Getting Racket benchmarks: `make -C racket/bench`
+  * Getting Kotlin benchmarks is complicated. We annotated some Kotlin internals with if-statement that checks environment variable and seems that this check is not being optimized by JIT. We....
   * `mkae -C racket/bench` to calculate Racket benchmarks
   * `make -C ocaml/bench` to calculate OCaml benchmarks
-  * `dune test unif_count` to calculate count of unifications
-  * `dune test unif_trace` to calculate count of unifications and get unification traces
-  * OCanren benchmarks
-      ````
-        sudo cpupower frequency-set --governor performance
-        dune exec ocaml/bench/numero_bench.exe --profile=release
-        taskset -c 0 _build/default/ocaml/bench/numero_bench.exe
-      ````
+  * `dune test unif_count` to calculate count of unifications ...
+  * `dune test unif_trace` ... and get unification traces
 
-  * appendo1.ml.t -- appendo in OCanren
-  * appendo2.ml.t
-  * appendo1.rkt.t -- appendo in Racket
-  * appendo2.rkt.t -- appendo in Racket
-
-#### Non-OCaml dependencies
+#### System and Racket dependencies
 
   sudo apt install racket openjdk-17-jdk opam -y
   raco pkg install benchmark pretty-format
