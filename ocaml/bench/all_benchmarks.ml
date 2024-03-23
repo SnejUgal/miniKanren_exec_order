@@ -6,6 +6,14 @@
 open Benchmark
 open Scheme_interpret_nolog
 
+let () = 
+   let selfpid = Unix.getpid() in 
+   let cmd = Printf.sprintf "sudo renice -20 -p %d" selfpid in 
+   Printf.printf "Calling %S\n%!" cmd;  
+   let res: int = Sys.command cmd in 
+   assert(res=0);
+   ()
+   
 type config =
   { mutable print_raw : bool
   ; mutable repeat : int
@@ -89,10 +97,9 @@ let avg xs =
   sum /. n
 ;;
 
-let bench1 name rel update =
+let bench1 ?(iterations=10) name rel update =
   Gc.minor ();
   Gc.compact ();
-  let iterations = 10 in
   let res = latency1 ~repeat:config.repeat (Int64.of_int iterations) ~name rel () in
   (* let res = throughput1 ~repeat:config.repeat 4 ~name rel () in *)
   print_newline ();
@@ -122,6 +129,7 @@ let () =
     (fun t -> timinigs.expo <- t);
   bench1
     "log_3 243"
+    ~iterations:20
     (wrap_test ~n:1 ~reifier:num_reifier (fun q ->
        logo (build_num 243) (build_num 3) q zero))
     (fun t -> timinigs.logo <- t);
@@ -150,7 +158,7 @@ let () =
 
 let () =
   Printf.printf
-    "Latency[%S] = [%f, %f, %f, %f, %f]"
+    "Latency[%S] = [%f, %f, %f, %f, %f]\n"
     "OCanren"
     timinigs.expo
     timinigs.logo
