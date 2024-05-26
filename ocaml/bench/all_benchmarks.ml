@@ -6,14 +6,14 @@
 open Benchmark
 open Scheme_interpret_nolog
 
-let () = 
-   let selfpid = Unix.getpid() in 
-   let cmd = Printf.sprintf "sudo renice -20 -p %d" selfpid in 
-   Printf.printf "Calling %S\n%!" cmd;  
-   let res: int = Sys.command cmd in 
-   assert(res=0);
-   ()
-   
+(* let () =  *)
+(*    let selfpid = Unix.getpid() in  *)
+(*    let cmd = Printf.sprintf "sudo renice -20 -p %d" selfpid in  *)
+(*    Printf.printf "Calling %S\n%!" cmd;   *)
+(*    let res: int = Sys.command cmd in  *)
+(*    assert(res=0); *)
+(*    () *)
+
 type config =
   { mutable print_raw : bool
   ; mutable repeat : int

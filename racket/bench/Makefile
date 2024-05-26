@@ -19,13 +19,13 @@ quines_demo.exe: quines_demo.rkt
 .PHONY: numero_bench_racket.sexp
 numero_bench_racket.sexp: numero_bench.exe
 	@$(RM) $@   # %U means seconds
-	sudo cpupower frequency-set --governor performance
+	# sudo cpupower frequency-set --governor performance
 	taskset -c 0 ./$^
 
 .PHONY: quines_bench_racket.sexp
 quines_bench_racket.sexp: quines_bench.exe
 	@ $(RM) $@
-	sudo cpupower frequency-set --governor performance
+	# sudo cpupower frequency-set --governor performance
 	taskset -c 0 ./$^
 
 clean:
